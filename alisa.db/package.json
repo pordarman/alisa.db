@@ -1,0 +1,28 @@
+{
+  "name": "alisa.db",
+  "version": "0.3.2",
+  "description": "JSON database modülü",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "keywords": [
+    "json",
+    "Json",
+    "JSON",
+    "db",
+    "jsondb",
+    "JSONdb",
+    "database",
+    "JSONdatabase",
+    "JSON-database",
+    "json-database",
+    "databasejson",
+    "databaseJSON",
+    "DATABASE",
+    "JSONDATABASE",
+    "DATABASEJSON"
+  ],
+  "author": "Fearless Crazy",
+  "license": "ISC"
+}
