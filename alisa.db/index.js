@@ -166,11 +166,13 @@ class Database {
    * @example
    * 
    * // JSON dosyasının içindeki bütün verileri siler ve girdiğiniz verileri yazar
-   * Database.setFile([
-   * ["hello", "World!"], 
-   * ["key", "value"], 
-   * ["array", ["1", "2", "3"]]
-   * ]) // { hello: "World!", key: "value", array: ["1", "2", "3"] }
+   * Database.setFile(
+   *  { 
+   *   hello: "World!", 
+   *   key: "value", 
+   *   array: ["1", "2", "3"] 
+   *  }
+   * ) // { hello: "World!", key: "value", array: ["1", "2", "3"] }
    * 
    * // Eğer belirli bir dosyayı değiştirmek istiyorsanız 2. parametre olarak dosyanın yolunu giriniz
    * Database.setMany([
@@ -489,7 +491,7 @@ class Database {
 
 
   /**
-    * JSON dosyasından belirtilen verilerin en az bir tanesinin olup olmadığını kontrol eder
+    * JSON dosyasından belirtilen verilerin en az bir tanesinin olup olmadığını `kontrol eder`
     * @param {Array} keys Veriler
     * @param {String} fileName Dosyanın adı (İsteğe göre)
     * @return {Boolean}
@@ -533,7 +535,7 @@ class Database {
 
 
   /**
-   * JSON dosyasından belirtilen verilerin hepsinin olup olmadığını kontrol eder
+   * JSON dosyasından belirtilen verilerin hepsinin olup olmadığını `kontrol eder`
    * @param {Array} keys Veriler
    * @param {String} fileName Dosyanın adı (İsteğe göre)
    * @return {Boolean}
@@ -601,7 +603,7 @@ class Database {
 
 
   /**
-    * JSON dosyasından belirtilen verilerin en az bir tanesinin olup olmadığını kontrol eder
+    * JSON dosyasından belirtilen verilerin en az bir tanesinin olup olmadığını `kontrol eder`
     * @param {Array} keys Veriler
     * @param {String} fileName Dosyanın adı (İsteğe göre)
     * @return {Boolean}
@@ -636,7 +638,7 @@ class Database {
 
 
   /**
-    * JSON dosyasından belirtilen verilerin en az bir tanesinin olup olmadığını kontrol eder
+    * JSON dosyasından belirtilen verilerin en az bir tanesinin olup olmadığını `kontrol eder`
     * @param {Array} keys Veriler
     * @param {String} fileName Dosyanın adı (İsteğe göre)
     * @return {Boolean}
@@ -671,7 +673,7 @@ class Database {
 
 
   /**
-   * JSON dosyasından belirtilen verilerin hepsinin olup olmadığını kontrol eder
+   * JSON dosyasından belirtilen verilerin hepsinin olup olmadığını `kontrol eder`
    * @param {Array} keys Veriler
    * @param {String} fileName Dosyanın adı (İsteğe göre)
    * @return {Boolean}
@@ -874,7 +876,7 @@ class Database {
 
 
   /**
-   * JSON dosyasından tanımladığınız verilerden en az bir tanesinin olup olmadığını kontrol eder 
+   * JSON dosyasından tanımladığınız verilerden en az bir tanesinin olup olmadığını `kontrol eder` 
    * @param {(element: { key: String, value: any}, index: Number, array: Array) => any} callback some fonksiyonu için
    * @param {String} fileName Dosyanın adı (İsteğe göre)
    * @return {Boolean}
@@ -894,7 +896,7 @@ class Database {
    * // Sonra komutu kullanarak istediğimiz verileri kontrol edelim
    * Database.some(callback => {
    * 
-   *   // Objenin key verisinde "ali" kelimesi içeren kelime olup olmadığını kontrol eder
+   *   // Objenin key verisinde "ali" kelimesi içeren kelime olup olmadığını `kontrol eder`
    *   return callback.key.includes("ali")
    * 
    * }) // true
@@ -902,7 +904,7 @@ class Database {
    * // Bu da başka bir çağırma şekli
    * Database.some(callback => {
    * 
-   *   // Objenin value verisi Array olan var mı yok mu onu kontrol eder
+   *   // Objenin value verisi Array olan var mı yok mu onu `kontrol eder`
    *   return Array.isArray(callback.value)
    * 
    * }) // false
@@ -924,7 +926,7 @@ class Database {
 
 
   /**
-   * JSON dosyasından tanımladığınız verilerin hepsinin olup olmadığını kontrol eder
+   * JSON dosyasından tanımladığınız verilerin hepsinin olup olmadığını `kontrol eder`
    * @param {(element: { key: String, value: any}, index: Number, array: Array) => any} callback every fonksiyonu için
    * @param {String} fileName Dosyanın adı (İsteğe göre)
    * @return {Boolean}
@@ -944,7 +946,7 @@ class Database {
    * // Sonra komutu kullanarak istediğimiz verileri kontrol edelim
    * Database.every(callback => {
    * 
-   *   // Objenin her key verisinde "ali" kelimesi içeren kelime olup olmadığını kontrol eder
+   *   // Objenin her key verisinde "ali" kelimesi içeren kelime olup olmadığını `kontrol eder`
    *   return callback.key.includes("ali")
    * 
    * }) // false
@@ -952,7 +954,7 @@ class Database {
    * // Bu da başka bir çağırma şekli
    * Database.every(callback => {
    * 
-   *   // Objenin key verisinin bir yazı tipi olup olmadığını kontrol eder
+   *   // Objenin key verisinin bir yazı tipi olup olmadığını `kontrol eder`
    *   return typeof callback.key == "string"
    * 
    * }) // true
@@ -1232,7 +1234,7 @@ class Database {
   push(key, item, fileName = this.DEFAULT_JSON_FILE_NAME) {
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    if (!item && Object.prototype.toString.call(item) == "[object Undefined]") throw new DatabaseError("item değeri eksik", errorCodes.missingInput)
+    if (!item && item === undefined) throw new DatabaseError("item değeri eksik", errorCodes.missingInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     fileName = fileName.replace(".json", "")
     try {
@@ -1245,6 +1247,56 @@ class Database {
     if (!veri) veri = [item]
     else if (!Array.isArray(veri)) throw new DatabaseError("Verinin değeri bir Array olmalıdır", errorCodes.isNotArray)
     else veri.push(item)
+    dosya[key] = veri
+    fs.writeFileSync(`${fileName}.json`, JSON.stringify(dosya, null, 2))
+    return veri
+  }
+
+
+
+  /**
+     * JSON dosyasındaki verinin Array'in sonuna yeni veriler ekler
+     * @param {String} key Verinin adı
+     * @param {Array} array Eklenecek veriler 
+     * @param {String} fileName Dosyanın adı (İsteğe göre)
+     * @return {Array}
+     * @example
+     * 
+     * // İlk önce database'ye bazı veriler yazdıralım
+     * Database.setMany(
+     *  { 
+     *   ali: "Kral", 
+     *   alifelan: "Öyle işte", 
+     *   tr: "RECEP TAYYİP PADİŞAHIM ÇOK YAŞA", 
+     *   us: "Ameriga bizi gısganıyor yigenim", 
+     *   bıktım: ["bıktım.."]
+     *  }
+     * )
+     * 
+     * // Sonra komutu kullanarak Array verisinin sonuna yeni bir veri ekleyelim
+     * Database.pushAll("bıktım", ["bu hayattan..", "yeter", "artık"]) // ["bıktım..", "bu hayattan..", "yeter", "artık"]
+     * 
+     * // Artık "bıktım" verisinde şunlar yazıyor ["bıktım..", "bu hayattan..", "yeter", "artık"]
+     */
+
+   pushAll(key, array, fileName = this.DEFAULT_JSON_FILE_NAME) {
+    if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
+    if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
+    if (!array) throw new DatabaseError("array değeri eksik", errorCodes.missingInput)
+    if (typeof array == "string" && this) return this.push(key, array, fileName)
+    if (!Array.isArray(array)) throw new DatabaseError("array'in değeri bir Array olmalıdır", errorCodes.isNotArray)
+    if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
+    fileName = fileName.replace(".json", "")
+    try {
+      var dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
+    } catch (e) {
+      if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`${fileName}.json dosyası bulunamadı!`, errorCodes.missingFile)
+      throw new DatabaseError("Bilinmeyen bir hata oluştu!", errorCodes.unknown)
+    }
+    let veri = dosya[key]
+    if (!veri) veri = array
+    else if (!Array.isArray(veri)) throw new DatabaseError("Verinin değeri bir Array olmalıdır", errorCodes.isNotArray)
+    else veri.push(...array)
     dosya[key] = veri
     fs.writeFileSync(`${fileName}.json`, JSON.stringify(dosya, null, 2))
     return veri
@@ -1272,10 +1324,10 @@ class Database {
      * )
      * 
      * // Sonra komutu kullanarak Array verisinin en sonundaki veriyi silelim
-     * Database.pop() // ["of"]
+     * Database.pop("bıktım") // ["of"]
      * 
      * // Eğer birden fazla veri silmek istiyorsanız içine silinecek veri sayısını yazınız
-     * Database.pop(2) // ["ya", "of"]
+     * Database.pop("bıktım", 2) // ["ya", "of"]
      * 
      * // Artık "bıktım" verisinde şunlar yazıyor ["bıktım..", "bu hayattan"]
      */
@@ -1340,7 +1392,7 @@ class Database {
   unshift(key, item, fileName = this.DEFAULT_JSON_FILE_NAME) {
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    if (!item && Object.prototype.toString.call(item) == "[object Undefined]") throw new DatabaseError("item değeri eksik", errorCodes.missingInput)
+    if (!item && item === undefined) throw new DatabaseError("item değeri eksik", errorCodes.missingInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     fileName = fileName.replace(".json", "")
     try {
@@ -1353,6 +1405,56 @@ class Database {
     if (!veri) veri = [item]
     else if (!Array.isArray(veri)) throw new DatabaseError("Verinin değeri bir Array olmalıdır", errorCodes.isNotArray)
     else veri.unshift(item)
+    dosya[key] = veri
+    fs.writeFileSync(`${fileName}.json`, JSON.stringify(dosya, null, 2))
+    return veri
+  }
+
+
+
+  /**
+     * JSON dosyasındaki verinin Array'in en başına yeni veriler ekler
+     * @param {String} key Verinin adı
+     * @param {Array} array Eklenecek veriler 
+     * @param {String} fileName Dosyanın adı (İsteğe göre)
+     * @return {Array}
+     * @example
+     * 
+     * // İlk önce database'ye bazı veriler yazdıralım
+     * Database.setMany(
+     *  { 
+     *   ali: "Kral", 
+     *   alifelan: "Öyle işte", 
+     *   tr: "RECEP TAYYİP PADİŞAHIM ÇOK YAŞA", 
+     *   us: "Ameriga bizi gısganıyor yigenim", 
+     *   bıktım: ["bıktım.."]
+     *  }
+     * )
+     * 
+     * // Sonra komutu kullanarak Array verisinin sonuna yeni bir veri ekleyelim
+     * Database.unshiftAll("bıktım", "yaşamaktan") // ["yaşamaktan", "bıktım.."]
+     * 
+     * // Artık "bıktım" verisinde şunlar yazıyor ["yaşamaktan", "bıktım.."]
+     */
+
+   unshiftAll(key, array, fileName = this.DEFAULT_JSON_FILE_NAME) {
+    if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
+    if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
+    if (!array) throw new DatabaseError("array değeri eksik", errorCodes.missingInput)
+    if (typeof array == "string" && this) return this.unshift(key, array, fileName)
+    if (!Array.isArray(array)) throw new DatabaseError("array'in değeri bir Array olmalıdır", errorCodes.isNotArray)
+    if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
+    fileName = fileName.replace(".json", "")
+    try {
+      var dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
+    } catch (e) {
+      if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`${fileName}.json dosyası bulunamadı!`, errorCodes.missingFile)
+      throw new DatabaseError("Bilinmeyen bir hata oluştu!", errorCodes.unknown)
+    }
+    let veri = dosya[key]
+    if (!veri) veri = array
+    else if (!Array.isArray(veri)) throw new DatabaseError("Verinin değeri bir Array olmalıdır", errorCodes.isNotArray)
+    else veri.unshift(...array)
     dosya[key] = veri
     fs.writeFileSync(`${fileName}.json`, JSON.stringify(dosya, null, 2))
     return veri
@@ -1380,10 +1482,10 @@ class Database {
      * )
      * 
      * // Sonra komutu kullanarak Array verisinin en baştaki veriyi silelim
-     * Database.shift() // ["bıktım.."]
+     * Database.shift("bıktım") // ["bıktım.."]
      * 
      * // Eğer birden fazla veri silmek istiyorsanız içine silinecek veri sayısını yazınız
-     * Database.shift(2) // ["bıktım..", "bu hayattan"]
+     * Database.shift("bıktım", 2) // ["bıktım..", "bu hayattan"]
      * 
      * // Artık "bıktım" verisinde şunlar yazıyor ["ağlıcam", "ya", "of"]
      */
@@ -1703,6 +1805,43 @@ class Database {
     try {
       fs.writeFileSync(`${fileName}.json`, "{}")
       return {}
+    } catch (e) {
+      if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`${fileName}.json dosyası bulunamadı!`, errorCodes.missingFile)
+      throw new DatabaseError("Bilinmeyen bir hata oluştu!", errorCodes.unknown)
+    }
+  }
+
+
+
+  /**
+   * Yeni bir database dosyası oluşturma komutları
+   */
+
+
+  /**
+    * Yeni bir JSON database dosyası oluşturur
+    * @param {String} fileName Dosyanın adı (İsteğe göre)
+    * @return {Object}
+    * @example
+    * 
+    * // İlk önce database'yi silelim
+    * Database.destroy()
+    * 
+    * // Sonra komutu kullanarak yeni bir dosya oluşturalım
+    * Database.create("alisa.json")
+    * 
+    * // Bu ise dosyayı oluştururken içine veri yazdırarak oluşturur
+    * Database.create("alisadb.json", { ali: "Adam" })
+    */
+
+   create(fileName = this.DEFAULT_JSON_FILE_NAME, file = {}) {
+    if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
+    fileName = fileName.replace(".json", "")
+    if (fs.existsSync(`${fileName}.json`)) throw new DatabaseError(`${fileName}.json adında bir dosya zaten mevcut`, errorCodes.exists)
+    if (Object.prototype.toString.call(file) != "[object Object]") throw new DatabaseError("file değeri bir Object tipi olmalıdır", errorCodes.invalidInput)
+    try {
+      fs.writeFileSync(`${fileName}.json`, file)
+      return file
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`${fileName}.json dosyası bulunamadı!`, errorCodes.missingFile)
       throw new DatabaseError("Bilinmeyen bir hata oluştu!", errorCodes.unknown)

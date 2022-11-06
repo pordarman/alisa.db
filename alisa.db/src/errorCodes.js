@@ -10,5 +10,7 @@ module.exports = {
     isNotArray: 6,
     isNotNumber: 7,
 
-    unknown: 8
+    unknown: 8,
+    
+    exists: 9
 }
