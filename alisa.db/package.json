@@ -1,6 +1,6 @@
 {
   "name": "alisa.db",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "JSON database modülü",
   "main": "index.js",
   "scripts": {
