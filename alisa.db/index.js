@@ -6,8 +6,8 @@ class Database {
 
 
   /**
-   * 
-   * @param {String} fileName 
+   * Bunu sadece 1 kere tanımlamanız yeterlidir
+   * @param {String} fileName Varsayılan dosyanın adı
    */
 
   constructor(fileName) {
