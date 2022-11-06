@@ -1,6 +1,6 @@
 {
   "name": "alisa.db",
-  "version": "0.3.2",
+  "version": "0.0.1",
   "description": "JSON database modülü",
   "main": "index.js",
   "scripts": {
@@ -24,5 +24,13 @@
     "DATABASEJSON"
   ],
   "author": "Fearless Crazy",
-  "license": "ISC"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pordarman/alisa.db.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pordarman/alisa.db/issues"
+  },
+  "homepage": "https://github.com/pordarman/alisa.db#readme"
 }
