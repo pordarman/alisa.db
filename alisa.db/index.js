@@ -481,7 +481,7 @@ class Database {
     fileName = fileName.replace(".json", "")
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
-      return key in dosya ? true : false
+      return key in dosya
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`${fileName}.json dosyası bulunamadı!`, errorCodes.missingFile)
       throw new DatabaseError("Bilinmeyen bir hata oluştu!", errorCodes.unknown)
@@ -836,7 +836,7 @@ class Database {
    */
 
   includes(key, fileName = this.DEFAULT_JSON_FILE_NAME) {
-    if (!this) throw new DatabaseError("Lütfen .filter() komutunu kullanınız", errorCodes.invalidCommand)
+    if (!this) throw new DatabaseError("Lütfen .filter(object => object.key.includes()) komutunu kullanınız", errorCodes.invalidCommand)
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     return this.filter(object => object.key.includes(key), fileName)
@@ -867,7 +867,7 @@ class Database {
    */
 
   startsWith(key, fileName = this.DEFAULT_JSON_FILE_NAME) {
-    if (!this) throw new DatabaseError("Lütfen .filter() komutunu kullanınız", errorCodes.invalidCommand)
+    if (!this) throw new DatabaseError("Lütfen .filter(object => object.key.startsWith()) komutunu kullanınız", errorCodes.invalidCommand)
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     return this.filter(object => object.key.startsWith(key), fileName)

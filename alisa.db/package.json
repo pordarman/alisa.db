@@ -1,6 +1,6 @@
 {
   "name": "alisa.db",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "JSON database modülü",
   "main": "index.js",
   "scripts": {
@@ -8,20 +8,11 @@
   },
   "keywords": [
     "json",
-    "Json",
-    "JSON",
     "db",
     "jsondb",
-    "JSONdb",
     "database",
-    "JSONdatabase",
-    "JSON-database",
     "json-database",
-    "databasejson",
-    "databaseJSON",
-    "DATABASE",
-    "JSONDATABASE",
-    "DATABASEJSON"
+    "databasejson"
   ],
   "author": "Fearless Crazy",
   "license": "MIT",

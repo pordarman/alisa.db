@@ -7,8 +7,8 @@ module.exports = {
     invalidInput: 4,
     invalidCommand: 5,
     
-    isNotArray: 6,
-    isNotNumber: 7,
+    notArray: 6,
+    notNumber: 7,
 
     unknown: 8,
     

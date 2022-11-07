@@ -1,20 +1,6 @@
 {
-  "a": "ali",
-  "ab": "ali2",
-  "abc": "ali3",
-  "a1": [
-    "ali",
-    "veli",
-    49,
-    50,
-    1,
-    2,
-    3,
-    4,
-    "ali",
-    "veli",
-    49,
-    50
-  ],
-  "b": "b"
+  "hello": "World",
+  "test": "Test",
+  "alisa": "alisa.db",
+  "version": "0.0.3"
 }
