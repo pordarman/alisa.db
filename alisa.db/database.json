@@ -2,5 +2,39 @@
   "hello": "World",
   "test": "Test",
   "alisa": "alisa.db",
-  "version": "0.0.3"
+  "version": "0.0.3",
+  "ebesinin": [
+    1,
+    2,
+    {
+      "ali": "a"
+    },
+    [
+      1,
+      2,
+      3,
+      {
+        "b": "c",
+        "a": {},
+        "d": true,
+        "e": [
+          "a",
+          "b",
+          {
+            "f": [
+              "g",
+              "e",
+              "ç",
+              "ğ",
+              "a",
+              {
+                "t": false,
+                "j": "Ebesinin.."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  ]
 }
