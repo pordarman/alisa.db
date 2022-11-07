@@ -1,6 +1,7 @@
 const DatabaseError = require("./src/DatabaseError")
 const errorCodes = require("./src/errorCodes")
 const fs = require("fs")
+const { version } = require("./package.json")
 
 class Database {
 
@@ -19,6 +20,19 @@ class Database {
     if (!fs.existsSync(`${this.DEFAULT_JSON_FILE_NAME}.json`)) fs.writeFileSync(`${this.DEFAULT_JSON_FILE_NAME}.json`, "{}")
 
   }
+
+
+
+  /**
+   * Database'nin sürüm versiyonu
+   * @return {String}
+   */
+
+  get version() {
+    return `v${version}`
+  }
+
+
 
 
   /**
@@ -243,7 +257,7 @@ class Database {
 
   /**
     * JSON dosyasından belirtilen `verileri çeker` 
-    * @param {Array} keys Veriler
+    * @param {Array<String>} keys Veriler
     * @param {any} defaultValue Eğer hiçbir veri yoksa döndürülecek varsayılan veri
     * @param {String} fileName Dosyanın adı (İsteğe göre)
     * @return {Array|any}
@@ -1282,7 +1296,7 @@ class Database {
      * // Artık "bıktım" verisinde şunlar yazıyor ["bıktım..", "bu hayattan..", "yeter", "artık"]
      */
 
-   pushAll(key, array, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  pushAll(key, array, fileName = this.DEFAULT_JSON_FILE_NAME) {
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     if (!array) throw new DatabaseError("array değeri eksik", errorCodes.missingInput)
@@ -1440,7 +1454,7 @@ class Database {
      * // Artık "bıktım" verisinde şunlar yazıyor ["yaşamaktan", "bıktım.."]
      */
 
-   unshiftAll(key, array, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  unshiftAll(key, array, fileName = this.DEFAULT_JSON_FILE_NAME) {
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     if (!array) throw new DatabaseError("array değeri eksik", errorCodes.missingInput)
@@ -1493,7 +1507,7 @@ class Database {
      * // Artık "bıktım" verisinde şunlar yazıyor ["ağlıcam", "ya", "of"]
      */
 
-   shift(key, number = 1, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  shift(key, number = 1, fileName = this.DEFAULT_JSON_FILE_NAME) {
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     if (number == 0) return []
@@ -1837,7 +1851,7 @@ class Database {
     * Database.create("alisadb.json", { ali: "Adam" })
     */
 
-   create(fileName = this.DEFAULT_JSON_FILE_NAME, file = {}) {
+  create(fileName = this.DEFAULT_JSON_FILE_NAME, file = {}) {
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     fileName = fileName.replace(".json", "")
     if (fs.existsSync(`${fileName}.json`)) throw new DatabaseError(`${fileName}.json adında bir dosya zaten mevcut`, errorCodes.exists)
