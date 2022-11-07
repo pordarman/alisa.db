@@ -266,6 +266,9 @@ class Database {
     * // Birden çok veriyi çekmek için array içinde key'lerin isimlerini giriniz
     * Database.getMany(["hello", "Alisa", "Fearless"]) // ["World!", "o7", "Crazy"]
     * 
+    * // Eğer girdiğiniz değerlerin en az 1 tanesi bile bulunduysa bir Array döndürür
+    * Database.getMany(["hello", "alisa", "fear"]) // ["World!", undefined, undefined]
+    * 
     * // Eğer girdiğiniz değerlerin hiç birisi bulunamadıysa girdiğiniz değeri döndürür
     * Database.getMany(["ali", "deneme", "test"], "Hiçbir veri bulunamadı!") // "Hiçbir veri bulunamadı!"
     */
@@ -278,7 +281,7 @@ class Database {
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
       let newArray = keys.map(keys_1 => dosya[keys_1])
-      if (newArray.length) return newArray
+      if (newArray.filter(value => value).length) return newArray
       return defaultValue
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`${fileName}.json dosyası bulunamadı!`, errorCodes.missingFile)
@@ -1553,7 +1556,7 @@ class Database {
      * // Artık "kalp" verisinde şu yazıyor 30
      */
 
-  add(key, number, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  add(key, number = 1, fileName = this.DEFAULT_JSON_FILE_NAME) {
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     if (!number && number != 0) throw new DatabaseError("number değeri eksik", errorCodes.missingInput)
@@ -1605,7 +1608,7 @@ class Database {
      * // Artık "kalp" verisinde şu yazıyor 10
      */
 
-  substr(key, number, goToNegative = true, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  substr(key, number = 1, goToNegative = true, fileName = this.DEFAULT_JSON_FILE_NAME) {
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     if (!number && number != 0) throw new DatabaseError("number değeri eksik", errorCodes.missingInput)
@@ -1840,7 +1843,7 @@ class Database {
     if (fs.existsSync(`${fileName}.json`)) throw new DatabaseError(`${fileName}.json adında bir dosya zaten mevcut`, errorCodes.exists)
     if (Object.prototype.toString.call(file) != "[object Object]") throw new DatabaseError("file değeri bir Object tipi olmalıdır", errorCodes.invalidInput)
     try {
-      fs.writeFileSync(`${fileName}.json`, file)
+      fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, 2))
       return file
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`${fileName}.json dosyası bulunamadı!`, errorCodes.missingFile)

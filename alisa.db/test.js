@@ -30,7 +30,6 @@ Database.setMany({ key1: "value1", key2: "value2", key3: "value3" })
 // Bu ise database.json dosyasının içindeki her şeyi siler ve sizin girdiğiniz veriyi yazar
 Database.setFile({ alisa: "o7", array: ["1", "2", "3"] })
 
-
 /**
  * Veriyi bulma komutları
  */
@@ -146,12 +145,10 @@ Database.substr("key", 5) // Bu da 1 yerine 5 çıkartır
 Database.substr("key", 4, true) // Bu ise sayının eksi (-)'lere düşüp düşmeceğini kontrol eder
 
 // Bu database.json dosyasındaki "key" verisinin değerini çarparak arttırır
-Database.multi("key")
-Database.multi("key", 5) // Bu da 1 yerine 5 ekler
+Database.multi("key", 5)
 
 // Bu database.json dosyasındaki "key" verisinin değerini böler
-Database.division("key")
-Database.division("key", 5) // Bu da 1 yerine 5 ekler
+Database.division("key", 5)
 Database.division("key", 4, true) // Bu ise sayının virgüllü olup olmayacağını kontrol eder
 
 
