@@ -22,13 +22,13 @@
 ```js
 const Database = new (require("alisa.db"))()
 ```
->Bunu yazdıktan sonra artık istediğiniz **her şeye** erişebileceksiniz
+> Bunu yazdıktan sonra artık istediğiniz **her şeye** erişebileceksiniz
 <br>
 <br>
 > İsterseniz database'ye veri yazdırabilirsiniz, isterseniz veriyi çekebilirsiniz tamamen sizin özgürlüğünüze kalmış
 <br>
 <br>
->Şimdi isterseniz database'ye nasıl veri yazdıracağınızı kısaca anlatayım
+> Şimdi isterseniz database'ye nasıl veri yazdıracağınızı kısaca anlatayım
 
 ```js
 // Database'ye veri yazdırma
