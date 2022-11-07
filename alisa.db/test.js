@@ -28,7 +28,7 @@ Database.set("key", "value")
 Database.setMany({ key1: "value1", key2: "value2", key3: "value3" })
 
 // Bu ise database.json dosyasının içindeki her şeyi siler ve sizin girdiğiniz veriyi yazar
-Database.setFile({ alisa: "o7", array: ["1", "2", "3"] })
+Database.setFile({ alisa: "o7", array: ["1", "2", "3"], hello: "World!", anyObject: { anyKey: "anyValue", anyArray: ["alisa", "db", "is", "awesome"], anyObjectAgain: {} }, what: "the", fuck: "bro!?" })
 
 /**
  * Veriyi bulma komutları
@@ -46,6 +46,11 @@ Database.fetchMany(["key", "alisa", "array"]) // [undefined, "o7", ["1", "2", "3
 Database.getAll()
 Database.fetchAll()
 Database.all()
+Database.toJSON()
+// Yukarıdakilerin hepsi JSON (yani Object) formatında çağırılır
+
+Database.toArray()
+// Bu komut ise Array halinde çağırılır
 
 
 /**

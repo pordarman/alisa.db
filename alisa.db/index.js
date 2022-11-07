@@ -1752,6 +1752,91 @@ class Database {
 
 
   /**
+   * Database dosyasındaki bütün verileri çağırma komutları
+   */
+
+
+  /**
+   * JSON dosyasından bütün verileri çeker ve JSON formatında döndürür
+   * @param {String} fileName Dosyanın adı (İsteğe göre)
+   * @return {Object}
+   * @example
+   * 
+   * // İlk önce database'ye bazı veriler yazdıralım
+   * Database.setMany(
+   *  { 
+   *   hello: "World!", 
+   *   Alisa: "o7", 
+   *   Fearless: "Crazy", 
+   *   array: [1, 2, 3], 
+   *   string: "String"
+   *  }
+   * ) // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+   * 
+   * // Bütün verileri çekmek için bu komutu kullanınız
+   * Database.toJSON() // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+   * 
+   * // Eğer başka bir dosyadaki verileri çekmek için o dosyanın yolunu giriniz
+   * Database.toJSON("öylesine bir dosya adı.json")
+   */
+
+  toJSON(fileName = this.DEFAULT_JSON_FILE_NAME) {
+    if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
+    fileName = fileName.replace(".json", "")
+    try {
+      let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
+      return dosya
+    } catch (e) {
+      if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`${fileName}.json dosyası bulunamadı!`, errorCodes.missingFile)
+      throw new DatabaseError("Bilinmeyen bir hata oluştu!", errorCodes.unknown)
+    }
+  }
+
+
+
+  /**
+   * JSON dosyasından bütün verileri çeker ve Array formatında döndürür
+   * @param {String} fileName Dosyanın adı (İsteğe göre)
+   * @return {Array<Object<String,any>>}
+   * @example
+   * 
+   * // İlk önce database'ye bazı veriler yazdıralım
+   * Database.setMany(
+   *  { 
+   *   hello: "World!", 
+   *   Alisa: "o7", 
+   *   Fearless: "Crazy", 
+   *   array: [1, 2, 3], 
+   *   string: "String"
+   *  }
+   * ) // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+   * 
+   * // Bütün verileri çekmek için bu komutu kullanınız
+   * Database.toArray() // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+   * 
+   * // Eğer başka bir dosyadaki verileri çekmek için o dosyanın yolunu giriniz
+   * Database.toArray("öylesine bir dosya adı.json")
+   */
+
+  toArray(fileName = this.DEFAULT_JSON_FILE_NAME) {
+    if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
+    fileName = fileName.replace(".json", "")
+    try {
+      let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
+      let newArray = []
+      for (const key in dosya) {
+        newArray.push({ [key]: dosya[key] })
+      }
+      return newArray
+    } catch (e) {
+      if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`${fileName}.json dosyası bulunamadı!`, errorCodes.missingFile)
+      throw new DatabaseError("Bilinmeyen bir hata oluştu!", errorCodes.unknown)
+    }
+  }
+
+
+
+  /**
    * Database dosyasını sıfırlama veya sıfırlama komutları
    */
 
