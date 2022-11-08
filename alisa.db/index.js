@@ -3,6 +3,8 @@ const errorCodes = require("./src/errorCodes")
 const fs = require("fs")
 const { version } = require("./package.json")
 
+
+
 class Database {
 
 
@@ -265,7 +267,7 @@ class Database {
 
   /**
   * JSON dosyasından belirtilen veriye karışılık gelen veriyi çeker
-  * @param {any} value Değerin adı
+  * @param {Array|Object|String|null|Number} value Değerin adı
   * @param {String} fileName Dosyanın adı (İsteğe göre)
   * @return {Boolean}
   * @example
@@ -331,7 +333,7 @@ class Database {
       // Aynı Array olup olmadğını kontrol eder
       function sameArray(array1, array2) {
         if (array1.length != array2.length) return false
-        return array1.every(value_1 => sameValue(value_1, array2.find(a2 => sameValue(value_1, a2))))
+        return array1.every(value_1 => array2.some(a2 => sameValue(value_1, a2)))
       }
 
       let obj = Object.entries(dosya).find(([key, value_1]) => sameValue(value, value_1))
@@ -349,7 +351,7 @@ class Database {
     * @param {Array<String>} keys Veriler
     * @param {any} defaultValue Eğer hiçbir veri yoksa döndürülecek varsayılan veri
     * @param {String} fileName Dosyanın adı (İsteğe göre)
-    * @return {Array|any}
+    * @return {any|Array}
     * @example
     * 
     * // İlk önce database'ye bazı veriler yazdıralım
@@ -461,7 +463,7 @@ class Database {
 
   /**
   * JSON dosyasından belirtilen veriye karışılık gelen veriyi çeker
-  * @param {any} value Değerin adı
+  * @param {Array|Object|String|null|Number} value Değerin adı
   * @param {String} fileName Dosyanın adı (İsteğe göre)
   * @return {Boolean}
   * @example
@@ -491,7 +493,7 @@ class Database {
     * @param {Array} keys Veriler
     * @param {any} defaultValue Eğer hiçbir veri yoksa döndürülecek varsayılan veri
     * @param {String} fileName Dosyanın adı (İsteğe göre)
-    * @return {Array|any}
+    * @return {any|Array}
     * @example
     * 
     * // İlk önce database'ye bazı veriler yazdıralım
@@ -624,7 +626,7 @@ class Database {
 
   /**
   * JSON dosyasından belirtilen veriye karışılık gelen değerin olup olmadığını kontrol eder
-  * @param {any} value Değerin adı
+  * @param {Array|Object|String|null|Number} value Değerin adı
   * @param {String} fileName Dosyanın adı (İsteğe göre)
   * @return {Boolean}
   * @example
@@ -687,7 +689,7 @@ class Database {
       // Array'in aynı Array olup olmadğını kontrol eder
       function sameArray(array1, array2) {
         if (array1.length != array2.length) return false
-        return array1.every(value_1 => sameValue(value_1, array2.find(a2 => sameValue(value_1, a2))))
+        return array1.every(value_1 => array2.some(a2 => sameValue(value_1, a2)))
       }
 
       return Object.values(dosya).some(value_1 => sameValue(value, value_1))
@@ -813,7 +815,7 @@ class Database {
 
   /**
   * JSON dosyasından belirtilen veriye karışılık gelen değerin olup olmadığını kontrol eder
-  * @param {any} value Değerin adı
+  * @param {Array|Object|String|null|Number} value Değerin adı
   * @param {String} fileName Dosyanın adı (İsteğe göre)
   * @return {Boolean}
   * @example
@@ -947,7 +949,7 @@ class Database {
 
   /**
    * JSON dosyasından tanımladığınız ilk veriyi döndürür 
-   * @param {(element: { key: String, value: any}, index: Number, array: Array) => any} callback find fonksiyonu için
+   * @param {(element: { key: String, value: Array|Object|String|null|Number}, index: Number, array: Array) => {}} callback find fonksiyonu için
    * @param {String} fileName Dosyanın adı (İsteğe göre)
    * @return {Object}
    * @example
@@ -998,7 +1000,7 @@ class Database {
 
   /**
    * JSON dosyasından tanımladığınız verileri döndürür 
-   * @param {(element: { key: String, value: any}, index: Number, array: Array) => any} callback filter fonksiyonu için
+   * @param {(element: { key: String, value: Array|Object|String|null|Number}, index: Number, array: Array) => {}} callback filter fonksiyonu için
    * @param {String} fileName Dosyanın adı (İsteğe göre)
    * @return {Array}
    * @example
@@ -1110,7 +1112,7 @@ class Database {
 
   /**
    * JSON dosyasından tanımladığınız verilerden en az bir tanesinin olup olmadığını kontrol eder
-   * @param {(element: { key: String, value: any}, index: Number, array: Array) => any} callback some fonksiyonu için
+   * @param {(element: { key: String, value: Array|Object|String|null|Number}, index: Number, array: Array) => {}} callback some fonksiyonu için
    * @param {String} fileName Dosyanın adı (İsteğe göre)
    * @return {Boolean}
    * @example
@@ -1160,7 +1162,7 @@ class Database {
 
   /**
    * JSON dosyasından tanımladığınız verilerin hepsinin olup olmadığını kontrol eder
-   * @param {(element: { key: String, value: any}, index: Number, array: Array) => any} callback every fonksiyonu için
+   * @param {(element: { key: String, value: Array|Object|String|null|Number}, index: Number, array: Array) => {}} callback every fonksiyonu için
    * @param {String} fileName Dosyanın adı (İsteğe göre)
    * @return {Boolean}
    * @example
@@ -1210,7 +1212,7 @@ class Database {
 
   /**
    * JSON dosyasından tanımladığınız ilk veriyi siler 
-   * @param {(element: { key: String, value: any}, index: Number, array: Array) => any} callback find fonksiyonu için
+   * @param {(element: { key: String, value: Array|Object|String|null|Number}, index: Number, array: Array) => {}} callback find fonksiyonu için
    * @param {String} fileName Dosyanın adı (İsteğe göre)
    * @return {Object|undefined}
    * @example
@@ -1259,7 +1261,7 @@ class Database {
 
   /**
    * JSON dosyasından tanımladığınız verilerin hepsini siler 
-   * @param {(element: { key: String, value: any}, index: Number, array: Array) => any} callback filter fonksiyonu için
+   * @param {(element: { key: String, value: Array|Object|String|null|Number}, index: Number, array: Array) => {}} callback filter fonksiyonu için
    * @param {String} fileName Dosyanın adı (İsteğe göre)
    * @return {Array}
    * @example
@@ -1442,7 +1444,7 @@ class Database {
   /**
      * JSON dosyasındaki verinin Array'in sonuna yeni bir veri ekler
      * @param {String} key Verinin adı
-     * @param {any} item Eklenecek veri 
+     * @param {Array|Object|String|null|Number} item Eklenecek veri 
      * @param {String} fileName Dosyanın adı (İsteğe göre)
      * @return {Array}
      * @example
@@ -1598,7 +1600,7 @@ class Database {
   /**
      * JSON dosyasındaki verinin Array'in en başına yeni bir veri ekler
      * @param {String} key Verinin adı
-     * @param {any} item Eklenecek veri 
+     * @param {Array|Object|String|null|Number} item Eklenecek veri 
      * @param {String} fileName Dosyanın adı (İsteğe göre)
      * @return {Array}
      * @example

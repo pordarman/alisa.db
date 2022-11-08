@@ -97,6 +97,19 @@ Gördüğünüz gibi burada ise teker teker yazdırmak yerine birden fazla veri 
 
 <br>
 
+
+# Güncelleme v0.1.4
+
+- Bazı yazım hataları giderildi
+
+- `.getValue()` ve `.hasValue()` komutları iyileştirildi
+
+<br>
+
+Modülün daha **stabil** ve **performanslı** çalışması için en son sürümde kullanmayı lütfen unutmayınız!
+
+<br>
+
 # Ve son olarak
 
 - Eğer bu modüle destek olmak isterseniz bana [github](https://github.com/pordarman) üzerinden istekte bulunursanız size seve seve yardımcı olurum.
