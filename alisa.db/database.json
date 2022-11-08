@@ -3,7 +3,7 @@
   "test": "Test",
   "alisa": "alisa.db",
   "version": "0.0.3",
-  "ebesinin": [
+  "a": [
     1,
     2,
     {
@@ -29,7 +29,7 @@
               "a",
               {
                 "t": false,
-                "j": "Ebesinin.."
+                "j": "Bir şey işte.."
               }
             ]
           }

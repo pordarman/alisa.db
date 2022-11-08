@@ -13,11 +13,27 @@ class Database {
 
   constructor(fileName) {
 
-    // Eğer kişi bir dosya ismi girmişse ve o dosyanın ismi yazı değerinde ise ve dosya ismi boş değil ise o dosya ismini varsayılan olarak kullanır
-    this.DEFAULT_JSON_FILE_NAME = ((typeof fileName == "string" && fileName !== "" && fileName.trim().endsWith(".json")) ? fileName.replace(/\.json *$/m, "") : "database")
+    // Eğer varsayılan bir dosya ismi girilmiş ise o dosyayı varsayılan olarak ayarla
+    if (typeof fileName == "string") {
+
+      // Eğer dosya ismi .json olarak bitiyorsa .json yazısını kaldır
+      if (fileName.trim().endsWith(".json")) {
+
+        // .json yazısını kaldırma
+        this.DEFAULT_FILE_NAME = fileName.replace(/\.json *$/m, "")
+      } else {
+
+        // .json olarak bitmiyorsa girilen değeri dosya ismi olarak alır
+        this.DEFAULT_FILE_NAME = fileName
+      }
+    } else {
+
+      // Eğer bir değer girmemişse veya değer bir yazı tipi değilse dosyanın ismini varsayılan olarak "database" alır
+      this.DEFAULT_FILE_NAME = "database"
+    }
 
     // Eğer girdiğiniz isimde bir JSON dosyası yoksa girdiğiniz isimle JSON dosyası oluşturur
-    if (!fs.existsSync(`${this.DEFAULT_JSON_FILE_NAME}.json`)) fs.writeFileSync(`${this.DEFAULT_JSON_FILE_NAME}.json`, "{}")
+    if (!fs.existsSync(`${this.DEFAULT_FILE_NAME}.json`)) fs.writeFileSync(`${this.DEFAULT_FILE_NAME}.json`, "{}")
 
   }
 
@@ -46,9 +62,9 @@ class Database {
    * @return {Array<String>}
    */
 
-  keys(fileName = this.DEFAULT_JSON_FILE_NAME) {
+  keys(fileName = this.DEFAULT_FILE_NAME) {
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
       return Object.keys(dosya)
@@ -66,9 +82,9 @@ class Database {
    * @return {Array<any>}
    */
 
-  values(fileName = this.DEFAULT_JSON_FILE_NAME) {
+  values(fileName = this.DEFAULT_FILE_NAME) {
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
       return Object.values(dosya)
@@ -103,12 +119,12 @@ class Database {
    * Database.set("Fearless", "Crazy", "database/fearless.json") // { "Fearless": "Crazy" }
    */
 
-  set(key, value, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  set(key, value, fileName = this.DEFAULT_FILE_NAME) {
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     if (!value && value === undefined) throw new DatabaseError("value değeri eksik", errorCodes.missingInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
       dosya[key] = value
@@ -146,11 +162,11 @@ class Database {
    * ], "test") // { hello: "World!", key: "value", array: ["1", "2", "3"] }
    */
 
-  setMany(keysAndValue, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  setMany(keysAndValue, fileName = this.DEFAULT_FILE_NAME) {
     if (!keysAndValue) throw new DatabaseError("keysAndValue değeri eksik", errorCodes.missingInput)
     if (!Array.isArray(keysAndValue) && Object.prototype.toString.call(keysAndValue) != "[object Object]") throw new DatabaseError("keysAndValue değeri bir Array veya Object tipi olmalıdır", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
       if (Array.isArray(keysAndValue)) keysAndValue = Object.fromEntries(keysAndValue)
@@ -189,11 +205,11 @@ class Database {
    * ], "database/fearless.json") // ./database/fearless.json dosyasına yazılacak veri => { hello: "World!", key: "value", array: ["1", "2", "3"] }
    */
 
-  setFile(input, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  setFile(input, fileName = this.DEFAULT_FILE_NAME) {
     if (!input) throw new DatabaseError("input değeri eksik", errorCodes.missingInput)
     if (!Array.isArray(input) && Object.prototype.toString.call(input) != "[object Object]") throw new DatabaseError("input değeri bir Array veya Object tipi olmalıdır", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       if (Array.isArray(input)) input = Object.fromEntries(input)
       fs.writeFileSync(`${fileName}.json`, JSON.stringify(input, null, 2))
@@ -231,11 +247,11 @@ class Database {
   * Database.get("hello3", "Öyle bir veri yok!") // "Öyle bir veri yok!"
   */
 
-  get(key, defaultValue = undefined, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  get(key, defaultValue = undefined, fileName = this.DEFAULT_FILE_NAME) {
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
       return key in dosya ? dosya[key] : defaultValue
@@ -267,10 +283,10 @@ class Database {
   * Database.getValue("hello", "Öyle bir veri yok!") // "Öyle bir veri yok!"
   */
 
-  getValue(value, defaultValue = undefined, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  getValue(value, defaultValue = undefined, fileName = this.DEFAULT_FILE_NAME) {
     if (!value) throw new DatabaseError("value değeri eksik", errorCodes.missingInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
 
@@ -360,15 +376,15 @@ class Database {
     * Database.getMany(["ali", "deneme", "test"], "Hiçbir veri bulunamadı!") // "Hiçbir veri bulunamadı!"
     */
 
-  getMany(keys, defaultValue = [], fileName = this.DEFAULT_JSON_FILE_NAME) {
+  getMany(keys, defaultValue = [], fileName = this.DEFAULT_FILE_NAME) {
     if (!keys) throw new DatabaseError("keys değeri eksik", errorCodes.missingInput)
     if (!Array.isArray(keys)) throw new DatabaseError("keys değeri bir Array olmalıdır", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
       let newArray = keys.map(keys_1 => dosya[keys_1])
-      return newArray.filter(value => value || value === null || value === false).length ? newArray : defaultValue
+      return newArray.filter(value => value !== undefined).length ? newArray : defaultValue
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`${fileName}.json dosyası bulunamadı!`, errorCodes.missingFile)
       throw new DatabaseError("Bilinmeyen bir hata oluştu!", errorCodes.unknown)
@@ -401,9 +417,9 @@ class Database {
    * Database.getAll("öylesine bir dosya adı.json")
    */
 
-  getAll(fileName = this.DEFAULT_JSON_FILE_NAME) {
+  getAll(fileName = this.DEFAULT_FILE_NAME) {
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
       return dosya
@@ -436,7 +452,7 @@ class Database {
      * Database.fetch("hello3", "Öyle bir veri yok!") // "Öyle bir veri yok!"
      */
 
-  fetch(key, defaultValue = undefined, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  fetch(key, defaultValue = undefined, fileName = this.DEFAULT_FILE_NAME) {
     if (!this) throw new DatabaseError("Lütfen .get() komutunu kullanınız", errorCodes.invalidCommand)
     return this.get(key, defaultValue, fileName)
   }
@@ -463,7 +479,7 @@ class Database {
   * Database.fetchValue("hello", "Öyle bir veri yok!") // "Öyle bir veri yok!"
   */
 
-  fetchValue(value, defaultValue = undefined, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  fetchValue(value, defaultValue = undefined, fileName = this.DEFAULT_FILE_NAME) {
     if (!this) throw new DatabaseError("Lütfen .getValue() komutunu kullanınız", errorCodes.invalidCommand)
     return this.getValue(value, defaultValue, fileName)
   }
@@ -499,7 +515,7 @@ class Database {
     * Database.fetchMany(["ali", "deneme", "test"], "Hiçbir veri bulunamadı!") // "Hiçbir veri bulunamadı!"
     */
 
-  fetchMany(keys, defaultValue = undefined, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  fetchMany(keys, defaultValue = undefined, fileName = this.DEFAULT_FILE_NAME) {
     if (!this) throw new DatabaseError("Lütfen .getMany() komutunu kullanınız", errorCodes.invalidCommand)
     return this.getMany(keys, defaultValue, fileName)
   }
@@ -530,7 +546,7 @@ class Database {
    * Database.fetchAll("öylesine bir dosya adı.json")
    */
 
-  fetchAll(fileName = this.DEFAULT_JSON_FILE_NAME) {
+  fetchAll(fileName = this.DEFAULT_FILE_NAME) {
     if (!this) throw new DatabaseError("Lütfen .getAll() komutunu kullanınız", errorCodes.invalidCommand)
     return this.getAll(fileName)
   }
@@ -561,7 +577,7 @@ class Database {
    * Database.all("öylesine bir dosya adı.json")
    */
 
-  all(fileName = this.DEFAULT_JSON_FILE_NAME) {
+  all(fileName = this.DEFAULT_FILE_NAME) {
     if (!this) throw new DatabaseError("Lütfen .getAll() komutunu kullanınız", errorCodes.invalidCommand)
     return this.getAll(fileName)
   }
@@ -590,11 +606,11 @@ class Database {
   * Database.has("hello3") // false
   */
 
-  has(key, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  has(key, fileName = this.DEFAULT_FILE_NAME) {
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
       return key in dosya
@@ -623,10 +639,10 @@ class Database {
   * Database.hasValue("hello") // false
   */
 
-  hasValue(value, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  hasValue(value, fileName = this.DEFAULT_FILE_NAME) {
     if (!value) throw new DatabaseError("value değeri eksik", errorCodes.missingInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
 
@@ -711,11 +727,11 @@ class Database {
     * Database.hasSome(["ali", "deneme", "test"]) // false
     */
 
-  hasSome(keys, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  hasSome(keys, fileName = this.DEFAULT_FILE_NAME) {
     if (!keys) throw new DatabaseError("keys değeri eksik", errorCodes.missingInput)
     if (!Array.isArray(keys)) throw new DatabaseError("keys değeri bir Array olmalıdır", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
       return keys.some(key => key in dosya)
@@ -755,11 +771,11 @@ class Database {
     * Database.hasAll(["hello", "Alisa", "test"]) // false
    */
 
-  hasAll(keys, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  hasAll(keys, fileName = this.DEFAULT_FILE_NAME) {
     if (!keys) throw new DatabaseError("keys değeri eksik", errorCodes.missingInput)
     if (!Array.isArray(keys)) throw new DatabaseError("keys değeri bir Array olmalıdır", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
       return keys.every(key => key in dosya)
@@ -788,7 +804,7 @@ class Database {
   * Database.exists("hello3") // false
   */
 
-  exists(key, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  exists(key, fileName = this.DEFAULT_FILE_NAME) {
     if (!this) throw new DatabaseError("Lütfen .has() komutunu kullanınız", errorCodes.invalidCommand)
     return this.has(key, fileName)
   }
@@ -812,7 +828,7 @@ class Database {
   * Database.existsValue("hello") // false
   */
 
-  existsValue(value, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  existsValue(value, fileName = this.DEFAULT_FILE_NAME) {
     if (!this) throw new DatabaseError("Lütfen .hasValue() komutunu kullanınız", errorCodes.invalidCommand)
     return this.hasValue(value, fileName)
   }
@@ -847,7 +863,7 @@ class Database {
     * Database.existsSome(["ali", "deneme", "test"]) // false
     */
 
-  existsSome(keys, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  existsSome(keys, fileName = this.DEFAULT_FILE_NAME) {
     if (!this) throw new DatabaseError("Lütfen .hasSome() komutunu kullanınız", errorCodes.invalidCommand)
     return this.hasSome(keys, fileName)
   }
@@ -882,7 +898,7 @@ class Database {
     * Database.hasMany(["ali", "deneme", "test"]) // false
     */
 
-  hasMany(keys, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  hasMany(keys, fileName = this.DEFAULT_FILE_NAME) {
     if (!this) throw new DatabaseError("Lütfen .hasSome() komutunu kullanınız", errorCodes.invalidCommand)
     return this.hasSome(keys, fileName)
   }
@@ -917,7 +933,7 @@ class Database {
     * Database.existsAll(["hello", "Alisa", "test"]) // false
    */
 
-  existsAll(keys, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  existsAll(keys, fileName = this.DEFAULT_FILE_NAME) {
     if (!this) throw new DatabaseError("Lütfen .hasAll() komutunu kullanınız", errorCodes.invalidCommand)
     return this.hasAll(keys, fileName)
   }
@@ -964,10 +980,10 @@ class Database {
    * }) // undefined
    */
 
-  find(callback, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  find(callback, fileName = this.DEFAULT_FILE_NAME) {
     if (typeof callback != "function") throw new DatabaseError("callback değeri bir fonksiyon değeri olmalıdır", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
       let arrayObject = Object.entries(dosya).map(a => ({ key: a[0], value: a[1] })).find(callback)
@@ -1015,10 +1031,10 @@ class Database {
    * }) // []
    */
 
-  filter(callback, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  filter(callback, fileName = this.DEFAULT_FILE_NAME) {
     if (typeof callback != "function") throw new DatabaseError("callback değeri bir fonksiyon değeri olmalıdır", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
       return Object.entries(dosya).map(a => ({ key: a[0], value: a[1] })).filter(callback).map(object => ({ [object.key]: object.value }))
@@ -1052,7 +1068,7 @@ class Database {
    * Database.includes("ali") // [{ ali: "Kral" }, { alifelan: "Öyle işte" }]
    */
 
-  includes(key, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  includes(key, fileName = this.DEFAULT_FILE_NAME) {
     if (!this) throw new DatabaseError("Lütfen .filter(object => object.key.includes()) komutunu kullanınız", errorCodes.invalidCommand)
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
@@ -1083,7 +1099,7 @@ class Database {
    * Database.startsWith("ali") // [{ ali: "Kral" }, { alifelan: "Öyle işte" }]
    */
 
-  startsWith(key, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  startsWith(key, fileName = this.DEFAULT_FILE_NAME) {
     if (!this) throw new DatabaseError("Lütfen .filter(object => object.key.startsWith()) komutunu kullanınız", errorCodes.invalidCommand)
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
@@ -1127,10 +1143,10 @@ class Database {
    * }) // false
    */
 
-  some(callback, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  some(callback, fileName = this.DEFAULT_FILE_NAME) {
     if (typeof callback != "function") throw new DatabaseError("callback değeri bir fonksiyon değeri olmalıdır", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
       return Object.entries(dosya).map(a => ({ key: a[0], value: a[1] })).some(callback)
@@ -1177,10 +1193,10 @@ class Database {
    * }) // true
    */
 
-  every(callback, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  every(callback, fileName = this.DEFAULT_FILE_NAME) {
     if (typeof callback != "function") throw new DatabaseError("callback değeri bir fonksiyon değeri olmalıdır", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
       return Object.entries(dosya).map(a => ({ key: a[0], value: a[1] })).every(callback)
@@ -1221,10 +1237,10 @@ class Database {
    * // Dosyada artık "ali" verisi bulunmuyor
    */
 
-  findAndDelete(callback, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  findAndDelete(callback, fileName = this.DEFAULT_FILE_NAME) {
     if (typeof callback != "function") throw new DatabaseError("callback değeri bir fonksiyon değeri olmalıdır", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
       let arrayDosya = Object.entries(dosya).map(a => ({ key: a[0], value: a[1] })).find(callback)
@@ -1270,10 +1286,10 @@ class Database {
    * // Dosyada artık "ali" ve "alifelan" verileri bulunmuyor
    */
 
-  filterAndDelete(callback, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  filterAndDelete(callback, fileName = this.DEFAULT_FILE_NAME) {
     if (typeof callback != "function") throw new DatabaseError("callback değeri bir fonksiyon değeri olmalıdır", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
       let arrayDosya = Object.entries(dosya).map(a => ({ key: a[0], value: a[1] })).filter(callback)
@@ -1298,7 +1314,7 @@ class Database {
      * JSON dosyasından veri silersiniz 
      * @param {String} key Silinecek verinin adı
      * @param {String} fileName Dosyanın adı (İsteğe göre)
-     * @return {Object|void}
+     * @return {Object|undefined}
      * @example
      * 
      * // İlk önce database'ye bazı veriler yazdıralım
@@ -1316,15 +1332,15 @@ class Database {
      * Database.delete("alifelan") // "alifelan" verisi silindi
      */
 
-  delete(key, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  delete(key, fileName = this.DEFAULT_FILE_NAME) {
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
       let veri = dosya[key]
-      if (!veri) return;
+      if (!veri) return undefined
       delete dosya[key]
       fs.writeFileSync(`${fileName}.json`, JSON.stringify(dosya, null, 2))
       return veri
@@ -1358,11 +1374,11 @@ class Database {
      * Database.deleteMany(["ali", "tr", "bıktım"]) // "ali", "tr" ve "bıktım" verileri silindi
      */
 
-  deleteMany(keys, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  deleteMany(keys, fileName = this.DEFAULT_FILE_NAME) {
     if (!keys) throw new DatabaseError("keys değeri eksik", errorCodes.missingInput)
     if (!Array.isArray(keys)) throw new DatabaseError("keys değeri bir Array olmalıdır", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
       let array = []
@@ -1403,9 +1419,9 @@ class Database {
      * Database.deleteAll() // { ali: "Kral", alifelan: "Öyle işte", tr: "RECEP TAYYİP PADİŞAHIM ÇOK YAŞA", us: "Ameriga bizi gısganıyor yigenim", bıktım: "bıktım.."}
      */
 
-  deleteAll(fileName = this.DEFAULT_JSON_FILE_NAME) {
+  deleteAll(fileName = this.DEFAULT_FILE_NAME) {
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
       fs.writeFileSync(`${fileName}.json`, "{}")
@@ -1448,12 +1464,12 @@ class Database {
      * // Artık "bıktım" verisinde şunlar yazıyor ["bıktım..", "bu hayattan.."]
      */
 
-  push(key, item, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  push(key, item, fileName = this.DEFAULT_FILE_NAME) {
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     if (!item && item === undefined) throw new DatabaseError("item değeri eksik", errorCodes.missingInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       var dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
     } catch (e) {
@@ -1462,7 +1478,7 @@ class Database {
     }
     let veri = dosya[key]
     if (!veri) veri = [item]
-    else if (!Array.isArray(veri)) throw new DatabaseError("Verinin değeri bir Array olmalıdır", errorCodes.isNotArray)
+    else if (!Array.isArray(veri)) throw new DatabaseError("Verinin değeri bir Array olmalıdır", errorCodes.notArray)
     else veri.push(item)
     dosya[key] = veri
     fs.writeFileSync(`${fileName}.json`, JSON.stringify(dosya, null, 2))
@@ -1496,14 +1512,14 @@ class Database {
      * // Artık "bıktım" verisinde şunlar yazıyor ["bıktım..", "bu hayattan..", "yeter", "artık"]
      */
 
-  pushAll(key, array, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  pushAll(key, array, fileName = this.DEFAULT_FILE_NAME) {
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     if (!array) throw new DatabaseError("array değeri eksik", errorCodes.missingInput)
     if (typeof array == "string" && this) return this.push(key, array, fileName)
-    if (!Array.isArray(array)) throw new DatabaseError("array'in değeri bir Array olmalıdır", errorCodes.isNotArray)
+    if (!Array.isArray(array)) throw new DatabaseError("array'in değeri bir Array olmalıdır", errorCodes.notArray)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       var dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
     } catch (e) {
@@ -1512,7 +1528,7 @@ class Database {
     }
     let veri = dosya[key]
     if (!veri) veri = array
-    else if (!Array.isArray(veri)) throw new DatabaseError("Verinin değeri bir Array olmalıdır", errorCodes.isNotArray)
+    else if (!Array.isArray(veri)) throw new DatabaseError("Verinin değeri bir Array olmalıdır", errorCodes.notArray)
     else veri.push(...array)
     dosya[key] = veri
     fs.writeFileSync(`${fileName}.json`, JSON.stringify(dosya, null, 2))
@@ -1549,14 +1565,14 @@ class Database {
      * // Artık "bıktım" verisinde şunlar yazıyor ["bıktım..", "bu hayattan"]
      */
 
-  pop(key, number = 1, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  pop(key, number = 1, fileName = this.DEFAULT_FILE_NAME) {
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     if (number == 0) return []
     number = Number(number)
-    if (isNaN(number)) throw new DatabaseError("number değeri bir sayı değeri olmalıdır", errorCodes.isNotNumber)
+    if (isNaN(number)) throw new DatabaseError("number değeri bir sayı değeri olmalıdır", errorCodes.notNumber)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       var dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
     } catch (e) {
@@ -1564,15 +1580,13 @@ class Database {
       throw new DatabaseError("Bilinmeyen bir hata oluştu!", errorCodes.unknown)
     }
     let veri = dosya[key]
+    if (!veri) return []
+    if (!Array.isArray(veri)) throw new DatabaseError("Verinin değeri bir Array olmalıdır", errorCodes.notArray)
     let newVeri = []
     let deletedValues = []
-    if (!veri) return []
-    else if (!Array.isArray(veri)) throw new DatabaseError("Verinin değeri bir Array olmalıdır", errorCodes.isNotArray)
-    else {
-      for (let i = 0; i < veri.length; i++) {
-        if (veri.length - i <= number) deletedValues.push(veri[i])
-        else newVeri.push(veri[i])
-      }
+    for (let i = 0; i < veri.length; i++) {
+      if (veri.length - i <= number) deletedValues.push(veri[i])
+      else newVeri.push(veri[i])
     }
     dosya[key] = newVeri
     fs.writeFileSync(`${fileName}.json`, JSON.stringify(dosya, null, 2))
@@ -1606,12 +1620,12 @@ class Database {
      * // Artık "bıktım" verisinde şunlar yazıyor ["yaşamaktan", "bıktım.."]
      */
 
-  unshift(key, item, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  unshift(key, item, fileName = this.DEFAULT_FILE_NAME) {
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     if (!item && item === undefined) throw new DatabaseError("item değeri eksik", errorCodes.missingInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       var dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
     } catch (e) {
@@ -1620,7 +1634,7 @@ class Database {
     }
     let veri = dosya[key]
     if (!veri) veri = [item]
-    else if (!Array.isArray(veri)) throw new DatabaseError("Verinin değeri bir Array olmalıdır", errorCodes.isNotArray)
+    else if (!Array.isArray(veri)) throw new DatabaseError("Verinin değeri bir Array olmalıdır", errorCodes.notArray)
     else veri.unshift(item)
     dosya[key] = veri
     fs.writeFileSync(`${fileName}.json`, JSON.stringify(dosya, null, 2))
@@ -1654,14 +1668,14 @@ class Database {
      * // Artık "bıktım" verisinde şunlar yazıyor ["yaşamaktan", "bıktım.."]
      */
 
-  unshiftAll(key, array, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  unshiftAll(key, array, fileName = this.DEFAULT_FILE_NAME) {
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     if (!array) throw new DatabaseError("array değeri eksik", errorCodes.missingInput)
     if (typeof array == "string" && this) return this.unshift(key, array, fileName)
-    if (!Array.isArray(array)) throw new DatabaseError("array'in değeri bir Array olmalıdır", errorCodes.isNotArray)
+    if (!Array.isArray(array)) throw new DatabaseError("array'in değeri bir Array olmalıdır", errorCodes.notArray)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       var dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
     } catch (e) {
@@ -1670,7 +1684,7 @@ class Database {
     }
     let veri = dosya[key]
     if (!veri) veri = array
-    else if (!Array.isArray(veri)) throw new DatabaseError("Verinin değeri bir Array olmalıdır", errorCodes.isNotArray)
+    else if (!Array.isArray(veri)) throw new DatabaseError("Verinin değeri bir Array olmalıdır", errorCodes.notArray)
     else veri.unshift(...array)
     dosya[key] = veri
     fs.writeFileSync(`${fileName}.json`, JSON.stringify(dosya, null, 2))
@@ -1707,14 +1721,14 @@ class Database {
      * // Artık "bıktım" verisinde şunlar yazıyor ["ağlıcam", "ya", "of"]
      */
 
-  shift(key, number = 1, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  shift(key, number = 1, fileName = this.DEFAULT_FILE_NAME) {
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     if (number == 0) return []
     number = Number(number)
-    if (isNaN(number)) throw new DatabaseError("number değeri bir sayı değeri olmalıdır", errorCodes.isNotNumber)
+    if (isNaN(number)) throw new DatabaseError("number değeri bir sayı değeri olmalıdır", errorCodes.notNumber)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       var dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
     } catch (e) {
@@ -1722,15 +1736,13 @@ class Database {
       throw new DatabaseError("Bilinmeyen bir hata oluştu!", errorCodes.unknown)
     }
     let veri = dosya[key]
+    if (!veri) return []
+    if (!Array.isArray(veri)) throw new DatabaseError("Verinin değeri bir Array olmalıdır", errorCodes.notArray)
     let newVeri = []
     let deletedValues = []
-    if (!veri) return []
-    else if (!Array.isArray(veri)) throw new DatabaseError("Verinin değeri bir Array olmalıdır", errorCodes.isNotArray)
-    else {
-      for (let i = 0; i < veri.length; i++) {
-        if (i < number) deletedValues.push(veri[i])
-        else newVeri.push(veri[i])
-      }
+    for (let i = 0; i < veri.length; i++) {
+      if (i < number) deletedValues.push(veri[i])
+      else newVeri.push(veri[i])
     }
     dosya[key] = newVeri
     fs.writeFileSync(`${fileName}.json`, JSON.stringify(dosya, null, 2))
@@ -1770,14 +1782,14 @@ class Database {
      * // Artık "kalp" verisinde şu yazıyor 30
      */
 
-  add(key, number = 1, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  add(key, number = 1, fileName = this.DEFAULT_FILE_NAME) {
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     if (!number && number != 0) throw new DatabaseError("number değeri eksik", errorCodes.missingInput)
     number = Number(number)
-    if (isNaN(number)) throw new DatabaseError("number değeri bir sayı değeri olmalıdır", errorCodes.isNotNumber)
+    if (isNaN(number)) throw new DatabaseError("number değeri bir sayı değeri olmalıdır", errorCodes.notNumber)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       var dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
     } catch (e) {
@@ -1786,7 +1798,7 @@ class Database {
     }
     let veri = dosya[key]
     if (!veri) veri = number
-    else if (isNaN(veri)) throw new DatabaseError("Verinin değeri bir Number olmalıdır", errorCodes.isNotNumber)
+    else if (isNaN(veri)) throw new DatabaseError("Verinin değeri bir Number olmalıdır", errorCodes.notNumber)
     else veri += number
     dosya[key] = veri
     fs.writeFileSync(`${fileName}.json`, JSON.stringify(dosya, null, 2))
@@ -1822,14 +1834,14 @@ class Database {
      * // Artık "kalp" verisinde şu yazıyor 10
      */
 
-  substr(key, number = 1, goToNegative = true, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  substr(key, number = 1, goToNegative = true, fileName = this.DEFAULT_FILE_NAME) {
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     if (!number && number != 0) throw new DatabaseError("number değeri eksik", errorCodes.missingInput)
     number = Number(number)
-    if (isNaN(number)) throw new DatabaseError("number değeri bir sayı değeri olmalıdır", errorCodes.isNotNumber)
+    if (isNaN(number)) throw new DatabaseError("number değeri bir sayı değeri olmalıdır", errorCodes.notNumber)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       var dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
     } catch (e) {
@@ -1838,7 +1850,7 @@ class Database {
     }
     let veri = dosya[key]
     if (!veri) veri = 0
-    else if (isNaN(veri)) throw new DatabaseError("Verinin değeri bir Number olmalıdır", errorCodes.isNotNumber)
+    else if (isNaN(veri)) throw new DatabaseError("Verinin değeri bir Number olmalıdır", errorCodes.notNumber)
     else veri -= number
     if (veri < 0 && !goToNegative) throw new DatabaseError("Verinin değeri bir Number olmalıdır", errorCodes.negativeNumber)
     dosya[key] = veri
@@ -1874,14 +1886,14 @@ class Database {
      * // Artık "kalp" verisinde şu yazıyor 45
      */
 
-  multi(key, number, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  multi(key, number, fileName = this.DEFAULT_FILE_NAME) {
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     if (!number && number != 0) throw new DatabaseError("number değeri eksik", errorCodes.missingInput)
     number = Number(number)
-    if (isNaN(number)) throw new DatabaseError("number değeri bir sayı değeri olmalıdır", errorCodes.isNotNumber)
+    if (isNaN(number)) throw new DatabaseError("number değeri bir sayı değeri olmalıdır", errorCodes.notNumber)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       var dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
     } catch (e) {
@@ -1890,7 +1902,7 @@ class Database {
     }
     let veri = dosya[key]
     if (!veri) veri = number
-    else if (isNaN(veri)) throw new DatabaseError("Verinin değeri bir Number olmalıdır", errorCodes.isNotNumber)
+    else if (isNaN(veri)) throw new DatabaseError("Verinin değeri bir Number olmalıdır", errorCodes.notNumber)
     else veri *= number
     dosya[key] = veri
     fs.writeFileSync(`${fileName}.json`, JSON.stringify(dosya, null, 2))
@@ -1926,14 +1938,14 @@ class Database {
      * // Artık "kalp" verisinde şu yazıyor 5
      */
 
-  division(key, number, isInteger = false, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  division(key, number, isInteger = false, fileName = this.DEFAULT_FILE_NAME) {
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     if (!number) throw new DatabaseError("number değeri eksik veya 0'a eşit", errorCodes.missingInput)
     number = Number(number)
-    if (isNaN(number)) throw new DatabaseError("number değeri bir sayı değeri olmalıdır", errorCodes.isNotNumber)
+    if (isNaN(number)) throw new DatabaseError("number değeri bir sayı değeri olmalıdır", errorCodes.notNumber)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       var dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
     } catch (e) {
@@ -1942,7 +1954,7 @@ class Database {
     }
     let veri = dosya[key]
     if (!veri) veri = 1
-    else if (isNaN(veri)) throw new DatabaseError("Verinin değeri bir Number olmalıdır", errorCodes.isNotNumber)
+    else if (isNaN(veri)) throw new DatabaseError("Verinin değeri bir Number olmalıdır", errorCodes.notNumber)
     else isInteger ? (veri /= number) : (veri /= number).toFixed(0)
     dosya[key] = veri
     fs.writeFileSync(`${fileName}.json`, JSON.stringify(dosya, null, 2))
@@ -1980,9 +1992,9 @@ class Database {
    * Database.toJSON("öylesine bir dosya adı.json")
    */
 
-  toJSON(fileName = this.DEFAULT_JSON_FILE_NAME) {
+  toJSON(fileName = this.DEFAULT_FILE_NAME) {
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
       return dosya
@@ -2018,9 +2030,9 @@ class Database {
    * Database.toArray("öylesine bir dosya adı.json")
    */
 
-  toArray(fileName = this.DEFAULT_JSON_FILE_NAME) {
+  toArray(fileName = this.DEFAULT_FILE_NAME) {
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
       let newArray = []
@@ -2064,9 +2076,9 @@ class Database {
       * // JSON dosyası artık evrenin sonsuzluklarına doğru yolculuk yaptı..
       */
 
-  destroy(fileName = this.DEFAULT_JSON_FILE_NAME) {
+  destroy(fileName = this.DEFAULT_FILE_NAME) {
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       fs.unlinkSync(`${fileName}.json`)
       return;
@@ -2101,9 +2113,9 @@ class Database {
     * // JSON dosyasında artık sadece "{}" verisi yazıyor
     */
 
-  reset(fileName = this.DEFAULT_JSON_FILE_NAME) {
+  reset(fileName = this.DEFAULT_FILE_NAME) {
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       fs.writeFileSync(`${fileName}.json`, "{}")
       return {}
@@ -2134,15 +2146,19 @@ class Database {
     * 
     * // Bu ise dosyayı oluştururken içine veri yazdırarak oluşturur
     * Database.create("alisadb.json", { ali: "Adam" })
+    * 
+    * // Eğer oluşturduğunuz dosyayı varsayılan dosya olarakta ayarlamak istiyorsanız en son true yazınız
+    * Database.create("default.json", {}, true)
     */
 
-  create(fileName = this.DEFAULT_JSON_FILE_NAME, file = {}) {
+  create(fileName = this.DEFAULT_FILE_NAME, file = {}, isDefaultFile = false) {
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     if (fs.existsSync(`${fileName}.json`)) throw new DatabaseError(`${fileName}.json adında bir dosya zaten mevcut`, errorCodes.exists)
     if (Object.prototype.toString.call(file) != "[object Object]") throw new DatabaseError("file değeri bir Object tipi olmalıdır", errorCodes.invalidInput)
     try {
       fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, 2))
+      if (isDefaultFile) this.DEFAULT_FILE_NAME = fileName
       return file
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`${fileName}.json dosyası bulunamadı!`, errorCodes.missingFile)
@@ -2181,11 +2197,11 @@ class Database {
     * Database.typeof("bıktım") // "array"
     */
 
-  typeof(key, fileName = this.DEFAULT_JSON_FILE_NAME) {
+  typeof(key, fileName = this.DEFAULT_FILE_NAME) {
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    fileName = fileName.replace(".json", "")
+    fileName = fileName.replace(/\.json *$/m, "")
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
       let veri = dosya[key]
