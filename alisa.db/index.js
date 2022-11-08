@@ -15,7 +15,7 @@ class Database {
 
   constructor(fileName) {
 
-    // Eğer varsayılan bir dosya ismi girilmiş ise o dosyayı varsayılan olarak ayarla
+    // Eğer varsayılan bir dosya ismi girilmiş ise o dosya ismini varsayılan olarak ayarla
     if (typeof fileName == "string") {
 
       // Eğer dosya ismi .json olarak bitiyorsa .json yazısını kaldır
