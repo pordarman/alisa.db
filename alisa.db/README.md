@@ -106,6 +106,8 @@ Gördüğünüz gibi burada ise teker teker yazdırmak yerine birden fazla veri 
 
 - `.getManyValue()`, `.hasSomeValue()` ve `.hasEveryValue()` komutları eklendi
 
+- `.clone()` komutu eklendi
+
 <br>
 
 Modülün daha **stabil** ve **performanslı** çalışması için en son sürümde kullanmayı lütfen unutmayınız!

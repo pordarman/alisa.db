@@ -187,7 +187,7 @@ class Database {
   set(key, value, fileName = this.DEFAULT_FILE_NAME) {
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    if (!value && value === undefined) throw new DatabaseError("value değeri eksik", errorCodes.missingInput)
+    if (value === undefined) throw new DatabaseError("value değeri eksik", errorCodes.missingInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
@@ -435,10 +435,10 @@ class Database {
     * Database.get("hello") // "World!"
     * 
     * // Birden çok veriyi çekmek için array içinde key'lerin isimlerini giriniz
-    * Database.getMany(["hello", "Alisa", "Fearless"]) // ["World!", "o7", "Crazy"]
+    * Database.getMany(["hello", "Alisa", "Fearless"]) // { hello: "World!", Alisa: "o7", Fearless: "Crazy" }
     * 
     * // Eğer girdiğiniz değerlerin en az 1 tanesi bile bulunduysa bir Array döndürür
-    * Database.getMany(["hello", "alisa", "fear"]) // ["World!", undefined, undefined]
+    * Database.getMany(["hello", "alisa", "fear"]) // { hello: "World!" }
     * 
     * // Eğer girdiğiniz değerlerin hiç birisi bulunamadıysa girdiğiniz değeri döndürür
     * Database.getMany(["ali", "deneme", "test"], "Hiçbir veri bulunamadı!") // "Hiçbir veri bulunamadı!"
@@ -615,10 +615,10 @@ class Database {
     * ) // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
     * 
     * // Eğer sadece tek bir tane veriyi çekmek istiyorsanız .get() komutunu kullanınız
-    * Database.get("hello") // "World!"
+    * Database.get("hello") // { hello: "World!", Alisa: "o7", Fearless: "Crazy" }
     * 
     * // Birden çok veriyi çekmek için array içinde key'lerin isimlerini giriniz
-    * Database.fetchMany(["hello", "Alisa", "Fearless"]) // ["World!", "o7", "Crazy"]
+    * Database.fetchMany(["hello", "Alisa", "Fearless"]) // { hello: "World!" }
     * 
     * // Eğer girdiğiniz değerlerin hiç birisi bulunamadıysa girdiğiniz değeri döndürür
     * Database.fetchMany(["ali", "deneme", "test"], "Hiçbir veri bulunamadı!") // "Hiçbir veri bulunamadı!"
@@ -1701,7 +1701,7 @@ class Database {
   push(key, item, fileName = this.DEFAULT_FILE_NAME) {
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    if (!item && item === undefined) throw new DatabaseError("item değeri eksik", errorCodes.missingInput)
+    if (item === undefined) throw new DatabaseError("item değeri eksik", errorCodes.missingInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
@@ -1857,7 +1857,7 @@ class Database {
   unshift(key, item, fileName = this.DEFAULT_FILE_NAME) {
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
-    if (!item && item === undefined) throw new DatabaseError("item değeri eksik", errorCodes.missingInput)
+    if (item === undefined) throw new DatabaseError("item değeri eksik", errorCodes.missingInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
@@ -2395,6 +2395,49 @@ class Database {
       if (isDefaultFile) this.DEFAULT_FILE_NAME = fileName
       return file
     } catch (e) {
+      if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`${fileName}.json dosyası bulunamadı!`, errorCodes.missingFile)
+      throw new DatabaseError("Bilinmeyen bir hata oluştu!", errorCodes.unknown)
+    }
+  }
+
+
+
+  /**
+    * Belirli bir JSON database dosyasını klonlar
+    * @param {String} fileName Dosyanın adı (İsteğe göre)
+    * @return {Object}
+    * @example
+    * 
+    * // İlk önce database'ye bazı veriler yazdıralım
+    * Database.setMany(
+    *  { 
+    *   ali: "Kral", 
+    *   alifelan: "Öyle işte", 
+    *   tr: "RECEP TAYYİP PADİŞAHIM ÇOK YAŞA", 
+    *   us: "Ameriga bizi gısganıyor yigenim", 
+    *   bıktım: ["bıktım.."]
+    *  }
+    * )
+    * 
+    * // Sonra komutu bu JSON dosyasını başka bir JSON dosyasına kopyalayalım
+    * Database.clone("alisa.json")
+    * 
+    * // İsterseniz klonlanacak dosya ismini de girebilirsiniz
+    * Database.clone("alisadb.json", "öylesine bir dosya ismi.json")
+    */
+
+   clone(cloneFileName, fileName = this.DEFAULT_FILE_NAME) {
+    if (!cloneFileName) throw new DatabaseError("Klonlanacak dosyanın ismi eksik", errorCodes.missingInput)
+    if (typeof cloneFileName != "string") throw new DatabaseError("cloneFileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
+    if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
+    fileName = fileName.replace(/\.json *$/m, "")
+    cloneFileName = cloneFileName.replace(/\.json *$/m, "")
+    try {
+      let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`))
+      fs.writeFileSync(`${cloneFileName}.json`, JSON.stringify(dosya, null, 2))
+      return dosya
+    } catch (e) {
+      console.log(e)
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`${fileName}.json dosyası bulunamadı!`, errorCodes.missingFile)
       throw new DatabaseError("Bilinmeyen bir hata oluştu!", errorCodes.unknown)
     }
