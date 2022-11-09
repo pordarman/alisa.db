@@ -90,6 +90,10 @@ Database.getValue("bro!?")
 Database.getValue({ anyKey: "anyValue", anyArray: ["alisa", "db", "is", "awesome"], anyObjectAgain: {} })
 
 
+// Bu database.json dosyasında girdiğiniz değerlerle aynı bir value değerleri var ise onu çağırır
+Database.getValue(["bro!?", { anyKey: "anyValue", anyArray: ["alisa", "db", "is", "awesome"], anyObjectAgain: {} }])
+
+
 // Bu database.json dosyasında girdiğiniz verilerin hepsini çağırır
 Database.getMany(["key", "alisa", "array"]) // [undefined, "o7", ["1", "2", "3"]]
 Database.fetchMany(["key", "alisa", "array"]) // [undefined, "o7", ["1", "2", "3"]]
@@ -121,6 +125,21 @@ Database.exists("key")
 // Bu girdiğiniz verilerden en az 1 tanesinin olup olmadığını kontrol eder
 Database.hasSome(["ali", "alisa", "key"])
 Database.existsSome(["ali", "alisa", "key"])
+
+
+// Bu database.json dosyasında girdiğiniz değerle aynı bir value değeri var mı yok mu onu kontrol eder
+Database.hasValue("bro!?")
+Database.existsValue({ anyKey: "anyValue", anyArray: ["alisa", "db", "is", "awesome"], anyObjectAgain: {} })
+
+
+// Bu database.json dosyasında girdiğiniz değerlerle en az bir value değerine eşit ise true döndürür
+Database.hasSomeValue(["bro!?", { anyKey: "anyValue", anyArray: ["alisa", "db", "is", "awesome"], anyObjectAgain: {} }]) // true
+Database.existsSomeValue(["no veri", "veri yok"]) // false
+
+
+// Bu database.json dosyasında girdiğiniz değerlerin hepsi bir value değerine eşit ise true döndürür
+Database.hasEveryValue(["bro!?", { anyKey: "anyValue", anyArray: ["alisa", "db", "is", "awesome"], anyObjectAgain: {} }]) // true
+Database.existsEveryValue(["bro!?", "no veri", "veri yok"]) // false
 
 
 // Bu girdiğiniz verilerin hepsinin olup olmadığını kontrol eder (Eğer 1 tanesi bile bulunamadıysa false döndürür)

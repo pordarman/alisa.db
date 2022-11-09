@@ -98,11 +98,13 @@ Gördüğünüz gibi burada ise teker teker yazdırmak yerine birden fazla veri 
 <br>
 
 
-# Güncelleme v0.1.4
+# Güncelleme v0.1.5
 
 - Bazı yazım hataları giderildi
 
-- `.getValue()` ve `.hasValue()` komutları iyileştirildi
+- `.getValue()` ve `.hasValue()` komutları daha da iyileştirildi
+
+- `.getManyValue()`, `.hasSomeValue()` ve `.hasEveryValue()` komutları eklendi
 
 <br>
 

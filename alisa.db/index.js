@@ -5,6 +5,69 @@ const { version } = require("./package.json")
 
 
 
+/**
+ * Girilen objelerin aynı olup olmadığını kontrol eder
+ * @param {Object} object1 
+ * @param {Object} object2 
+ * @returns {Boolean}
+ */
+
+function sameObject(object1, object2) {
+  let objectEnt1 = Object.entries(object1)
+  let objectEnt2 = Object.entries(object2)
+  if (objectEnt1.length != objectEnt2.length) return false
+  for (const [key, value_1] of objectEnt1) {
+    let obj = objectEnt2.find(a => a[0] === key)
+    if (!obj || !sameValue(value_1, obj[1])) return false
+  }
+  return true
+}
+
+/**
+ * Girilen değerlerin aynı olup olmadığını kontrol eder
+ * @param {*} value1 
+ * @param {*} value2 
+ * @returns {Boolean}
+ */
+
+function sameValue(value1, value2) {
+  let pro1 = Object.prototype.toString.call(value1)
+  let pro2 = Object.prototype.toString.call(value2)
+  if (pro1 !== pro2) return false
+  switch (pro1) {
+    case "[object Null]": {
+      return true
+    }
+    case "[object String]":
+    case "[object Number]":
+    case "[object Boolean]": {
+      return value1 === value2
+    }
+    case "[object Array]": {
+      return sameArray(value1, value2)
+    }
+    case "[object Object]": {
+      return sameObject(value1, value2)
+    }
+    default: {
+      return false
+    }
+  }
+}
+
+/**
+ * Girilen dizilerin aynı olup olmadığını kontrol eder
+ * @param {Array} array1 
+ * @param {Array} array2 
+ * @returns {Boolean}
+ */
+
+function sameArray(array1, array2) {
+  if (array1.length != array2.length) return false
+  return array1.every(value_1 => array2.some(a2 => sameValue(value_1, a2)))
+}
+
+
 class Database {
 
 
@@ -269,14 +332,14 @@ class Database {
   * JSON dosyasından belirtilen veriye karışılık gelen veriyi çeker
   * @param {Array|Object|String|null|Number} value Değerin adı
   * @param {String} fileName Dosyanın adı (İsteğe göre)
-  * @return {Boolean}
+  * @return {Object}
   * @example
   * 
   * // İlk önce database'ye bazı veriler yazdıralım
   * Database.set("hello", "World!") // { hello: "World!" }
   * 
   * // Eğer database'de "World!" adında bir değer var ise o veriyi döndürür döndürür
-  * Database.getValue("World!") // { hello: "World!" }
+  * Database.getValue("World!") // "hello"
   * 
   * // Eğer döndürülecek veri yok ise varsayılan olarak undefined verisini döndürür
   * Database.getValue("hello") // undefined
@@ -291,53 +354,56 @@ class Database {
     fileName = fileName.replace(/\.json *$/m, "")
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
+      return Object.entries(dosya).find(([key, value_1]) => sameValue(value, value_1))?.[0] ?? defaultValue
+    } catch (e) {
+      if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`${fileName}.json dosyası bulunamadı!`, errorCodes.missingFile)
+      throw new DatabaseError("Bilinmeyen bir hata oluştu!", errorCodes.unknown)
+    }
+  }
 
-      // Aynı obje olup olmadığını kontrol eder
-      function sameObject(object1, object2) {
-        let objectEnt1 = Object.entries(object1)
-        let objectEnt2 = Object.entries(object2)
-        if (objectEnt1.length != objectEnt2.length) return false
-        for (const [key, value_1] of objectEnt1) {
-          let obj = objectEnt2.find(a => a[0] === key)
-          if (!obj || !sameValue(value_1, obj[1])) return false
-        }
-        return true
-      }
+  /**
+    * JSON dosyasından belirtilen veriye karşılık gelen verileri bularak istenilen verileri çeker
+    * @param {Array} values Değerler
+    * @param {any} defaultValue Eğer hiçbir veri yoksa döndürülecek varsayılan veri
+    * @param {String} fileName Dosyanın adı (İsteğe göre)
+    * @return {any|Object}
+    * @example
+    * 
+    * // İlk önce database'ye bazı veriler yazdıralım
+    * Database.setMany(
+    *  { 
+    *   hello: "World!", 
+    *   Alisa: "o7", 
+    *   Fearless: "Crazy", 
+    *   array: [1, 2, 3], 
+    *   string: "String"
+    *  }
+    * ) // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+    * 
+    * // Eğer sadece tek bir tane veriyi çekmek istiyorsanız .getValue() komutunu kullanınız
+    * Database.getValue("World!") // "hello"
+    * 
+    * // Birden çok veriyi çekmek için array içinde value değerlerini giriniz
+    * Database.getManyValue(["World!", "o7", "String"]) // ["hello", "Alisa", "Fearless"]
+    * 
+    * // Eğer girdiğiniz value değerlerinin en az 1 tanesi bile bulunduysa bir Array döndürür
+    * Database.getManyValue([[1, 2, 3], "alisa", "fear"]) // ["array", undefined, undefined]
+    * 
+    * // Eğer girdiğiniz value değerlerinin hiç birisi bulunamadıysa girdiğiniz değeri döndürür
+    * Database.getManyValue(["ali", "deneme", "test"], "Hiçbir veri bulunamadı!") // "Hiçbir veri bulunamadı!"
+    */
 
-      // Değerin aynı değer olup olmadığını kontrol eder
-      function sameValue(value1, value2) {
-        let pro1 = Object.prototype.toString.call(value1)
-        let pro2 = Object.prototype.toString.call(value2)
-        if (pro1 !== pro2) return false
-        switch (pro1) {
-          case "[object Null]": {
-            return true
-          }
-          case "[object String]":
-          case "[object Number]":
-          case "[object Boolean]": {
-            return value1 === value2
-          }
-          case "[object Array]": {
-            return sameArray(value1, value2)
-          }
-          case "[object Object]": {
-            return sameObject(value1, value2)
-          }
-          default: {
-            return false
-          }
-        }
-      }
-
-      // Aynı Array olup olmadğını kontrol eder
-      function sameArray(array1, array2) {
-        if (array1.length != array2.length) return false
-        return array1.every(value_1 => array2.some(a2 => sameValue(value_1, a2)))
-      }
-
-      let obj = Object.entries(dosya).find(([key, value_1]) => sameValue(value, value_1))
-      return obj ? { [obj[0]]: obj[1] } : defaultValue
+  getManyValue(values, defaultValue = [], fileName = this.DEFAULT_FILE_NAME) {
+    if (!values) throw new DatabaseError("values değeri eksik", errorCodes.missingInput)
+    if (typeof values == "string" && this) return this.getValue(values, (Array.isArray(defaultValue) && defaultValue.length == 0) ? undefined : defaultValue, fileName)
+    if (!Array.isArray(values)) throw new DatabaseError("values değeri bir Array olmalıdır", errorCodes.invalidInput)
+    if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
+    fileName = fileName.replace(/\.json *$/m, "")
+    try {
+      let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
+      let ent = Object.entries(dosya)
+      let newArray = values.map(value => ent.find(([key, value_1]) => sameValue(value, value_1))?.[0])
+      return newArray.filter(a => a !== undefined).length ? newArray : defaultValue
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`${fileName}.json dosyası bulunamadı!`, errorCodes.missingFile)
       throw new DatabaseError("Bilinmeyen bir hata oluştu!", errorCodes.unknown)
@@ -351,7 +417,7 @@ class Database {
     * @param {Array<String>} keys Veriler
     * @param {any} defaultValue Eğer hiçbir veri yoksa döndürülecek varsayılan veri
     * @param {String} fileName Dosyanın adı (İsteğe göre)
-    * @return {any|Array}
+    * @return {any|Object}
     * @example
     * 
     * // İlk önce database'ye bazı veriler yazdıralım
@@ -378,15 +444,17 @@ class Database {
     * Database.getMany(["ali", "deneme", "test"], "Hiçbir veri bulunamadı!") // "Hiçbir veri bulunamadı!"
     */
 
-  getMany(keys, defaultValue = [], fileName = this.DEFAULT_FILE_NAME) {
+  getMany(keys, defaultValue = {}, fileName = this.DEFAULT_FILE_NAME) {
     if (!keys) throw new DatabaseError("keys değeri eksik", errorCodes.missingInput)
+    if (typeof keys == "string" && this) return this.get(keys, (Object.prototype.toString.call(defaultValue) == "[object Object]" && Object.keys(defaultValue).length == 0) ? undefined : defaultValue, fileName)
     if (!Array.isArray(keys)) throw new DatabaseError("keys değeri bir Array olmalıdır", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
-      let newArray = keys.map(keys_1 => dosya[keys_1])
-      return newArray.filter(value => value !== undefined).length ? newArray : defaultValue
+      let obj = {}
+      keys.forEach(key => obj[key] = dosya[key])
+      return Object.entries(obj).length ? obj : defaultValue
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`${fileName}.json dosyası bulunamadı!`, errorCodes.missingFile)
       throw new DatabaseError("Bilinmeyen bir hata oluştu!", errorCodes.unknown)
@@ -465,14 +533,14 @@ class Database {
   * JSON dosyasından belirtilen veriye karışılık gelen veriyi çeker
   * @param {Array|Object|String|null|Number} value Değerin adı
   * @param {String} fileName Dosyanın adı (İsteğe göre)
-  * @return {Boolean}
+  * @return {Object}
   * @example
   * 
   * // İlk önce database'ye bazı veriler yazdıralım
   * Database.set("hello", "World!") // { hello: "World!" }
   * 
   * // Eğer database'de "World!" adında bir değer var ise o veriyi döndürür döndürür
-  * Database.fetchValue("World!") // { hello: "World!" }
+  * Database.fetchValue("World!") // "hello"
   * 
   * // Eğer döndürülecek veri yok ise varsayılan olarak undefined verisini döndürür
   * Database.fetchValue("hello") // undefined
@@ -484,6 +552,45 @@ class Database {
   fetchValue(value, defaultValue = undefined, fileName = this.DEFAULT_FILE_NAME) {
     if (!this) throw new DatabaseError("Lütfen .getValue() komutunu kullanınız", errorCodes.invalidCommand)
     return this.getValue(value, defaultValue, fileName)
+  }
+
+
+
+  /**
+    * JSON dosyasından belirtilen veriye karşılık gelen verileri bularak istenilen verileri çeker
+    * @param {Array} values Değerler
+    * @param {any} defaultValue Eğer hiçbir veri yoksa döndürülecek varsayılan veri
+    * @param {String} fileName Dosyanın adı (İsteğe göre)
+    * @return {any|Object}
+    * @example
+    * 
+    * // İlk önce database'ye bazı veriler yazdıralım
+    * Database.setMany(
+    *  { 
+    *   hello: "World!", 
+    *   Alisa: "o7", 
+    *   Fearless: "Crazy", 
+    *   array: [1, 2, 3], 
+    *   string: "String"
+    *  }
+    * ) // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+    * 
+    * // Eğer sadece tek bir tane veriyi çekmek istiyorsanız .getValue() komutunu kullanınız
+    * Database.getValue("World!") // "hello"
+    * 
+    * // Birden çok veriyi çekmek için array içinde value değerlerini giriniz
+    * Database.fetchManyValue(["World!", "o7", "String"]) // ["hello", "Alisa", "Fearless"]
+    * 
+    * // Eğer girdiğiniz value değerlerinin en az 1 tanesi bile bulunduysa bir Array döndürür
+    * Database.fetchManyValue([[1, 2, 3], "alisa", "fear"]) // ["array", undefined, undefined]
+    * 
+    * // Eğer girdiğiniz value değerlerinin hiç birisi bulunamadıysa girdiğiniz değeri döndürür
+    * Database.fetchManyValue(["ali", "deneme", "test"], "Hiçbir veri bulunamadı!") // "Hiçbir veri bulunamadı!"
+    */
+
+  fetchManyValue(values, defaultValue = [], fileName = this.DEFAULT_FILE_NAME) {
+    if (!this) throw new DatabaseError("Lütfen .getManyValue() komutunu kullanınız", errorCodes.invalidCommand)
+    return this.getManyValue(values, defaultValue, fileName)
   }
 
 
@@ -647,52 +754,102 @@ class Database {
     fileName = fileName.replace(/\.json *$/m, "")
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
-
-      // Aynı obje olup olmadığını kontrol eder
-      function sameObject(object1, object2) {
-        let objectEnt1 = Object.entries(object1)
-        let objectEnt2 = Object.entries(object2)
-        if (objectEnt1.length != objectEnt2.length) return false
-        for (const [key, value_1] of objectEnt1) {
-          let obj = objectEnt2.find(a => a[0] === key)
-          if (!obj || !sameValue(value_1, obj[1])) return false
-        }
-        return true
-      }
-
-      // Değerin aynı değer olup olmadığını kontrol eder
-      function sameValue(value1, value2) {
-        let pro1 = Object.prototype.toString.call(value1)
-        let pro2 = Object.prototype.toString.call(value2)
-        if (pro1 !== pro2) return false
-        switch (pro1) {
-          case "[object Null]": {
-            return true
-          }
-          case "[object String]":
-          case "[object Number]":
-          case "[object Boolean]": {
-            return value1 === value2
-          }
-          case "[object Array]": {
-            return sameArray(value1, value2)
-          }
-          case "[object Object]": {
-            return sameObject(value1, value2)
-          }
-          default: {
-            return false
-          }
-        }
-      }
-
-      // Array'in aynı Array olup olmadğını kontrol eder
-      function sameArray(array1, array2) {
-        if (array1.length != array2.length) return false
-        return array1.every(value_1 => array2.some(a2 => sameValue(value_1, a2)))
-      }
-
       return Object.values(dosya).some(value_1 => sameValue(value, value_1))
+    } catch (e) {
+      if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`${fileName}.json dosyası bulunamadı!`, errorCodes.missingFile)
+      throw new DatabaseError("Bilinmeyen bir hata oluştu!", errorCodes.unknown)
+    }
+  }
+
+
+
+  /**
+    * JSON dosyasından belirtilen veriye karşılık gelen en az bir veri var mı kontrol eder
+    * @param {Array} values Değerler
+    * @param {String} fileName Dosyanın adı (İsteğe göre)
+    * @return {any|Object}
+    * @example
+    * 
+    * // İlk önce database'ye bazı veriler yazdıralım
+    * Database.setMany(
+    *  { 
+    *   hello: "World!", 
+    *   Alisa: "o7", 
+    *   Fearless: "Crazy", 
+    *   array: [1, 2, 3], 
+    *   string: "String"
+    *  }
+    * ) // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+    * 
+    * // Eğer sadece tek bir tane veriyi çekmek istiyorsanız .hasValue() komutunu kullanınız
+    * Database.hasValue("World!") // true
+    * 
+    * // Birden çok veriyi çekmek için array içinde value değerlerini giriniz
+    * Database.hasSomeValue(["World!", "o7", "String"]) // true
+    * 
+    * // Eğer girdiğiniz value değerlerinin en az 1 tanesi bile bulunduysa true döndürür
+    * Database.hasSomeValue([[1, 2, 3], "alisa", "fear"]) // true
+    * 
+    * // Eğer girdiğiniz value değerlerinin hiç birisi bulunamadıysa false döndürür
+    * Database.hasSomeValue(["ali", "deneme", "test"], "Hiçbir veri bulunamadı!") // false
+    */
+
+  hasSomeValue(values, fileName = this.DEFAULT_FILE_NAME) {
+    if (!values) throw new DatabaseError("values değeri eksik", errorCodes.missingInput)
+    if (typeof values == "string" && this) return this.hasValue(values, fileName)
+    if (!Array.isArray(values)) throw new DatabaseError("values değeri bir Array olmalıdır", errorCodes.invalidInput)
+    if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
+    fileName = fileName.replace(/\.json *$/m, "")
+    try {
+      let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
+      let ent = Object.entries(dosya)
+      return values.some(value => ent.some(([key, value_1]) => sameValue(value, value_1)))
+    } catch (e) {
+      if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`${fileName}.json dosyası bulunamadı!`, errorCodes.missingFile)
+      throw new DatabaseError("Bilinmeyen bir hata oluştu!", errorCodes.unknown)
+    }
+  }
+
+
+
+  /**
+    * JSON dosyasından belirtilen veriye karşılık gelen verilerin hepsi var mı kontrol eder
+    * @param {Array} values Değerler
+    * @param {String} fileName Dosyanın adı (İsteğe göre)
+    * @return {any|Object}
+    * @example
+    * 
+    * // İlk önce database'ye bazı veriler yazdıralım
+    * Database.setMany(
+    *  { 
+    *   hello: "World!", 
+    *   Alisa: "o7", 
+    *   Fearless: "Crazy", 
+    *   array: [1, 2, 3], 
+    *   string: "String"
+    *  }
+    * ) // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+    * 
+    * // Eğer sadece tek bir tane veriyi çekmek istiyorsanız .hasValue() komutunu kullanınız
+    * Database.hasValue("World!") // true
+    * 
+    * // Birden çok veriyi çekmek için array içinde value değerlerini giriniz
+    * Database.hasEveryValue(["World!", "o7", "String"]) // true
+    * 
+    * // Eğer girdiğiniz value değerlerinin en az 1 tanesi bile bulunmadıysa false döndürür
+    * Database.hasEveryValue([[1, 2, 3], "alisa", "fear"]) // false
+    */
+
+  hasEveryValue(values, fileName = this.DEFAULT_FILE_NAME) {
+    if (!values) throw new DatabaseError("values değeri eksik", errorCodes.missingInput)
+    if (typeof values == "string" && this) return this.hasValue(values, fileName)
+    if (!Array.isArray(values)) throw new DatabaseError("values değeri bir Array olmalıdır", errorCodes.invalidInput)
+    if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
+    fileName = fileName.replace(/\.json *$/m, "")
+    try {
+      let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
+      let ent = Object.entries(dosya)
+      return values.every(value => ent.some(([key, value_1]) => sameValue(value, value_1)))
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`${fileName}.json dosyası bulunamadı!`, errorCodes.missingFile)
       throw new DatabaseError("Bilinmeyen bir hata oluştu!", errorCodes.unknown)
@@ -731,6 +888,7 @@ class Database {
 
   hasSome(keys, fileName = this.DEFAULT_FILE_NAME) {
     if (!keys) throw new DatabaseError("keys değeri eksik", errorCodes.missingInput)
+    if (typeof keys == "string" && this) return this.has(keys, fileName)
     if (!Array.isArray(keys)) throw new DatabaseError("keys değeri bir Array olmalıdır", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
@@ -775,6 +933,7 @@ class Database {
 
   hasAll(keys, fileName = this.DEFAULT_FILE_NAME) {
     if (!keys) throw new DatabaseError("keys değeri eksik", errorCodes.missingInput)
+    if (typeof keys == "string" && this) return this.has(keys, fileName)
     if (!Array.isArray(keys)) throw new DatabaseError("keys değeri bir Array olmalıdır", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
@@ -833,6 +992,79 @@ class Database {
   existsValue(value, fileName = this.DEFAULT_FILE_NAME) {
     if (!this) throw new DatabaseError("Lütfen .hasValue() komutunu kullanınız", errorCodes.invalidCommand)
     return this.hasValue(value, fileName)
+  }
+
+
+
+  /**
+    * JSON dosyasından belirtilen veriye karşılık gelen en az bir veri var mı kontrol eder
+    * @param {Array} values Değerler
+    * @param {String} fileName Dosyanın adı (İsteğe göre)
+    * @return {any|Object}
+    * @example
+    * 
+    * // İlk önce database'ye bazı veriler yazdıralım
+    * Database.setMany(
+    *  { 
+    *   hello: "World!", 
+    *   Alisa: "o7", 
+    *   Fearless: "Crazy", 
+    *   array: [1, 2, 3], 
+    *   string: "String"
+    *  }
+    * ) // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+    * 
+    * // Eğer sadece tek bir tane veriyi çekmek istiyorsanız .hasValue() komutunu kullanınız
+    * Database.hasValue("World!") // true
+    * 
+    * // Birden çok veriyi çekmek için array içinde value değerlerini giriniz
+    * Database.existsSomeValue(["World!", "o7", "String"]) // true
+    * 
+    * // Eğer girdiğiniz value değerlerinin en az 1 tanesi bile bulunduysa true döndürür
+    * Database.existsSomeValue([[1, 2, 3], "alisa", "fear"]) // true
+    * 
+    * // Eğer girdiğiniz value değerlerinin hiç birisi bulunamadıysa false döndürür
+    * Database.existsSomeValue(["ali", "deneme", "test"], "Hiçbir veri bulunamadı!") // false
+    */
+
+  existsSomeValue(values, fileName = this.DEFAULT_FILE_NAME) {
+    if (!this) throw new DatabaseError("Lütfen .hasSomeValue() komutunu kullanınız", errorCodes.invalidCommand)
+    return this.hasSomeValue(values, fileName)
+  }
+
+
+
+  /**
+    * JSON dosyasından belirtilen veriye karşılık gelen verilerin hepsi var mı kontrol eder
+    * @param {Array} values Değerler
+    * @param {String} fileName Dosyanın adı (İsteğe göre)
+    * @return {any|Object}
+    * @example
+    * 
+    * // İlk önce database'ye bazı veriler yazdıralım
+    * Database.setMany(
+    *  { 
+    *   hello: "World!", 
+    *   Alisa: "o7", 
+    *   Fearless: "Crazy", 
+    *   array: [1, 2, 3], 
+    *   string: "String"
+    *  }
+    * ) // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+    * 
+    * // Eğer sadece tek bir tane veriyi çekmek istiyorsanız .hasValue() komutunu kullanınız
+    * Database.hasValue("World!") // true
+    * 
+    * // Birden çok veriyi çekmek için array içinde value değerlerini giriniz
+    * Database.existsEveryValue(["World!", "o7", "String"]) // true
+    * 
+    * // Eğer girdiğiniz value değerlerinin en az 1 tanesi bile bulunmadıysa false döndürür
+    * Database.existsEveryValue([[1, 2, 3], "alisa", "fear"]) // false
+    */
+
+  existsEveryValue(values, fileName = this.DEFAULT_FILE_NAME) {
+    if (!this) throw new DatabaseError("Lütfen .hasEveryValue() komutunu kullanınız", errorCodes.invalidCommand)
+    return this.hasEveryValue(values, fileName)
   }
 
 
@@ -1378,6 +1610,7 @@ class Database {
 
   deleteMany(keys, fileName = this.DEFAULT_FILE_NAME) {
     if (!keys) throw new DatabaseError("keys değeri eksik", errorCodes.missingInput)
+    if (typeof keys == "string" && this) return this.delete(keys, fileName)
     if (!Array.isArray(keys)) throw new DatabaseError("keys değeri bir Array olmalıdır", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
@@ -1418,16 +1651,15 @@ class Database {
      * )
      * 
      * // Sonra komutu kullanarak bütün verileri silelim
-     * Database.deleteAll() // { ali: "Kral", alifelan: "Öyle işte", tr: "RECEP TAYYİP PADİŞAHIM ÇOK YAŞA", us: "Ameriga bizi gısganıyor yigenim", bıktım: "bıktım.."}
+     * Database.deleteAll() // {}
      */
 
   deleteAll(fileName = this.DEFAULT_FILE_NAME) {
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
       fs.writeFileSync(`${fileName}.json`, "{}")
-      return dosya
+      return {}
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`${fileName}.json dosyası bulunamadı!`, errorCodes.missingFile)
       throw new DatabaseError("Bilinmeyen bir hata oluştu!", errorCodes.unknown)
