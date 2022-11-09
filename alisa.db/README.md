@@ -104,6 +104,8 @@ Gördüğünüz gibi burada ise teker teker yazdırmak yerine birden fazla veri 
 
 - `.getValue()` ve `.hasValue()` komutları daha da iyileştirildi
 
+- `.toArray()` komutunun işlevi değiştirildi
+
 - `.getManyValue()`, `.hasSomeValue()` ve `.hasEveryValue()` komutları eklendi
 
 - `.clone()` komutu eklendi

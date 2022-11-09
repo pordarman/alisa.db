@@ -372,13 +372,13 @@ class Database {
     * // İlk önce database'ye bazı veriler yazdıralım
     * Database.setMany(
     *  { 
-    *   hello: "World!", 
-    *   Alisa: "o7", 
-    *   Fearless: "Crazy", 
-    *   array: [1, 2, 3], 
-    *   string: "String"
+    *   ali: "Kral", 
+    *   alifelan: "Öyle işte", 
+    *   tr: "RECEP TAYYİP PADİŞAHIM ÇOK YAŞA", 
+    *   us: "Ameriga bizi gısganıyor yigenim", 
+    *   bıktım: ["bıktım.."]
     *  }
-    * ) // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+    * )
     * 
     * // Eğer sadece tek bir tane veriyi çekmek istiyorsanız .getValue() komutunu kullanınız
     * Database.getValue("World!") // "hello"
@@ -423,13 +423,13 @@ class Database {
     * // İlk önce database'ye bazı veriler yazdıralım
     * Database.setMany(
     *  { 
-    *   hello: "World!", 
-    *   Alisa: "o7", 
-    *   Fearless: "Crazy", 
-    *   array: [1, 2, 3], 
-    *   string: "String"
+    *   ali: "Kral", 
+    *   alifelan: "Öyle işte", 
+    *   tr: "RECEP TAYYİP PADİŞAHIM ÇOK YAŞA", 
+    *   us: "Ameriga bizi gısganıyor yigenim", 
+    *   bıktım: ["bıktım.."]
     *  }
-    * ) // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+    * )
     * 
     * // Eğer sadece tek bir tane veriyi çekmek istiyorsanız .get() komutunu kullanınız
     * Database.get("hello") // "World!"
@@ -472,13 +472,13 @@ class Database {
    * // İlk önce database'ye bazı veriler yazdıralım
    * Database.setMany(
    *  { 
-   *   hello: "World!", 
-   *   Alisa: "o7", 
-   *   Fearless: "Crazy", 
-   *   array: [1, 2, 3], 
-   *   string: "String"
+   *   ali: "Kral", 
+   *   alifelan: "Öyle işte", 
+   *   tr: "RECEP TAYYİP PADİŞAHIM ÇOK YAŞA", 
+   *   us: "Ameriga bizi gısganıyor yigenim", 
+   *   bıktım: ["bıktım.."]
    *  }
-   * ) // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+   * )
    * 
    * // Bütün verileri çekmek için bu komutu kullanınız
    * Database.getAll() // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
@@ -567,13 +567,13 @@ class Database {
     * // İlk önce database'ye bazı veriler yazdıralım
     * Database.setMany(
     *  { 
-    *   hello: "World!", 
-    *   Alisa: "o7", 
-    *   Fearless: "Crazy", 
-    *   array: [1, 2, 3], 
-    *   string: "String"
+    *   ali: "Kral", 
+    *   alifelan: "Öyle işte", 
+    *   tr: "RECEP TAYYİP PADİŞAHIM ÇOK YAŞA", 
+    *   us: "Ameriga bizi gısganıyor yigenim", 
+    *   bıktım: ["bıktım.."]
     *  }
-    * ) // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+    * )
     * 
     * // Eğer sadece tek bir tane veriyi çekmek istiyorsanız .getValue() komutunu kullanınız
     * Database.getValue("World!") // "hello"
@@ -606,13 +606,13 @@ class Database {
     * // İlk önce database'ye bazı veriler yazdıralım
     * Database.setMany(
     *  { 
-    *   hello: "World!", 
-    *   Alisa: "o7", 
-    *   Fearless: "Crazy", 
-    *   array: [1, 2, 3], 
-    *   string: "String"
+    *   ali: "Kral", 
+    *   alifelan: "Öyle işte", 
+    *   tr: "RECEP TAYYİP PADİŞAHIM ÇOK YAŞA", 
+    *   us: "Ameriga bizi gısganıyor yigenim", 
+    *   bıktım: ["bıktım.."]
     *  }
-    * ) // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+    * )
     * 
     * // Eğer sadece tek bir tane veriyi çekmek istiyorsanız .get() komutunu kullanınız
     * Database.get("hello") // { hello: "World!", Alisa: "o7", Fearless: "Crazy" }
@@ -640,13 +640,13 @@ class Database {
    * // İlk önce database'ye bazı veriler yazdıralım
    * Database.setMany(
    *  { 
-   *   hello: "World!", 
-   *   Alisa: "o7", 
-   *   Fearless: "Crazy", 
-   *   array: [1, 2, 3], 
-   *   string: "String"
+   *   ali: "Kral", 
+   *   alifelan: "Öyle işte", 
+   *   tr: "RECEP TAYYİP PADİŞAHIM ÇOK YAŞA", 
+   *   us: "Ameriga bizi gısganıyor yigenim", 
+   *   bıktım: ["bıktım.."]
    *  }
-   * ) // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+   * )
    * 
    * // Bütün verileri çekmek için bu komutu kullanınız
    * Database.fetchAll() // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
@@ -671,13 +671,13 @@ class Database {
    * // İlk önce database'ye bazı veriler yazdıralım
    * Database.setMany(
    *  { 
-   *   hello: "World!", 
-   *   Alisa: "o7", 
-   *   Fearless: "Crazy", 
-   *   array: [1, 2, 3], 
-   *   string: "String"
+   *   ali: "Kral", 
+   *   alifelan: "Öyle işte", 
+   *   tr: "RECEP TAYYİP PADİŞAHIM ÇOK YAŞA", 
+   *   us: "Ameriga bizi gısganıyor yigenim", 
+   *   bıktım: ["bıktım.."]
    *  }
-   * ) // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+   * )
    * 
    * // Bütün verileri çekmek için bu komutu kullanınız
    * Database.all() // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
@@ -773,13 +773,13 @@ class Database {
     * // İlk önce database'ye bazı veriler yazdıralım
     * Database.setMany(
     *  { 
-    *   hello: "World!", 
-    *   Alisa: "o7", 
-    *   Fearless: "Crazy", 
-    *   array: [1, 2, 3], 
-    *   string: "String"
+    *   ali: "Kral", 
+    *   alifelan: "Öyle işte", 
+    *   tr: "RECEP TAYYİP PADİŞAHIM ÇOK YAŞA", 
+    *   us: "Ameriga bizi gısganıyor yigenim", 
+    *   bıktım: ["bıktım.."]
     *  }
-    * ) // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+    * )
     * 
     * // Eğer sadece tek bir tane veriyi çekmek istiyorsanız .hasValue() komutunu kullanınız
     * Database.hasValue("World!") // true
@@ -822,13 +822,13 @@ class Database {
     * // İlk önce database'ye bazı veriler yazdıralım
     * Database.setMany(
     *  { 
-    *   hello: "World!", 
-    *   Alisa: "o7", 
-    *   Fearless: "Crazy", 
-    *   array: [1, 2, 3], 
-    *   string: "String"
+    *   ali: "Kral", 
+    *   alifelan: "Öyle işte", 
+    *   tr: "RECEP TAYYİP PADİŞAHIM ÇOK YAŞA", 
+    *   us: "Ameriga bizi gısganıyor yigenim", 
+    *   bıktım: ["bıktım.."]
     *  }
-    * ) // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+    * )
     * 
     * // Eğer sadece tek bir tane veriyi çekmek istiyorsanız .hasValue() komutunu kullanınız
     * Database.hasValue("World!") // true
@@ -868,13 +868,13 @@ class Database {
     * // İlk önce database'ye bazı veriler yazdıralım
     * Database.setMany(
     *  { 
-    *   hello: "World!", 
-    *   Alisa: "o7", 
-    *   Fearless: "Crazy", 
-    *   array: [1, 2, 3], 
-    *   string: "String"
+    *   ali: "Kral", 
+    *   alifelan: "Öyle işte", 
+    *   tr: "RECEP TAYYİP PADİŞAHIM ÇOK YAŞA", 
+    *   us: "Ameriga bizi gısganıyor yigenim", 
+    *   bıktım: ["bıktım.."]
     *  }
-    * ) // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+    * )
     * 
     * // Eğer sadece tek bir tane veriyi kontrol etmek istiyorsanız .has() komutunu kullanınız
     * Database.has("hello") // true
@@ -913,22 +913,22 @@ class Database {
    * // İlk önce database'ye bazı veriler yazdıralım
    * Database.setMany(
    *  { 
-   *   hello: "World!", 
-   *   Alisa: "o7", 
-   *   Fearless: "Crazy", 
-   *   array: [1, 2, 3], 
-   *   string: "String"
+   *   ali: "Kral", 
+   *   alifelan: "Öyle işte", 
+   *   tr: "RECEP TAYYİP PADİŞAHIM ÇOK YAŞA", 
+   *   us: "Ameriga bizi gısganıyor yigenim", 
+   *   bıktım: ["bıktım.."]
    *  }
-   * ) // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+   * )
    * 
    * // Eğer sadece tek bir tane veriyi kontrol etmek istiyorsanız .has() komutunu kullanınız
-    * Database.has("hello") // true
-    * 
-    * // Birden çok veriyi kontrol etmek için array içinde key'lerin isimlerini giriniz
-    * Database.hasAll(["hello", "Alisa", "Fearless"]) // true
-    * 
-    * // Eğer girdiğiniz değerlerin bir tanesi bile yok ise false döndürür
-    * Database.hasAll(["hello", "Alisa", "test"]) // false
+   * Database.has("hello") // true
+   * 
+   * // Birden çok veriyi kontrol etmek için array içinde key'lerin isimlerini giriniz
+   * Database.hasAll(["hello", "Alisa", "Fearless"]) // true
+   * 
+   * // Eğer girdiğiniz değerlerin bir tanesi bile yok ise false döndürür
+   * Database.hasAll(["hello", "Alisa", "test"]) // false
    */
 
   hasAll(keys, fileName = this.DEFAULT_FILE_NAME) {
@@ -1006,13 +1006,13 @@ class Database {
     * // İlk önce database'ye bazı veriler yazdıralım
     * Database.setMany(
     *  { 
-    *   hello: "World!", 
-    *   Alisa: "o7", 
-    *   Fearless: "Crazy", 
-    *   array: [1, 2, 3], 
-    *   string: "String"
+    *   ali: "Kral", 
+    *   alifelan: "Öyle işte", 
+    *   tr: "RECEP TAYYİP PADİŞAHIM ÇOK YAŞA", 
+    *   us: "Ameriga bizi gısganıyor yigenim", 
+    *   bıktım: ["bıktım.."]
     *  }
-    * ) // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+    * )
     * 
     * // Eğer sadece tek bir tane veriyi çekmek istiyorsanız .hasValue() komutunu kullanınız
     * Database.hasValue("World!") // true
@@ -1044,13 +1044,13 @@ class Database {
     * // İlk önce database'ye bazı veriler yazdıralım
     * Database.setMany(
     *  { 
-    *   hello: "World!", 
-    *   Alisa: "o7", 
-    *   Fearless: "Crazy", 
-    *   array: [1, 2, 3], 
-    *   string: "String"
+    *   ali: "Kral", 
+    *   alifelan: "Öyle işte", 
+    *   tr: "RECEP TAYYİP PADİŞAHIM ÇOK YAŞA", 
+    *   us: "Ameriga bizi gısganıyor yigenim", 
+    *   bıktım: ["bıktım.."]
     *  }
-    * ) // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+    * )
     * 
     * // Eğer sadece tek bir tane veriyi çekmek istiyorsanız .hasValue() komutunu kullanınız
     * Database.hasValue("World!") // true
@@ -1079,13 +1079,13 @@ class Database {
     * // İlk önce database'ye bazı veriler yazdıralım
     * Database.setMany(
     *  { 
-    *   hello: "World!", 
-    *   Alisa: "o7", 
-    *   Fearless: "Crazy", 
-    *   array: [1, 2, 3], 
-    *   string: "String"
+    *   ali: "Kral", 
+    *   alifelan: "Öyle işte", 
+    *   tr: "RECEP TAYYİP PADİŞAHIM ÇOK YAŞA", 
+    *   us: "Ameriga bizi gısganıyor yigenim", 
+    *   bıktım: ["bıktım.."]
     *  }
-    * ) // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+    * )
     * 
     * // Eğer sadece tek bir tane veriyi kontrol etmek istiyorsanız .has() komutunu kullanınız
     * Database.has("hello") // true
@@ -1114,13 +1114,13 @@ class Database {
     * // İlk önce database'ye bazı veriler yazdıralım
     * Database.setMany(
     *  { 
-    *   hello: "World!", 
-    *   Alisa: "o7", 
-    *   Fearless: "Crazy", 
-    *   array: [1, 2, 3], 
-    *   string: "String"
+    *   ali: "Kral", 
+    *   alifelan: "Öyle işte", 
+    *   tr: "RECEP TAYYİP PADİŞAHIM ÇOK YAŞA", 
+    *   us: "Ameriga bizi gısganıyor yigenim", 
+    *   bıktım: ["bıktım.."]
     *  }
-    * ) // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+    * )
     * 
     * // Eğer sadece tek bir tane veriyi kontrol etmek istiyorsanız .has() komutunu kullanınız
     * Database.has("hello") // true
@@ -1149,22 +1149,22 @@ class Database {
    * // İlk önce database'ye bazı veriler yazdıralım
    * Database.setMany(
    *  { 
-   *   hello: "World!", 
-   *   Alisa: "o7", 
-   *   Fearless: "Crazy", 
-   *   array: [1, 2, 3], 
-   *   string: "String"
+   *   ali: "Kral", 
+   *   alifelan: "Öyle işte", 
+   *   tr: "RECEP TAYYİP PADİŞAHIM ÇOK YAŞA", 
+   *   us: "Ameriga bizi gısganıyor yigenim", 
+   *   bıktım: ["bıktım.."]
    *  }
-   * ) // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+   * )
    * 
    * // Eğer sadece tek bir tane veriyi kontrol etmek istiyorsanız .has() komutunu kullanınız
-    * Database.has("hello") // true
-    * 
-    * // Birden çok veriyi kontrol etmek için array içinde key'lerin isimlerini giriniz
-    * Database.existsAll(["hello", "Alisa", "Fearless"]) // true
-    * 
-    * // Eğer girdiğiniz değerlerin bir tanesi bile yok ise false döndürür
-    * Database.existsAll(["hello", "Alisa", "test"]) // false
+   * Database.has("hello") // true
+   * 
+   * // Birden çok veriyi kontrol etmek için array içinde key'lerin isimlerini giriniz
+   * Database.existsAll(["hello", "Alisa", "Fearless"]) // true
+   * 
+   * // Eğer girdiğiniz değerlerin bir tanesi bile yok ise false döndürür
+   * Database.existsAll(["hello", "Alisa", "test"]) // false
    */
 
   existsAll(keys, fileName = this.DEFAULT_FILE_NAME) {
@@ -2211,16 +2211,16 @@ class Database {
    * // İlk önce database'ye bazı veriler yazdıralım
    * Database.setMany(
    *  { 
-   *   hello: "World!", 
-   *   Alisa: "o7", 
-   *   Fearless: "Crazy", 
-   *   array: [1, 2, 3], 
-   *   string: "String"
+   *   ali: "Kral", 
+   *   alifelan: "Öyle işte", 
+   *   tr: "RECEP TAYYİP PADİŞAHIM ÇOK YAŞA", 
+   *   us: "Ameriga bizi gısganıyor yigenim", 
+   *   bıktım: ["bıktım.."]
    *  }
-   * ) // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+   * )
    * 
    * // Bütün verileri çekmek için bu komutu kullanınız
-   * Database.toJSON() // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+   * Database.toJSON() // { "ali": "Kral", "alifelan": "Öyle işte", "tr": "RECEP TAYYİP PADİŞAHIM ÇOK YAŞA", "us": "Ameriga bizi gısganıyor yigenim", "bıktım": ["bıktım.."] }
    * 
    * // Eğer başka bir dosyadaki verileri çekmek için o dosyanın yolunu giriniz
    * Database.toJSON("öylesine bir dosya adı.json")
@@ -2249,16 +2249,17 @@ class Database {
    * // İlk önce database'ye bazı veriler yazdıralım
    * Database.setMany(
    *  { 
-   *   hello: "World!", 
-   *   Alisa: "o7", 
-   *   Fearless: "Crazy", 
-   *   array: [1, 2, 3], 
-   *   string: "String"
+   *   ali: "Kral", 
+   *   alifelan: "Öyle işte", 
+   *   tr: "RECEP TAYYİP PADİŞAHIM ÇOK YAŞA", 
+   *   us: "Ameriga bizi gısganıyor yigenim", 
+   *   bıktım: ["bıktım.."]
    *  }
-   * ) // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+   * )
    * 
    * // Bütün verileri çekmek için bu komutu kullanınız
-   * Database.toArray() // { "hello": "World!", "Alisa": "o7", "Fearless": "Crazy", "array": [1, 2, 3], "string": "String" }
+   * Database.toArray() 
+   * // [["ali", "Kral"], ["alifelan", "Öyle işte"], ["tr", "RECEP TAYYİP PADİŞAHIM ÇOK YAŞA"], ["us", "Ameriga bizi gısganıyor yigenim"], ["bıktım", ["bıktım.."]]]
    * 
    * // Eğer başka bir dosyadaki verileri çekmek için o dosyanın yolunu giriniz
    * Database.toArray("öylesine bir dosya adı.json")
@@ -2269,11 +2270,7 @@ class Database {
     fileName = fileName.replace(/\.json *$/m, "")
     try {
       let dosya = JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
-      let newArray = []
-      for (const key in dosya) {
-        newArray.push({ [key]: dosya[key] })
-      }
-      return newArray
+      return Object.entries(dosya)
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`${fileName}.json dosyası bulunamadı!`, errorCodes.missingFile)
       throw new DatabaseError("Bilinmeyen bir hata oluştu!", errorCodes.unknown)
