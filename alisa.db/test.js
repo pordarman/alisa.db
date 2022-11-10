@@ -1,20 +1,20 @@
 /**
  * 
- * NOT!!! Aşağıdaki komutların açıklamalarını okumadan önce bilmeniz gerekenler!!!!
+ * NOTE!!! What you need to know before reading the descriptions of the commands below!!!!
  * 
- * Aşağıda komutların ne işe yaradıklarını açıklarken bazı yerlerde "key" ve "value" kelimelerini kullanıyorum.
- * Eğer bunların ne anlama geldiğini bilmiyorsanız lütfen aşağıdaki yere bakınız yoksa komutun tam olarak ne işe yaradığını tam olarak anlayamayabilirsiniz!
+ * I use the words "key" and "value" in some places while explaining what the commands do below.
+ * If you don't know what they mean, please see the place below or you may not understand exactly what the command does!
  * 
- * Eğer biliyorsanız buraya bakmanız gerek yok
+ * You don't need to look here if you know
  */
 
 
 /**
- * Şimdi key ve value dediğimiz şey nedir?
+ * Now what do we call key and value?
  * 
- * "key" ve "value" sadece bir Object ifadede bulunur. Eğer bir yerde "key" veya "value" yazısının geçtiğini duyuyorsanız onun bir Object yani obje olduğunu anlamalısınız
+ * "key" and "value" only exist in an Object expression. If you hear "key" or "value" written somewhere, you should understand that it is an Object.
  * 
- * Hemen bir örnek vererek açıklayayım
+ * Let's explain with an example
  */
 
 ({
@@ -25,256 +25,256 @@
 })
 
 /**
- * Buradaki "key:", "anotherKey:", "anotherKey2:" ve "anotherKey3:" bizim key değerlerimiz. Yani "key:" key'ine karışık gelen değer "value"'dir
+ * Here "key:", "anotherKey:", "anotherKey2:" and "anotherKey3:" are our key values. So the mixed value for the "key:" key is "value"
  * 
- * Aynı zamanda "anotherKey2:" key'ine karşılık gelen değer {} dir
+ * Also the value corresponding to "anotherKey2:" is {}
  * 
- * Ve yukarıda da anlaşıldığı üzere "value", [], {} ve "anotherValue" değerlerimiz ise bizim value değerlerimizdir
+ * And as understood above, our "value", [], {} and "anotherValue" values are our value values.
  * 
  * 
- * Şimdi aşağıdaki komutlara geçebilirsiniz
+ * Now you can proceed to the following commands
  */
 
 
 
 
 
-// İlk önce alisa.db modülünü tanımlıyoruz
-const alisadb = require("./index") // Siz "./index" yerine "alisa.db" yazınız
+// First we define the alisa.db module
+const alisadb = require("./index") // You replace "./index" with "alisa.db"
 
-// Sonra yeni bir tane database oluşturuyoruz
-const Database = new alisadb("database.json") // Buraya ise varsayılan olarak dosyamızın adını giriyoruz
+// Then we create a new database
+const Database = new alisadb("database.json") // Here we enter the name of our file by default
 
 
 /**
- * Ana komutlar
+ * Main commands
  */
 
 
-// Bu database.json dosyasındaki bütün key değerlerini çağırır
+// This calls all key values in database.json file
 Database.keys()
 
 
-// Bu da database.json dosyasındaki bütün value değerlerini çağırır
+// This calls all the values in database.json file
 Database.values()
 
 
 /**
- * Veri yazdırma komutları
+ * Data print commands
  */
 
 
-// Bu database.json dosyasına { "key": "value" } değerini yazdırır
+// This prints the value { "key": "value" } to the database.json file
 Database.set("key", "value")
 
 
-// Bu ise teker teker yapmak yerine hepsini aynı anda yazdırır
+// This prints them all at once instead of doing it one at a time.
 Database.setMany({ key1: "value1", key2: "value2", key3: "value3" })
 
 
-// Bu ise database.json dosyasının içindeki her şeyi siler ve sizin girdiğiniz veriyi yazar
+// This deletes everything in the database.json file and writes the data you entered.
 Database.setFile({ alisa: "o7", array: ["1", "2", "3"], hello: "World!", anyObject: { anyKey: "anyValue", anyArray: ["alisa", "db", "is", "awesome"], anyObjectAgain: {} }, what: "the", fuck: "bro!?" })
 
+
 /**
- * Veriyi bulma komutları
+ * Data pull commands
  */
 
 
-// Bu database.json dosyasında "key" diye bir veri var ise onu çağırır
+// If there is a data called "key" in this database.json file, it calls it
 Database.get("key")
 Database.fetch("key")
 
 
-// Bu database.json dosyasında girdiğiniz değerle aynı bir value değeri var ise onu çağırır
+// If there is a value that is the same as the value you entered in this database.json file, it calls it
 Database.getValue("bro!?")
 Database.getValue({ anyKey: "anyValue", anyArray: ["alisa", "db", "is", "awesome"], anyObjectAgain: {} })
 
 
-// Bu database.json dosyasında girdiğiniz değerlerle aynı bir value değerleri var ise onu çağırır
+// If there is a value that is the same as the values you entered in this database.json file, it calls it
 Database.getValue(["bro!?", { anyKey: "anyValue", anyArray: ["alisa", "db", "is", "awesome"], anyObjectAgain: {} }])
 
 
-// Bu database.json dosyasında girdiğiniz verilerin hepsini çağırır
+// This will call all the data you entered in the database.json file
 Database.getMany(["key", "alisa", "array"]) // [undefined, "o7", ["1", "2", "3"]]
 Database.fetchMany(["key", "alisa", "array"]) // [undefined, "o7", ["1", "2", "3"]]
 
 
 
-// Bu database.json dosyasındaki bütün veriyi çağırır
+// This calls all data in database.json file
 Database.getAll()
 Database.fetchAll()
 Database.all()
 Database.toJSON()
-// Yukarıdakilerin hepsi JSON (yani Object) formatında çağırılır
+// All of the above are called in JSON (i.e. Object) format
 
 Database.toArray()
-
-// Bu komut ise Array halinde çağırılır
+// This command is called as Array
 
 
 /**
- * Veriyi kontrol etme komutları
+ * Commands to check data
  */
 
 
-// Bu database.json dosyasında "key" diye bir verinin olup olmadığını kontrol eder
+// This checks if there is a "key" in the database.json file.
 Database.has("key")
 Database.exists("key")
 
 
-// Bu girdiğiniz verilerden en az 1 tanesinin olup olmadığını kontrol eder
+// This checks if at least 1 of the data you entered exists
 Database.hasSome(["ali", "alisa", "key"])
 Database.existsSome(["ali", "alisa", "key"])
 
 
-// Bu database.json dosyasında girdiğiniz değerle aynı bir value değeri var mı yok mu onu kontrol eder
+// This checks whether there is a value that is the same as the value you entered in the database.json file.
 Database.hasValue("bro!?")
 Database.existsValue({ anyKey: "anyValue", anyArray: ["alisa", "db", "is", "awesome"], anyObjectAgain: {} })
 
 
-// Bu database.json dosyasında girdiğiniz değerlerle en az bir value değerine eşit ise true döndürür
+// Returns true if this is equal to at least one value with the values you entered in the database.json file
 Database.hasSomeValue(["bro!?", { anyKey: "anyValue", anyArray: ["alisa", "db", "is", "awesome"], anyObjectAgain: {} }]) // true
-Database.existsSomeValue(["no veri", "veri yok"]) // false
+Database.existsSomeValue(["no no", "empty"]) // false
 
 
-// Bu database.json dosyasında girdiğiniz değerlerin hepsi bir value değerine eşit ise true döndürür
+// Returns true if the values you entered in this database.json file are all equal to a value
 Database.hasEveryValue(["bro!?", { anyKey: "anyValue", anyArray: ["alisa", "db", "is", "awesome"], anyObjectAgain: {} }]) // true
-Database.existsEveryValue(["bro!?", "no veri", "veri yok"]) // false
+Database.existsEveryValue(["bro!?", "no no", "empty"]) // false
 
 
-// Bu girdiğiniz verilerin hepsinin olup olmadığını kontrol eder (Eğer 1 tanesi bile bulunamadıysa false döndürür)
+// This checks if all the data you entered are present (returns false if even 1 is not found)
 Database.hasAll(["ali", "alisa", "key"])
 Database.existsAll(["ali", "alisa", "key"])
 
 
 /**
- * Fonksiyon kullanarak istediğiniz verileri çekme komutları 
+ * Commands to pull the data you want using functions
  */
 
 
-// Bu database.json dosyasındaki key verisinin içinde "a" harfi bulunan ilk veriyi çağırır
+// This allows you to pull the data you want from the database.json file
 Database.find(object => object.key.includes("a"))
-Database.includes("a") // İkisi aynı şey
+Database.includes("a") // They are the same thing
 
 Database.find(object => object.key.startsWith("a"))
-Database.startsWith("a") // Bu ikisi de aynı şey
+Database.startsWith("a") // They are the same thing
 
 
-// Bu database.json dosyasındaki key verisinin içinde "a" harfi bulunan bütün verileri çağırır
+// This calls all data with letter "a" in key data in database.json file
 Database.filter(object => object.key.includes("a"))
 
 
-// Bu database.json dosyasındaki key verilerinin en az birisinin içinde "a" harfi olup olmadığını kontrol eder 
+// This checks if at least one of the key data in the database.json file contains the letter "a"
 Database.some(object => object.key.includes("a"))
 
 
-// Bu database.json dosyasındaki bütün key verilerinin içinde "a" harfi bulunup bulunmadığını kontrol eder
+// This checks if all key data in the database.json file contains the letter "a"
 Database.every(object => object.key.includes("a"))
 
 
-// Bu ise database.json dosyasındaki belirttiğiniz veri var ise onu siler
+// This will delete the data you specified in the database.json file
 Database.findAndDelete(object => object.key.includes("alisao7"))
 
 
-// Bu ise database.json dosyasındaki belirttiğiniz veriler var ise bütün verileri siler
+// This will delete all the data in the database.json file, if there is any data you specified
 Database.filterAndDelete(object => object.key.includes("alisao7"))
 
 
 /**
- * Veri silme komutları
+ * Data wipe commands
  */
 
 
-// Bu database.json dosyasındaki "key" verisini siler
+// This deletes the "key" data in the database.json file
 Database.delete("key")
 
 
-// Bu ise database.json dosyasındaki girdiğiniz addaki bütün verileri siler
+// This will delete all data with the name you entered in the database.json file
 Database.deleteMany(["key", "alisa", "value"])
 
 
-// Bu ise database.json dosyasındaki bütün verileri siler
+// This deletes all the data in the database.json file
 Database.deleteAll()
 
 
 /**
- * Array komutları
+ * Array commands
  */
 
 
-// Bu database.json dosyasındaki "key" verisine karşılık gelen Array'in sonuna yeni bir veri ekler
+// Adds a new data to the end of the Array corresponding to the "key" data in this database.json file
 Database.push("key", "veri")
 
 
-// Bu ise verinin sonuna birden çok veri ekler
+// This adds multiple data to the end of the data
 Database.pushAll("key", ["veri1", "veri2", "veri3"])
 
 
-// Bu da Array'in en sonundaki veriyi siler
+// This deletes the data at the very end of the Array.
 Database.pop("key")
-Database.pop("key", 5) // Bu da 1 veri yerine 5 veri siler
+Database.pop("key", 5) // This also deletes 5 data instead of 1 data
 
 
-// Bu database.json dosyasındaki "key" verisine karşılık gelen Array'in başına yeni bir veri ekler
+// Adds a new data to the beginning of the Array corresponding to the "key" data in this database.json file
 Database.unshift("key", "veri")
 
 
-// Bu ise verinin başına birden çok veri ekler
+// This adds multiple data to the beginning of the data
 Database.unshiftAll("key", ["veri1", "veri2", "veri3"])
 
 
-// Bu da Array'in en başındaki veriyi siler
+// This deletes the data at the very beginning of the Array
 Database.shift("key")
-Database.shift("key", 5) // Bu da 1 veri yerine 5 veri siler
+Database.shift("key", 5) // This also deletes 5 data instead of 1 data
 
 
 /**
- * Dört işlem komutları
+ * Math operation commands
  */
 
 
-// Bu database.json dosyasındaki "key" verisinin değerini arttırır
+// This increments the value of the "key" data in the database.json file
 Database.add("key")
-Database.add("key", 5) // Bu da 1 yerine 5 ekler
+Database.add("key", 5) // This adds 5 instead of 1
 
 
-// Bu database.json dosyasındaki "key" verisinin değerini azaltır
+// This reduces the value of the "key" data in the database.json file
 Database.substr("key")
-Database.substr("key", 5) // Bu da 1 yerine 5 çıkartır
-Database.substr("key", 4, true) // Bu ise sayının eksi (-)'lere düşüp düşmeceğini kontrol eder
+Database.substr("key", 5) // This subtracts 5 instead of 1
+Database.substr("key", 4, true) // This checks if the number drops to minus (-)'s
 
 
-// Bu database.json dosyasındaki "key" verisinin değerini çarparak arttırır
+// This multiplies the value of the "key" data in the database.json file
 Database.multi("key", 5)
 
 
-// Bu database.json dosyasındaki "key" verisinin değerini böler
+// This splits the value of the "key" data in the database.json file
 Database.division("key", 5)
-Database.division("key", 4, true) // Bu ise sayının virgüllü olup olmayacağını kontrol eder
+Database.division("key", 4, true) // This checks whether the number is integer or not.
 
 
 /**
- * Sıfırlama/silme/oluşturma komutları
+ * Reset/delete/create commands
  */
 
 
-// Bu database.json dosyasındaki bütün verileri siler
+// This deletes all data in database.json
 Database.deleteAll()
 Database.reset()
 
 
-// Bu da direkt database.json dosyasını siler
+// This directly deletes the database.json file
 Database.destroy()
 
 
-// Bu ise database.json adında yeni bir dosya oluşturur
+// This creates a new file called database.json
 Database.create("database.json")
 
 
 /**
- * Diğer komutlar
+ * Other commands
  */
 
 
-// Bu ise "key" verisine karşılık gelen verinin tipini gösterir
+// This indicates the type of data corresponding to the "key" data.
 Database.typeof("key")

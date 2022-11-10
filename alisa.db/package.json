@@ -1,8 +1,8 @@
 {
   "name": "alisa.db",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "readme": "README.md",
-  "description": "JSON database modülü",
+  "description": "JSON database module",
   "main": "index.js",
   "scripts": {
     "test": "node test.js"

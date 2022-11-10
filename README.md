@@ -1,140 +1,151 @@
 ## ![alisa.db Logo](https://i.hizliresim.com/aug2sp9.png)
 
-# Kaynak dosyası
+# Source file
 
 - [alisa.db](https://github.com/pordarman/alisa.db)
 
 <br>
 
-# Yaratıcı(lar)
+# Creator(s)
 
 - [Ali (Fearless Crazy)](https://github.com/pordarman)
 
 <br>
 
-# Sosyal medya hesapları
+# Social media accounts
 
 - Ali: [İnstagram](https://www.instagram.com/ali.celk/) - [Discord](https://discord.com/users/488839097537003521) - [Spotify](https://open.spotify.com/user/215jixxk4morzgq5mpzsmwwqa?si=41e0583b36f9449b)
 
 <br>
 
-# Nasıl indirilir?
+# How to download?
 
-- İlk önce bir tane [node.js](https://nodejs.org/en/) dosyası oluşturuyoruz (Eğer bilgisayarınızda [node.js](https://nodejs.org/en/) indirmediyseniz [Buraya tıklayarak](https://nodejs.org/en/) node.js indirebilirsiniz)
+- First we create a [node.js](https://nodejs.org/en/) file (If you have not downloaded [node.js](https://nodejs.org/en/) to computer before, you can download node.js by [clicking here](https://nodejs.org/en/))
 
-- Sonra oluşturduğunuz dosyanın klasörüne "shift + sağ tık" yaparak PowerShell terminalini açıyoruz
+- Then we open the PowerShell terminal by "shift + right click" on the folder of the file you created.
 
-![PowerShell terminalini açma](https://i.hizliresim.com/namhujn.png)
+![Opening the PowerShell terminal](https://i.hizliresim.com/namhujn.png)
 
-- Sonra çıkan yere **npm i alisa.db** yazıyoruz ve enter tuşuna basıyoruz
+- Then we write **npm i alisa.db** and press enter.
 
-![alisa.db modülünü indirme](https://i.hizliresim.com/8f3yk6t.png)
+![Download the alisa.db module](https://i.hizliresim.com/8f3yk6t.png)
 
-- Ve artık **alisa.db** modülünü indirmiş bulunmaktayız tebrikleerr 🎉🎉
+- And now we have downloaded the **alisa.db** module, congratulations 🎉🎉
 
 
-
-<br>
-
-# Nedir bu modül?
-
-- Bu modül JSON database'si kullanan insanlara kolaylık etme amacıyla kurulmuştur
-
-- İçinde neredeyse her şeyi özelleştirebileceğiniz komutlar, bilgiler bulunmaktadır
-
-- Herhangi bir gelir gütmeksizin, sadece insanlara yardımcı olabilmek amacıyla yapılmıştır
 
 <br>
 
-# Peki nasıl kullanılır?
+# What is this module?
 
-Çok basit, önce herhangi bir node.js dosyası açıp onun içine şunları yazmalısınız:
+- This module was established to facilitate people using JSON database
+
+- This module, which contains as many commands and features as you would like, is *perfect*, just like the man/woman of your dreams
+
+- There are commands and features that you can customize almost anything
+
+- This module was made with the sole purpose of helping people, without generating any income
+
+<br>
+
+# So how to use?
+
+It's very simple, first you have to open any node.js file and write the following in it:
 <br>
 ```js
 const Database = new (require("alisa.db"))()
 ```
-Bunu yazdıktan sonra **bütün** komutlara erişim sağlayabilirsiniz
+After typing this you can access **all** commands
 
 <br>
 
-# Örnek
+# Example
 
-Şimdi isterseniz database'ye nasıl veri yazdıracağınızı kısaca anlatayım
+Now, if you want, let me briefly explain how to write data to the database
 <br>
 
 ```js
-// Database'ye veri yazdırma
+// Printing data to database
 Database.set("hello", "World!")
 
-// Bunu yazdıktan sonra database.json dosyasında şu veriler oluşur:
+// After typing this, the following data is created in the database.json file:
 ```
-![Database'ye veri yazdırma](https://i.hizliresim.com/mnt8zwz.png)
+![Printing data to database](https://i.hizliresim.com/mnt8zwz.png)
   
-Gördüğünüz gibi kullanımı gayet basit ve anlaşılır.
+As you can see, it is very simple and understandable to use
 
 <br>
 
-Ve eğer isterseniz tek bir veri kaydetmek yerine aynı anda birden fazla veri de kaydedebilirsiniz.
+And if you want, instead of saving a single data, you can save multiple data at the same time
 ```js
-// Database'ye çoklu veri yazdırma
+// Printing multiple data to database
 Database.setMany({ hello: "World", test: "Test", alisa: "alisa.db", version: "0.0.3" })
 
-// Bunu yazdıktan sonra database.json dosyasında şu veriler oluşur:
+// After typing this, the following data is created in the database.json file:
 ```
-![Database'ye çoklu veri yazdırma](https://i.hizliresim.com/lzfojym.png)
+![Printing multiple data to database](https://i.hizliresim.com/lzfojym.png)
 
-Gördüğünüz gibi burada ise teker teker yazdırmak yerine birden fazla veri yazdırarak zamandan ve bellekten tasarruf edebiliriz.
-
-<br>
-
-# Peki neden alisa.db?
-
-- İlk nedeni aşırı basit olması ve hata verme olasılığının daha az olması
-
-- İkinci nedeni ise açık kaynaklı modül olmasından dolayı isterseniz kendinize özel bir şekilde düzenlenebilir olması
-
-- Üçüncü nedeni ise... Şeyy, sanırım başka neden kalmadı :( Belki beni mutlu etmek için olabilir 👉👈
+As you can see, we can save time and memory by printing multiple data instead of printing one by one
 
 <br>
 
+# So why alisa.db?
 
-# Güncellemeler
+- The first reason is that it is overly simple and less likely to fail
+
+- The second reason is that since it is an open source module, it can be edited in a special way if you want
+
+- The third reason is that we are improving this module every day, making it more performance and adding new features to our strength
+
+- The fourth reason is... Well, I guess there's no other reason :( Maybe it's just to make me happy 👉👈
+
+<br>
+
+
+# Updates
+## v0.2.0
+
+- The whole module has been translated into English (It was quite difficult for me..)
+
+- Annnddd fixed some typos
+
+
 ## v0.1.8
 
-- Bazı performans sorunları giderildi
+- Fixed some performance issues
 
-- Bazı yazım hataları giderildi
+- Fixed some typos
 
 ## v0.1.7
 
-- `.clone()` komutu eklendi
+- Added `.clone()` command
 
 ## v0.1.6
 
-- `.toArray()` komutunun işlevi değiştirildi
+- Changed the function of the `.toArray()` command
 
-- `.getManyValue()`, `.hasSomeValue()` ve `.hasEveryValue()` komutları eklendi
+- Added `.getManyValue()`, `.hasSomeValue()` and `.hasEveryValue()` commands
 
 ## v0.1.5
 
-- Bazı yazım hataları giderildi
+- Fixed some typos
 
-- `.getValue()` ve `.hasValue()` komutları daha da iyileştirildi
-
-<br>
-
-Modülün daha **stabil** ve **performanslı** çalışması için en son sürümde kullanmayı lütfen unutmayınız!
+- Improved `.getValue()` and `.hasValue()` commands
 
 <br>
 
-# Ve son olarak
-
-- Eğer bu modüle destek olmak isterseniz bana [github](https://github.com/pordarman) üzerinden istekte bulunursanız size seve seve yardımcı olurum.
-
-- Buraya kadar okuduğunuz için teşekkür ederim, iyi ki varsınız 💗
-
-- Sonraki modüllerimde görüşmek üzere hoşçakalın!!
+Please do not forget to use it in the latest version for more **stable** and **performance** of the module!
 
 <br>
 
-![kalp kalp kalp](https://gifdb.com/images/high/drake-heart-hands-aqm0moab2i6ocb44.webp)
+# And finally
+
+- If you want to support this module, if you request me on [github](https://github.com/pordarman), I will be happy to help you.
+
+- Thank you for reading this far, i love you 💗
+
+- See you in my next modules!
+
+<br>
+
+![lovee](https://gifdb.com/images/high/drake-heart-hands-aqm0moab2i6ocb44.webp)
