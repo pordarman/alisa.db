@@ -98,17 +98,28 @@ Gördüğünüz gibi burada ise teker teker yazdırmak yerine birden fazla veri 
 <br>
 
 
-# Güncelleme v0.1.5
+# Güncellemeler
+## v0.1.8
+
+- Bazı performans sorunları giderildi
 
 - Bazı yazım hataları giderildi
 
-- `.getValue()` ve `.hasValue()` komutları daha da iyileştirildi
+## v0.1.7
+
+- `.clone()` komutu eklendi
+
+## v0.1.6
 
 - `.toArray()` komutunun işlevi değiştirildi
 
 - `.getManyValue()`, `.hasSomeValue()` ve `.hasEveryValue()` komutları eklendi
 
-- `.clone()` komutu eklendi
+## v0.1.5
+
+- Bazı yazım hataları giderildi
+
+- `.getValue()` ve `.hasValue()` komutları daha da iyileştirildi
 
 <br>
 

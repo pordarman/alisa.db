@@ -395,7 +395,7 @@ class Database {
 
   getManyValue(values, defaultValue = [], fileName = this.DEFAULT_FILE_NAME) {
     if (!values) throw new DatabaseError("values değeri eksik", errorCodes.missingInput)
-    if (typeof values == "string" && this) return this.getValue(values, (Array.isArray(defaultValue) && defaultValue.length == 0) ? undefined : defaultValue, fileName)
+    if (typeof values == "string") return this.getValue(values, (Array.isArray(defaultValue) && defaultValue.length == 0) ? undefined : defaultValue, fileName)
     if (!Array.isArray(values)) throw new DatabaseError("values değeri bir Array olmalıdır", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
@@ -446,7 +446,7 @@ class Database {
 
   getMany(keys, defaultValue = {}, fileName = this.DEFAULT_FILE_NAME) {
     if (!keys) throw new DatabaseError("keys değeri eksik", errorCodes.missingInput)
-    if (typeof keys == "string" && this) return this.get(keys, (Object.prototype.toString.call(defaultValue) == "[object Object]" && Object.keys(defaultValue).length == 0) ? undefined : defaultValue, fileName)
+    if (typeof keys == "string") return this.get(keys, (Object.prototype.toString.call(defaultValue) == "[object Object]" && Object.keys(defaultValue).length == 0) ? undefined : defaultValue, fileName)
     if (!Array.isArray(keys)) throw new DatabaseError("keys değeri bir Array olmalıdır", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
@@ -523,7 +523,6 @@ class Database {
      */
 
   fetch(key, defaultValue = undefined, fileName = this.DEFAULT_FILE_NAME) {
-    if (!this) throw new DatabaseError("Lütfen .get() komutunu kullanınız", errorCodes.invalidCommand)
     return this.get(key, defaultValue, fileName)
   }
 
@@ -550,7 +549,6 @@ class Database {
   */
 
   fetchValue(value, defaultValue = undefined, fileName = this.DEFAULT_FILE_NAME) {
-    if (!this) throw new DatabaseError("Lütfen .getValue() komutunu kullanınız", errorCodes.invalidCommand)
     return this.getValue(value, defaultValue, fileName)
   }
 
@@ -589,7 +587,6 @@ class Database {
     */
 
   fetchManyValue(values, defaultValue = [], fileName = this.DEFAULT_FILE_NAME) {
-    if (!this) throw new DatabaseError("Lütfen .getManyValue() komutunu kullanınız", errorCodes.invalidCommand)
     return this.getManyValue(values, defaultValue, fileName)
   }
 
@@ -625,7 +622,6 @@ class Database {
     */
 
   fetchMany(keys, defaultValue = undefined, fileName = this.DEFAULT_FILE_NAME) {
-    if (!this) throw new DatabaseError("Lütfen .getMany() komutunu kullanınız", errorCodes.invalidCommand)
     return this.getMany(keys, defaultValue, fileName)
   }
 
@@ -656,7 +652,6 @@ class Database {
    */
 
   fetchAll(fileName = this.DEFAULT_FILE_NAME) {
-    if (!this) throw new DatabaseError("Lütfen .getAll() komutunu kullanınız", errorCodes.invalidCommand)
     return this.getAll(fileName)
   }
 
@@ -687,7 +682,6 @@ class Database {
    */
 
   all(fileName = this.DEFAULT_FILE_NAME) {
-    if (!this) throw new DatabaseError("Lütfen .getAll() komutunu kullanınız", errorCodes.invalidCommand)
     return this.getAll(fileName)
   }
 
@@ -796,7 +790,7 @@ class Database {
 
   hasSomeValue(values, fileName = this.DEFAULT_FILE_NAME) {
     if (!values) throw new DatabaseError("values değeri eksik", errorCodes.missingInput)
-    if (typeof values == "string" && this) return this.hasValue(values, fileName)
+    if (typeof values == "string") return this.hasValue(values, fileName)
     if (!Array.isArray(values)) throw new DatabaseError("values değeri bir Array olmalıdır", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
@@ -842,7 +836,7 @@ class Database {
 
   hasEveryValue(values, fileName = this.DEFAULT_FILE_NAME) {
     if (!values) throw new DatabaseError("values değeri eksik", errorCodes.missingInput)
-    if (typeof values == "string" && this) return this.hasValue(values, fileName)
+    if (typeof values == "string") return this.hasValue(values, fileName)
     if (!Array.isArray(values)) throw new DatabaseError("values değeri bir Array olmalıdır", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
@@ -888,7 +882,7 @@ class Database {
 
   hasSome(keys, fileName = this.DEFAULT_FILE_NAME) {
     if (!keys) throw new DatabaseError("keys değeri eksik", errorCodes.missingInput)
-    if (typeof keys == "string" && this) return this.has(keys, fileName)
+    if (typeof keys == "string") return this.has(keys, fileName)
     if (!Array.isArray(keys)) throw new DatabaseError("keys değeri bir Array olmalıdır", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
@@ -933,7 +927,7 @@ class Database {
 
   hasAll(keys, fileName = this.DEFAULT_FILE_NAME) {
     if (!keys) throw new DatabaseError("keys değeri eksik", errorCodes.missingInput)
-    if (typeof keys == "string" && this) return this.has(keys, fileName)
+    if (typeof keys == "string") return this.has(keys, fileName)
     if (!Array.isArray(keys)) throw new DatabaseError("keys değeri bir Array olmalıdır", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
@@ -966,7 +960,6 @@ class Database {
   */
 
   exists(key, fileName = this.DEFAULT_FILE_NAME) {
-    if (!this) throw new DatabaseError("Lütfen .has() komutunu kullanınız", errorCodes.invalidCommand)
     return this.has(key, fileName)
   }
 
@@ -990,7 +983,6 @@ class Database {
   */
 
   existsValue(value, fileName = this.DEFAULT_FILE_NAME) {
-    if (!this) throw new DatabaseError("Lütfen .hasValue() komutunu kullanınız", errorCodes.invalidCommand)
     return this.hasValue(value, fileName)
   }
 
@@ -1028,7 +1020,6 @@ class Database {
     */
 
   existsSomeValue(values, fileName = this.DEFAULT_FILE_NAME) {
-    if (!this) throw new DatabaseError("Lütfen .hasSomeValue() komutunu kullanınız", errorCodes.invalidCommand)
     return this.hasSomeValue(values, fileName)
   }
 
@@ -1063,7 +1054,6 @@ class Database {
     */
 
   existsEveryValue(values, fileName = this.DEFAULT_FILE_NAME) {
-    if (!this) throw new DatabaseError("Lütfen .hasEveryValue() komutunu kullanınız", errorCodes.invalidCommand)
     return this.hasEveryValue(values, fileName)
   }
 
@@ -1098,7 +1088,6 @@ class Database {
     */
 
   existsSome(keys, fileName = this.DEFAULT_FILE_NAME) {
-    if (!this) throw new DatabaseError("Lütfen .hasSome() komutunu kullanınız", errorCodes.invalidCommand)
     return this.hasSome(keys, fileName)
   }
 
@@ -1133,7 +1122,6 @@ class Database {
     */
 
   hasMany(keys, fileName = this.DEFAULT_FILE_NAME) {
-    if (!this) throw new DatabaseError("Lütfen .hasSome() komutunu kullanınız", errorCodes.invalidCommand)
     return this.hasSome(keys, fileName)
   }
 
@@ -1168,7 +1156,6 @@ class Database {
    */
 
   existsAll(keys, fileName = this.DEFAULT_FILE_NAME) {
-    if (!this) throw new DatabaseError("Lütfen .hasAll() komutunu kullanınız", errorCodes.invalidCommand)
     return this.hasAll(keys, fileName)
   }
 
@@ -1303,7 +1290,6 @@ class Database {
    */
 
   includes(key, fileName = this.DEFAULT_FILE_NAME) {
-    if (!this) throw new DatabaseError("Lütfen .filter(object => object.key.includes()) komutunu kullanınız", errorCodes.invalidCommand)
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     return this.filter(object => object.key.includes(key), fileName)
@@ -1334,7 +1320,6 @@ class Database {
    */
 
   startsWith(key, fileName = this.DEFAULT_FILE_NAME) {
-    if (!this) throw new DatabaseError("Lütfen .filter(object => object.key.startsWith()) komutunu kullanınız", errorCodes.invalidCommand)
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     return this.filter(object => object.key.startsWith(key), fileName)
@@ -1610,7 +1595,7 @@ class Database {
 
   deleteMany(keys, fileName = this.DEFAULT_FILE_NAME) {
     if (!keys) throw new DatabaseError("keys değeri eksik", errorCodes.missingInput)
-    if (typeof keys == "string" && this) return this.delete(keys, fileName)
+    if (typeof keys == "string") return this.delete(keys, fileName)
     if (!Array.isArray(keys)) throw new DatabaseError("keys değeri bir Array olmalıdır", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
@@ -1750,7 +1735,7 @@ class Database {
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     if (!array) throw new DatabaseError("array değeri eksik", errorCodes.missingInput)
-    if (typeof array == "string" && this) return this.push(key, array, fileName)
+    if (typeof array == "string") return this.push(key, array, fileName)
     if (!Array.isArray(array)) throw new DatabaseError("array'in değeri bir Array olmalıdır", errorCodes.notArray)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
@@ -1906,7 +1891,7 @@ class Database {
     if (!key) throw new DatabaseError("key değeri eksik", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     if (!array) throw new DatabaseError("array değeri eksik", errorCodes.missingInput)
-    if (typeof array == "string" && this) return this.unshift(key, array, fileName)
+    if (typeof array == "string") return this.unshift(key, array, fileName)
     if (!Array.isArray(array)) throw new DatabaseError("array'in değeri bir Array olmalıdır", errorCodes.notArray)
     if (typeof fileName != "string") throw new DatabaseError("fileName değeri bir yazı tipi olmalıdır", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
