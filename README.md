@@ -14,7 +14,7 @@
 
 # Social media accounts
 
-- Ali: [İnstagram](https://www.instagram.com/ali.celk/) - [Discord](https://discord.com/users/488839097537003521) - [Spotify](https://open.spotify.com/user/215jixxk4morzgq5mpzsmwwqa?si=41e0583b36f9449b)
+- Ali: [Instagram](https://www.instagram.com/ali.celk/) - [Discord](https://discord.com/users/488839097537003521) - [Spotify](https://open.spotify.com/user/215jixxk4morzgq5mpzsmwwqa?si=41e0583b36f9449b)
 
 <br>
 
@@ -103,6 +103,10 @@ As you can see, we can save time and memory by printing multiple data instead of
 
 
 # Updates
+## v0.2.1
+
+- Fixed several bug fixes
+
 ## v0.2.0
 
 - The whole module has been translated into English (It was quite difficult for me..)

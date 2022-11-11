@@ -63,8 +63,14 @@ function sameValue(value1, value2) {
  */
 
 function sameArray(array1, array2) {
+  let obj = {}
   if (array1.length != array2.length) return false
-  return array1.every(value_1 => array2.some(a2 => sameValue(value_1, a2)))
+  return array1.every(value_1 => array2.some((a2, i) => {
+    let isSame = sameValue(value_1, a2)
+    if (!isSame || obj[i]) return false
+    obj[i] = true
+    return true
+  }))
 }
 
 
@@ -2385,7 +2391,7 @@ class Database {
     * Database.clone("alisadb.json", "öylesine bir dosya ismi.json")
     */
 
-   clone(cloneFileName, fileName = this.DEFAULT_FILE_NAME) {
+  clone(cloneFileName, fileName = this.DEFAULT_FILE_NAME) {
     if (!cloneFileName) throw new DatabaseError("The name of the file to be cloned is missing", errorCodes.missingInput)
     if (typeof cloneFileName != "string") throw new DatabaseError("cloneFileName value must be a string", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
