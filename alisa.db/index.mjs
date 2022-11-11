@@ -1,7 +1,7 @@
-const DatabaseError = require("./src/.js/DatabaseError")
-const errorCodes = require("./src/.js/errorCodes")
-const fs = require("fs")
-const { version } = require("./package.json")
+import DatabaseError from "./src/.mjs/DatabaseError.mjs";
+import errorCodes from "./src/.mjs/errorCodes.mjs";
+import fs from "fs";
+import { version } from "./package.json";
 
 
 
@@ -2455,4 +2455,4 @@ class Database {
 
 }
 
-module.exports = Database;
+export default Database

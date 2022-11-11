@@ -135,6 +135,10 @@ As you can see, we can save time and memory by printing multiple data instead of
 
 
 # Updates
+## v0.3.0
+
+- The module is now available not only for node.js but also for javascript
+
 ## v0.2.2
 
 - Made some changes to the README file
@@ -148,29 +152,6 @@ As you can see, we can save time and memory by printing multiple data instead of
 - The whole module has been translated into English (It was quite difficult for me..)
 
 - Annnddd fixed some typos
-
-
-## v0.1.8
-
-- Fixed some performance issues
-
-- Fixed some typos
-
-## v0.1.7
-
-- Added `.clone()` command
-
-## v0.1.6
-
-- Changed the function of the `.toArray()` command
-
-- Added `.getManyValue()`, `.hasSomeValue()` and `.hasEveryValue()` commands
-
-## v0.1.5
-
-- Fixed some typos
-
-- Improved `.getValue()` and `.hasValue()` commands
 
 <br>
 
