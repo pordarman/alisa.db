@@ -319,13 +319,13 @@ class Database {
   * // First, let's print some data to the database
   * Database.set("hello", "World") // { hello: "World" }
   * 
-  * // If there is a data named "hello" in the database, it returns that data.
+  * // If there is a data named "hello" in the database, it returns that data
   * Database.get("hello") // "World"
   * 
-  * // If there is no data to return, it returns undefined by default.
+  * // If there is no data to return, it returns undefined by default
   * Database.get("hello3") // undefined
   * 
-  * // If there is no data to return, it returns the data you entered.
+  * // If there is no data to return, it returns the data you entered
   * Database.get("hello3", "There is no such data!") // "There is no such data!"
   */
 
@@ -355,13 +355,13 @@ class Database {
   * // First, let's print some data to the database
   * Database.set("hello", "World") // { hello: "World" }
   * 
-  * // If there is a value named "World" in the database, it returns that data.
+  * // If there is a value named "World" in the database, it returns that data
   * Database.getValue("World") // "hello"
   * 
-  * // If there is no data to return, it returns undefined by default.
+  * // If there is no data to return, it returns undefined by default
   * Database.getValue("hello") // undefined
   * 
-  * // If there is no data to return, it returns the data you entered.
+  * // If there is no data to return, it returns the data you entered
   * Database.getValue("hello", "There is no such data!") // "There is no such data!"
   */
 
@@ -396,7 +396,7 @@ class Database {
     *  }
     * )
     * 
-    * // If you only want to retrieve a single data, use the .getValue() command.
+    * // If you only want to retrieve a single data, use the .getValue() command
     * Database.getValue("World") // "hello"
     * 
     * // Enter values in array to pull multiple data
@@ -446,7 +446,7 @@ class Database {
     *  }
     * )
     * 
-    * // If you only want to get a single piece of data, use the .get() command.
+    * // If you only want to get a single piece of data, use the .get() command
     * Database.get("hello") // "World"
     * 
     * // Enter the names of the keys in the array to pull multiple data
@@ -526,17 +526,18 @@ class Database {
      * // First, let's print some data to the database
      * Database.set("hello", "World") // { hello: "World" }
      * 
-     * // Eğer database'de "hello" adında bir veri var ise o veriyi döndürür
+     * // If there is a key named "hello" in the database, it returns that data
      * Database.fetch("hello") // "World"
      * 
-     * // If there is no data to return, it returns undefined by default.
+     * // If there is no data to return, it returns undefined by default
      * Database.fetch("hello3") // undefined
      * 
-     * // If there is no data to return, it returns the data you entered.
+     * // If there is no data to return, it returns the data you entered
      * Database.fetch("hello3", "There is no such data!") // "There is no such data!"
      */
 
   fetch(key, defaultValue = undefined, fileName = this.DEFAULT_FILE_NAME) {
+    console.log(this)
     return this.get(key, defaultValue, fileName)
   }
 
@@ -552,13 +553,13 @@ class Database {
   * // First, let's print some data to the database
   * Database.set("hello", "World") // { hello: "World" }
   * 
-  * // Eğer database'de "World" adında bir değer var ise o veriyi döndürür döndürür
+  * // If there is a value named "hello" in the database, it returns that data
   * Database.fetchValue("World") // "hello"
   * 
-  * // If there is no data to return, it returns undefined by default.
+  * // If there is no data to return, it returns undefined by default
   * Database.fetchValue("hello") // undefined
   * 
-  * // If there is no data to return, it returns the data you entered.
+  * // If there is no data to return, it returns the data you entered
   * Database.fetchValue("hello", "There is no such data!") // "There is no such data!"
   */
 
@@ -586,7 +587,7 @@ class Database {
     *  }
     * )
     * 
-    * // If you only want to retrieve a single data, use the .getValue() command.
+    * // If you only want to retrieve a single data, use the .getValue() command
     * Database.getValue("World") // "hello"
     * 
     * // Enter values in array to pull multiple data
@@ -623,7 +624,7 @@ class Database {
     *  }
     * )
     * 
-    * // If you only want to get a single piece of data, use the .get() command.
+    * // If you only want to get a single piece of data, use the .get() command
     * Database.get("hello") // "World"
     * 
     * // Enter the names of the keys in the array to pull multiple data
@@ -715,7 +716,7 @@ class Database {
   * // First, let's print some data to the database
   * Database.set("hello", "World") // { hello: "World" }
   * 
-  * // It returns true if there is a data named "hello" in the database.
+  * // It returns true if there is a data named "hello" in the database
   * Database.has("hello") // true
   * 
   * // Returns false if there is no data to return
@@ -748,7 +749,7 @@ class Database {
   * // First, let's print some data to the database
   * Database.set("hello", "World") // { hello: "World" }
   * 
-  * // It returns true if there is a value named "World" in the database.
+  * // It returns true if there is a value named "World" in the database
   * Database.hasValue("World") // true
   * 
   * // Returns false if there is no value named "World"
@@ -787,16 +788,16 @@ class Database {
     *  }
     * )
     * 
-    * // If you only want to retrieve a single data, use the .hasValue() command.
+    * // If you only want to retrieve a single data, use the .hasValue() command
     * Database.hasValue("World") // true
     * 
     * // Enter values in array to pull multiple data
     * Database.hasSomeValue(["World", "o7", "String"]) // true
     * 
-    * // Returns true if at least 1 of the values you entered were found.
+    * // Returns true if at least 1 of the values you entered were found
     * Database.hasSomeValue([[1, 2, 3], "King", "fear"]) // true
     * 
-    * // Returns false if none of the values you entered were found.
+    * // Returns false if none of the values you entered were found
     * Database.hasSomeValue(["ali", "test"]) // false
     */
 
@@ -835,7 +836,7 @@ class Database {
     *  }
     * )
     * 
-    * // If you only want to retrieve a single data, use the .hasValue() command.
+    * // If you only want to retrieve a single data, use the .hasValue() command
     * Database.hasValue("World") // true
     * 
     * // Enter values in array to pull multiple data
@@ -880,13 +881,13 @@ class Database {
     *  }
     * )
     * 
-    * // If you only want to check one piece of data, use the .has() command.
+    * // If you only want to check one piece of data, use the .has() command
     * Database.has("hello") // true
     * 
     * // Enter the names of the keys in the array to check multiple data
     * Database.hasSome(["hello", "Alisa", "Fearless"]) // true
     * 
-    * // Returns false if none of the values you entered were found.
+    * // Returns false if none of the values you entered were found
     * Database.hasSome(["alisa", "test"]) // false
     */
 
@@ -924,7 +925,7 @@ class Database {
    *  }
    * )
    * 
-   * // If you only want to check one piece of data, use the .has() command.
+   * // If you only want to check one piece of data, use the .has() command
    * Database.has("hello") // true
    * 
    * // Enter the names of the keys in the array to check multiple data
@@ -961,7 +962,7 @@ class Database {
   * // First, let's print some data to the database
   * Database.set("hello", "World") // { hello: "World" }
   * 
-  * // It returns true if there is a data named "hello" in the database.
+  * // It returns true if there is a data named "hello" in the database
   * Database.exists("hello") // true
   * 
   * // Returns false if there is no data to return
@@ -984,7 +985,7 @@ class Database {
   * // First, let's print some data to the database
   * Database.set("hello", "World") // { hello: "World" }
   * 
-  * // It returns true if there is a value named "World" in the database.
+  * // It returns true if there is a value named "World" in the database
   * Database.existsValue("World") // true
   * 
   * // Returns false if there is no value named "World"
@@ -1014,16 +1015,16 @@ class Database {
     *  }
     * )
     * 
-    * // If you only want to retrieve a single data, use the .hasValue() command.
+    * // If you only want to retrieve a single data, use the .hasValue() command
     * Database.hasValue("World") // true
     * 
     * // Enter values in array to pull multiple data
     * Database.existsSomeValue(["World", "o7", "String"]) // true
     * 
-    * // Returns true if at least 1 of the values you entered were found.
+    * // Returns true if at least 1 of the values you entered were found
     * Database.existsSomeValue([[1, 2, 3], "alisa", "King"]) // true
     * 
-    * // Returns false if none of the values you entered were found.
+    * // Returns false if none of the values you entered were found
     * Database.existsSomeValue(["ali", "test"]) // false
     */
 
@@ -1050,7 +1051,7 @@ class Database {
     *  }
     * )
     * 
-    * // If you only want to retrieve a single data, use the .hasValue() command.
+    * // If you only want to retrieve a single data, use the .hasValue() command
     * Database.hasValue("World") // true
     * 
     * // Enter values in array to pull multiple data
@@ -1083,13 +1084,13 @@ class Database {
     *  }
     * )
     * 
-    * // If you only want to check one piece of data, use the .has() command.
+    * // If you only want to check one piece of data, use the .has() command
     * Database.has("hello") // true
     * 
     * // Enter the names of the keys in the array to check multiple data
     * Database.existsSome(["hello", "Alisa", "Fearless"]) // true
     * 
-    * // Returns false if none of the values you entered were found.
+    * // Returns false if none of the values you entered were found
     * Database.existsSome(["alisa", "test"]) // false
     */
 
@@ -1116,13 +1117,13 @@ class Database {
     *  }
     * )
     * 
-    * // If you only want to check one piece of data, use the .has() command.
+    * // If you only want to check one piece of data, use the .has() command
     * Database.has("hello") // true
     * 
     * // Enter the names of the keys in the array to check multiple data
     * Database.hasMany(["hello", "Alisa", "Fearless"]) // true
     * 
-    * // Returns false if none of the values you entered were found.
+    * // Returns false if none of the values you entered were found
     * Database.hasMany(["alisa", "test"]) // false
     */
 
@@ -1149,7 +1150,7 @@ class Database {
    *  }
    * )
    * 
-   * // If you only want to check one piece of data, use the .has() command.
+   * // If you only want to check one piece of data, use the .has() command
    * Database.has("hello") // true
    * 
    * // Enter the names of the keys in the array to check multiple data
@@ -1357,7 +1358,7 @@ class Database {
    * // This is another way of calling
    * Database.some(callback => {
    * 
-   *   // It checks whether the object's value data is Array or not.
+   *   // It checks whether the object's value data is Array or not
    *   return Array.isArray(callback.value)
    * 
    * }) // false
@@ -1772,7 +1773,7 @@ class Database {
      * // Then let's delete the data at the end of the Array data using the command
      * Database.pop("ilost") // ["broo"]
      * 
-     * // If you want to delete more than one data, enter the number of data to be deleted.
+     * // If you want to delete more than one data, enter the number of data to be deleted
      * Database.pop("ilost", 2) // ["i cry", "broo"]
      * 
      * // Now in the "ilost" data the following data ["i lost..", "this life"]
@@ -1925,7 +1926,7 @@ class Database {
      * // Then let's delete the first data of the Array data using the command
      * Database.shift("ilost") // ["i lost.."]
      * 
-     * // If you want to delete more than one data, enter the number of data to be deleted.
+     * // If you want to delete more than one data, enter the number of data to be deleted
      * Database.shift("ilost", 2) // ["i lost..", "this life"]
      * 
      * // Now in the "ilost" data contains the following data ["i cry", "broo"]
@@ -2273,7 +2274,7 @@ class Database {
       * // Then let's delete the file completely using the command
       * Database.destroy()
       * 
-      * // The JSON file has now traveled to the infinities of the universe...
+      * // The JSON file has now traveled to the infinities of the universe..
       */
 
   destroy(fileName = this.DEFAULT_FILE_NAME) {
@@ -2343,10 +2344,10 @@ class Database {
     * // Then let's create a new file using the command
     * Database.create("alisa.json")
     * 
-    * // If we want to print data in the file while creating it, let's write the data as the second parameter.
+    * // If we want to print data in the file while creating it, let's write the data as the second parameter
     * Database.create("alisadb.json", { ali: "Adam" })
     * 
-    * // If you want to set the file you created as the default file, type true last.
+    * // If you want to set the file you created as the default file, type true last
     * Database.create("default.json", {}, true)
     */
 
@@ -2387,7 +2388,7 @@ class Database {
     * // Then let's command copy this JSON file to another JSON file
     * Database.clone("alisa.json")
     * 
-    * // If you want, you can also enter the file name to be cloned.
+    * // If you want, you can also enter the file name to be cloned
     * Database.clone("alisadb.json", "öylesine bir dosya ismi.json")
     */
 

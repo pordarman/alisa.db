@@ -53,9 +53,33 @@
 It's very simple, first you have to open any node.js file and write the following in it:
 <br>
 ```js
-const Database = new (require("alisa.db"))()
+const alisa.db = require("alisa.db")
+
+const Database = new alisa.db("database.json")
+const Database_1 = new alisa.db("alisadb.json")
+const Database_2 = new alisa.db("example.json")
 ```
+Each database we wrote above holds a different file database data. You can increase this as much as you want.
+
 After typing this you can access **all** commands
+
+<br>
+
+### **CAUTION!!**
+Please make your definitions as above. If you have made a definition as below, the module will not work properly and will give an error!
+
+```js
+// Incorrect command definition
+
+const alisa.db = require("alisa.db")
+
+const { get, set } = new alisa.db("database.json")
+// This command will throw an error!
+
+
+const Database = new alisa.db("alisa.json")
+// This command will work as it should
+```
 
 <br>
 

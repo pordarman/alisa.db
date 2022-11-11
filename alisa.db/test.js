@@ -2,7 +2,7 @@
  * 
  * NOTE!!! What you need to know before reading the descriptions of the commands below!!!!
  * 
- * I use the words "key" and "value" in some places while explaining what the commands do below.
+ * I use the words "key" and "value" in some places while explaining what the commands do below
  * If you don't know what they mean, please see the place below or you may not understand exactly what the command does!
  * 
  * You don't need to look here if you know
@@ -12,7 +12,7 @@
 /**
  * Now what do we call key and value?
  * 
- * "key" and "value" only exist in an Object expression. If you hear "key" or "value" written somewhere, you should understand that it is an Object.
+ * "key" and "value" only exist in an Object expression. If you hear "key" or "value" written somewhere, you should understand that it is an Object
  * 
  * Let's explain with an example
  */
@@ -29,7 +29,7 @@
  * 
  * Also the value corresponding to "anotherKey2:" is {}
  * 
- * And as understood above, our "value", [], {} and "anotherValue" values are our value values.
+ * And as understood above, our "value", [], {} and "anotherValue" values are our value values
  * 
  * 
  * Now you can proceed to the following commands
@@ -68,11 +68,11 @@ Database.values()
 Database.set("key", "value")
 
 
-// This prints them all at once instead of doing it one at a time.
+// This prints them all at once instead of doing it one at a time
 Database.setMany({ key1: "value1", key2: "value2", key3: "value3" })
 
 
-// This deletes everything in the database.json file and writes the data you entered.
+// This deletes everything in the database.json file and writes the data you entered
 Database.setFile({ alisa: "o7", array: ["1", "2", "3"], hello: "World!", anyObject: { anyKey: "anyValue", anyArray: ["alisa", "db", "is", "awesome"], anyObjectAgain: {} }, what: "the", fuck: "bro!?" })
 
 
@@ -117,7 +117,7 @@ Database.toArray()
  */
 
 
-// This checks if there is a "key" in the database.json file.
+// This checks if there is a "key" in the database.json file
 Database.has("key")
 Database.exists("key")
 
@@ -127,7 +127,7 @@ Database.hasSome(["ali", "alisa", "key"])
 Database.existsSome(["ali", "alisa", "key"])
 
 
-// This checks whether there is a value that is the same as the value you entered in the database.json file.
+// This checks whether there is a value that is the same as the value you entered in the database.json file
 Database.hasValue("bro!?")
 Database.existsValue({ anyKey: "anyValue", anyArray: ["alisa", "db", "is", "awesome"], anyObjectAgain: {} })
 
@@ -210,7 +210,7 @@ Database.push("key", "veri")
 Database.pushAll("key", ["veri1", "veri2", "veri3"])
 
 
-// This deletes the data at the very end of the Array.
+// This deletes the data at the very end of the Array
 Database.pop("key")
 Database.pop("key", 5) // This also deletes 5 data instead of 1 data
 
@@ -250,7 +250,7 @@ Database.multi("key", 5)
 
 // This splits the value of the "key" data in the database.json file
 Database.division("key", 5)
-Database.division("key", 4, true) // This checks whether the number is integer or not.
+Database.division("key", 4, true) // This checks whether the number is integer or not
 
 
 /**
@@ -276,5 +276,5 @@ Database.create("database.json")
  */
 
 
-// This indicates the type of data corresponding to the "key" data.
+// This indicates the type of data corresponding to the "key" data
 Database.typeof("key")
