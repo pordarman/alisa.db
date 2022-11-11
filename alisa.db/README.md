@@ -135,6 +135,10 @@ As you can see, we can save time and memory by printing multiple data instead of
 
 
 # Updates
+## v0.2.2
+
+- Made some changes to the README file
+
 ## v0.2.1
 
 - Fixed several bug fixes
