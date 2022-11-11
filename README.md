@@ -1,5 +1,13 @@
 ## ![alisa.db Logo](https://i.hizliresim.com/aug2sp9.png)
 
+
+[![Package Name](https://img.shields.io/badge/Package%20name-alisa.db-red)](https://www.npmjs.com/package/alisa.db/)
+[![Paket boyutu](https://img.shields.io/bundlephobia/min/alisa.db?label=Package%20size)](https://www.npmjs.com/package/alisa.db/)
+[![Version](https://img.shields.io/npm/v/alisa.db.svg?label=Package%20version)](https://www.npmjs.com/package/alisa.db/)
+[![License](https://img.shields.io/npm/l/alisa.db.svg?label=License)](https://www.npmjs.com/package/alisa.db/)
+
+[![NPM](https://nodei.co/npm/alisa.db.png?downloads=true)](https://www.npmjs.com/package/alisa.db/)
+
 # Source file
 
 - [alisa.db](https://github.com/pordarman/alisa.db)
@@ -24,11 +32,11 @@
 
 - Then we open the PowerShell terminal by "shift + right click" on the folder of the file you created.
 
-![Opening the PowerShell terminal](https://i.hizliresim.com/namhujn.png)
+![Opening the PowerShell terminal](https://i.hizliresim.com/gbwgora.png)
 
 - Then we write **npm i alisa.db** and press enter.
 
-![Download the alisa.db module](https://i.hizliresim.com/8f3yk6t.png)
+![Download the alisa.db module](https://i.hizliresim.com/sqavkev.png)
 
 - And now we have downloaded the **alisa.db** module, congratulations 🎉🎉
 
@@ -53,11 +61,11 @@
 It's very simple, first you have to open any node.js file and write the following in it:
 <br>
 ```js
-const alisa.db = require("alisa.db")
+const alisa_db = require("alisa.db")
 
-const Database = new alisa.db("database.json")
-const Database_1 = new alisa.db("alisadb.json")
-const Database_2 = new alisa.db("example.json")
+const Database = new alisa_db("database.json")
+const Database_1 = new alisa_db("alisa.db.json")
+const Database_2 = new alisa_db("example.json")
 ```
 Each database we wrote above holds a different file database data. You can increase this as much as you want.
 
@@ -71,13 +79,13 @@ Please make your definitions as above. If you have made a definition as below, t
 ```js
 // Incorrect command definition
 
-const alisa.db = require("alisa.db")
+const alisa_db = require("alisa.db")
 
-const { get, set } = new alisa.db("database.json")
+const { get, set } = new alisa_db("database.json")
 // This command will throw an error!
 
 
-const Database = new alisa.db("alisa.json")
+const Database = new alisa_db("alisa.json")
 // This command will work as it should
 ```
 

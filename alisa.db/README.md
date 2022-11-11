@@ -1,15 +1,12 @@
 ## ![alisa.db Logo](https://i.hizliresim.com/aug2sp9.png)
 
-[![License](https://img.shields.io/npm/l/alisa.db.svg)](https://img.shields.io/npm/l/alisa.db.svg)
-[![Build Status](https://travis-ci.org/pordarman/alisa.db.svg?branch=master)](https://travis-ci.org/pordarman/alisa.db)
-[![Coverage Status](https://coveralls.io/repos/github/pordarman/alisa.db/badge.svg?branch=master)](https://coveralls.io/github/pordarman/alisa.db?branch=master)
-[![Github Issues](https://img.shields.io/github/issues-raw/pordarman/alisa.db.svg)](https://img.shields.io/github/issues-raw/pordarman/alisa.db.svg)
-[![Version](https://img.shields.io/npm/v/alisa.db.svg)](https://img.shields.io/npm/v/alisa.db.svg)
-[![Node Version](https://img.shields.io/node/v/alisa.db.svg)](https://img.shields.io/node/v/alisa.db.svg)
-[![Last Commit](https://img.shields.io/github/last-commit/pordarman/alisa.db.svg)](https://img.shields.io/github/last-commit/pordarman/alisa.db.svg)
+
+[![Package Name](https://img.shields.io/badge/Package%20name-alisa.db-red)](https://www.npmjs.com/package/alisa.db/)
+[![Paket boyutu](https://img.shields.io/bundlephobia/min/alisa.db?label=Package%20size)](https://www.npmjs.com/package/alisa.db/)
+[![Version](https://img.shields.io/npm/v/alisa.db.svg?label=Package%20version)](https://www.npmjs.com/package/alisa.db/)
+[![License](https://img.shields.io/npm/l/alisa.db.svg?label=License)](https://www.npmjs.com/package/alisa.db/)
 
 [![NPM](https://nodei.co/npm/alisa.db.png?downloads=true)](https://www.npmjs.com/package/alisa.db/)
-
 
 # Source file
 
