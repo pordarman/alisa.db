@@ -135,6 +135,14 @@ As you can see, we can save time and memory by printing multiple data instead of
 
 
 # Updates
+## v0.3.2
+
+- Added feature to set JSON spaces
+
+- Fixed some typos
+
+- Update README.md file
+
 ## v0.3.1
 
 - Added caching option (Currently this option is in the testing phase, there may be bugs)
@@ -142,14 +150,6 @@ As you can see, we can save time and memory by printing multiple data instead of
 ## v0.3.0
 
 - The module is now available not only for node.js but also for javascript
-
-## v0.2.2
-
-- Made some changes to the README file
-
-## v0.2.1
-
-- Fixed several bug fixes
 
 <br>
 

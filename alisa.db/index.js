@@ -2,9 +2,9 @@
  * Database's options
  * @typedef {Object} constructorObject
  * @property {String} [fileName="database"] Default file name
+ * @property {Number} [spaces=2] How many spaces to use for indentation in the output json files
  * @property {Boolean} [cache=false] You set whether to cache the database file (If you cache it, the performance of the module will increase, but the probability of error will also increase)
  */
-
 
 const DatabaseError = require("./src/.js/DatabaseError")
 const errorCodes = require("./src/.js/errorCodes")
@@ -92,6 +92,7 @@ class Database {
 
   constructor(constructorObject = {}) {
 
+
     // If a text is written to the object entered, take that text as the default file name
     if (typeof constructorObject == "string") {
 
@@ -105,55 +106,81 @@ class Database {
         // If it does not end in .json, it takes the entered value as the file name
         this.DEFAULT_FILE_NAME = constructorObject
       }
-    } else {
+    }
 
-      // If entered as an object, continue as normal
-      const { fileName, cache } = constructorObject
+    // If the entered value is not an Object value, convert it to an Object value (required so that the module does not give an error)
+    if (Object.prototype.toString.call(constructorObject) !== "[object Object]") constructorObject = {}
 
 
-      // If the name of the file is entered, make it the default file name
-      if (typeof fileName == "string") {
+    // If entered as an object, continue as normal
+    const { fileName, cache, spaces } = constructorObject
 
-        // If the file name ends in .json, remove .json
-        if (fileName.trim().endsWith(".json")) {
 
-          // Removing .json text
-          this.DEFAULT_FILE_NAME = fileName.replace(/\.json *$/m, "")
-        } else {
+    // If the name of the file is entered, make it the default file name
+    if (typeof fileName == "string") {
 
-          // If it does not end in .json, it takes the entered value as the file name
-          this.DEFAULT_FILE_NAME = fileName
-        }
+      // If the file name ends in .json, remove .json
+      if (fileName.trim().endsWith(".json")) {
 
+        // Removing .json text
+        this.DEFAULT_FILE_NAME = fileName.replace(/\.json *$/m, "")
       } else {
+
+        // If it does not end in .json, it takes the entered value as the file name
+        this.DEFAULT_FILE_NAME = fileName
+      }
+
+    } else {
 
       // If no value is entered or the value is not a font, the file name is defaulted to "database"
       this.DEFAULT_FILE_NAME = "database"
 
-      }
-
-      // If the user has set the cache setting, use his settings
-      if (typeof cache == "boolean") {
-  
-        // And if the setting is true do this
-        if (constructorObject.cache === true) {
-
-          let file;
-          try { file = fs.readFileSync(`${this.DEFAULT_FILE_NAME}.json`, "utf-8") } catch (e) { file = {}}
-  
-          // Save in cache (This caching can also be used for multiple files)
-          this.cache = { [this.DEFAULT_FILE_NAME]: file }
-  
-        }
-  
-      }
-
     }
-    
+
+
     // If there is no JSON file with the name you entered, it will create a JSON file with the name you entered
     if (!fs.existsSync(`${this.DEFAULT_FILE_NAME}.json`)) fs.writeFileSync(`${this.DEFAULT_FILE_NAME}.json`, "{}")
 
 
+
+    // If the user has set the cache setting, use his settings
+    if (typeof cache == "boolean") {
+
+      // And if the setting is true do this
+      if (cache === true) {
+
+        // Save in cache (This caching can also be used for multiple files)
+        this.cache = { [this.DEFAULT_FILE_NAME]: fs.readFileSync(`${this.DEFAULT_FILE_NAME}.json`, "utf-8") }
+
+      }
+
+    }
+
+
+    // If the user has specified the number of spaces in the JSON file, use that setting
+    if (spaces !== undefined) {
+
+      // Convert entered value to number object
+      let numberOfSpaces = Number(spaces)
+
+      // If the value entered is a number, use the number as the default space setting
+      if (!isNaN(numberOfSpaces)) {
+
+        this.spaces = numberOfSpaces
+
+      } else {
+
+        // If the entered value is not a number, use 2 by default
+        this.spaces = 2
+
+      }
+
+    } else {
+
+      // If no value is entered, use the default value of 2
+      this.spaces = 2
+
+    }
 
   }
 
@@ -183,9 +210,10 @@ class Database {
 
   /**
    * @param {String} fileName File name
+   * @private
    */
 
-  static _getFile(fileName) {
+  _getFile(fileName) {
     if (this.cache) return this.cache[fileName] ?? JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
     return JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
   }
@@ -207,7 +235,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      let file = Database._getFile(fileName)
+      let file = this._getFile(fileName)
       return Object.keys(file)
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`File ${fileName}.json not found!`, errorCodes.missingFile)
@@ -227,7 +255,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      let file = Database._getFile(fileName)
+      let file = this._getFile(fileName)
       return Object.values(file)
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`File ${fileName}.json not found!`, errorCodes.missingFile)
@@ -267,9 +295,9 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      let file = Database._getFile(fileName)
+      let file = this._getFile(fileName)
       file[key] = value
-      fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, 2))
+      fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
       if (this.cache) this.cache[fileName] = file
       return file
     } catch (e) {
@@ -310,10 +338,10 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      let file = Database._getFile(fileName)
+      let file = this._getFile(fileName)
       if (Array.isArray(keysAndValue)) keysAndValue = Object.fromEntries(keysAndValue)
       file = { ...file, ...keysAndValue }
-      fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, 2))
+      fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
       if (this.cache) this.cache[fileName] = file
       return file
     } catch (e) {
@@ -355,7 +383,7 @@ class Database {
     fileName = fileName.replace(/\.json *$/m, "")
     try {
       if (Array.isArray(input)) input = Object.fromEntries(input)
-      fs.writeFileSync(`${fileName}.json`, JSON.stringify(input, null, 2))
+      fs.writeFileSync(`${fileName}.json`, JSON.stringify(input, null, this.spaces))
       if (this.cache) this.cache[fileName] = file
       return input
     } catch (e) {
@@ -397,7 +425,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      let file = Database._getFile(fileName)
+      let file = this._getFile(fileName)
       return key in file ? file[key] : defaultValue
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`File ${fileName}.json not found!`, errorCodes.missingFile)
@@ -432,7 +460,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      let file = Database._getFile(fileName)
+      let file = this._getFile(fileName)
       return Object.entries(file).find(([key, value_1]) => sameValue(value, value_1))?.[0] ?? defaultValue
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`File ${fileName}.json not found!`, errorCodes.missingFile)
@@ -478,7 +506,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      let file = Database._getFile(fileName)
+      let file = this._getFile(fileName)
       let ent = Object.entries(file)
       let newArray = values.map(value => ent.find(([key, value_1]) => sameValue(value, value_1))?.[0])
       return newArray.filter(a => a !== undefined).length ? newArray : defaultValue
@@ -528,7 +556,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      let file = Database._getFile(fileName)
+      let file = this._getFile(fileName)
       let obj = {}
       keys.forEach(key => obj[key] = file[key])
       return Object.entries(obj).length ? obj : defaultValue
@@ -567,7 +595,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      let file = Database._getFile(fileName)
+      let file = this._getFile(fileName)
       return file
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`File ${fileName}.json not found!`, errorCodes.missingFile)
@@ -790,7 +818,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      let file = Database._getFile(fileName)
+      let file = this._getFile(fileName)
       return key in file
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`File ${fileName}.json not found!`, errorCodes.missingFile)
@@ -822,7 +850,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      let file = Database._getFile(fileName)
+      let file = this._getFile(fileName)
       return Object.values(file).some(value_1 => sameValue(value, value_1))
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`File ${fileName}.json not found!`, errorCodes.missingFile)
@@ -869,7 +897,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      let file = Database._getFile(fileName)
+      let file = this._getFile(fileName)
       let ent = Object.entries(file)
       return values.some(value => ent.some(([key, value_1]) => sameValue(value, value_1)))
     } catch (e) {
@@ -914,7 +942,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      let file = Database._getFile(fileName)
+      let file = this._getFile(fileName)
       let ent = Object.entries(file)
       return values.every(value => ent.some(([key, value_1]) => sameValue(value, value_1)))
     } catch (e) {
@@ -959,7 +987,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      let file = Database._getFile(fileName)
+      let file = this._getFile(fileName)
       return keys.some(key => key in file)
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`File ${fileName}.json not found!`, errorCodes.missingFile)
@@ -1003,7 +1031,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      let file = Database._getFile(fileName)
+      let file = this._getFile(fileName)
       return keys.every(key => key in file)
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`File ${fileName}.json not found!`, errorCodes.missingFile)
@@ -1271,7 +1299,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      let file = Database._getFile(fileName)
+      let file = this._getFile(fileName)
       let arrayObject = Object.entries(file).map(a => ({ key: a[0], value: a[1] })).find(callback)
       return { [arrayObject.key]: arrayObject.value }
     } catch (e) {
@@ -1321,7 +1349,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      let file = Database._getFile(fileName)
+      let file = this._getFile(fileName)
       return Object.entries(file).map(a => ({ key: a[0], value: a[1] })).filter(callback).map(object => ({ [object.key]: object.value }))
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`File ${fileName}.json not found!`, errorCodes.missingFile)
@@ -1430,7 +1458,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      let file = Database._getFile(fileName)
+      let file = this._getFile(fileName)
       return Object.entries(file).map(a => ({ key: a[0], value: a[1] })).some(callback)
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`File ${fileName}.json not found!`, errorCodes.missingFile)
@@ -1479,7 +1507,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      let file = Database._getFile(fileName)
+      let file = this._getFile(fileName)
       return Object.entries(file).map(a => ({ key: a[0], value: a[1] })).every(callback)
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`File ${fileName}.json not found!`, errorCodes.missingFile)
@@ -1522,11 +1550,11 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      let file = Database._getFile(fileName)
+      let file = this._getFile(fileName)
       let arrayfile = Object.entries(file).map(a => ({ key: a[0], value: a[1] })).find(callback)
       if (arrayfile) {
         delete file[arrayfile.key]
-        fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, 2))
+        fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
         if (this.cache) this.cache[fileName] = file
       }
       return arrayfile
@@ -1572,11 +1600,11 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      let file = Database._getFile(fileName)
+      let file = this._getFile(fileName)
       let arrayfile = Object.entries(file).map(a => ({ key: a[0], value: a[1] })).filter(callback)
       if (arrayfile.length) {
         arrayfile.forEach(object => delete file[object.key])
-        fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, 2))
+        fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
         if (this.cache) this.cache[fileName] = file
       }
       return arrayfile
@@ -1620,11 +1648,11 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      let file = Database._getFile(fileName)
+      let file = this._getFile(fileName)
       let veri = file[key]
       if (!veri) return undefined
       delete file[key]
-      fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, 2))
+      fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
       if (this.cache) this.cache[fileName] = file
       return veri
     } catch (e) {
@@ -1663,7 +1691,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      let file = Database._getFile(fileName)
+      let file = this._getFile(fileName)
       let array = []
       keys.forEach(key => {
         let veri = file[key]
@@ -1752,7 +1780,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      var file = Database._getFile(fileName)
+      var file = this._getFile(fileName)
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`File ${fileName}.json not found!`, errorCodes.missingFile)
       throw new DatabaseError("An unknown error has occurred!", errorCodes.unknown)
@@ -1762,7 +1790,7 @@ class Database {
     else if (!Array.isArray(veri)) throw new DatabaseError("The value of the data must be an Array value", errorCodes.notArray)
     else veri.push(item)
     file[key] = veri
-    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, 2))
+    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
     if (this.cache) this.cache[fileName] = file
     return veri
   }
@@ -1802,7 +1830,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      var file = Database._getFile(fileName)
+      var file = this._getFile(fileName)
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`File ${fileName}.json not found!`, errorCodes.missingFile)
       throw new DatabaseError("An unknown error has occurred!", errorCodes.unknown)
@@ -1812,7 +1840,7 @@ class Database {
     else if (!Array.isArray(veri)) throw new DatabaseError("The value of the data must be an Array value", errorCodes.notArray)
     else veri.push(...array)
     file[key] = veri
-    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, 2))
+    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
     if (this.cache) this.cache[fileName] = file
     return veri
   }
@@ -1855,7 +1883,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      var file = Database._getFile(fileName)
+      var file = this._getFile(fileName)
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`File ${fileName}.json not found!`, errorCodes.missingFile)
       throw new DatabaseError("An unknown error has occurred!", errorCodes.unknown)
@@ -1870,7 +1898,7 @@ class Database {
       else newVeri.push(veri[i])
     }
     file[key] = newVeri
-    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, 2))
+    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
     if (this.cache) this.cache[fileName] = file
     return deletedValues
   }
@@ -1908,7 +1936,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      var file = Database._getFile(fileName)
+      var file = this._getFile(fileName)
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`File ${fileName}.json not found!`, errorCodes.missingFile)
       throw new DatabaseError("An unknown error has occurred!", errorCodes.unknown)
@@ -1918,7 +1946,7 @@ class Database {
     else if (!Array.isArray(veri)) throw new DatabaseError("The value of the data must be an Array value", errorCodes.notArray)
     else veri.unshift(item)
     file[key] = veri
-    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, 2))
+    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
     if (this.cache) this.cache[fileName] = file
     return veri
   }
@@ -1958,7 +1986,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      var file = Database._getFile(fileName)
+      var file = this._getFile(fileName)
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`File ${fileName}.json not found!`, errorCodes.missingFile)
       throw new DatabaseError("An unknown error has occurred!", errorCodes.unknown)
@@ -1968,7 +1996,7 @@ class Database {
     else if (!Array.isArray(veri)) throw new DatabaseError("The value of the data must be an Array value", errorCodes.notArray)
     else veri.unshift(...array)
     file[key] = veri
-    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, 2))
+    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
     if (this.cache) this.cache[fileName] = file
     return veri
   }
@@ -2011,7 +2039,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      var file = Database._getFile(fileName)
+      var file = this._getFile(fileName)
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`File ${fileName}.json not found!`, errorCodes.missingFile)
       throw new DatabaseError("An unknown error has occurred!", errorCodes.unknown)
@@ -2026,7 +2054,7 @@ class Database {
       else newVeri.push(veri[i])
     }
     file[key] = newVeri
-    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, 2))
+    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
     if (this.cache) this.cache[fileName] = file
     return deletedValues
   }
@@ -2072,7 +2100,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      var file = Database._getFile(fileName)
+      var file = this._getFile(fileName)
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`File ${fileName}.json not found!`, errorCodes.missingFile)
       throw new DatabaseError("An unknown error has occurred!", errorCodes.unknown)
@@ -2082,7 +2110,7 @@ class Database {
     else if (isNaN(veri)) throw new DatabaseError("The value of the data must be a Number", errorCodes.notNumber)
     else veri += number
     file[key] = veri
-    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, 2))
+    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
     if (this.cache) this.cache[fileName] = file
     return number
   }
@@ -2124,7 +2152,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      var file = Database._getFile(fileName)
+      var file = this._getFile(fileName)
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`File ${fileName}.json not found!`, errorCodes.missingFile)
       throw new DatabaseError("An unknown error has occurred!", errorCodes.unknown)
@@ -2135,7 +2163,7 @@ class Database {
     else veri -= number
     if (veri < 0 && !goToNegative) throw new DatabaseError("The value of the data must be a Number", errorCodes.negativeNumber)
     file[key] = veri
-    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, 2))
+    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
     if (this.cache) this.cache[fileName] = file
     return number
   }
@@ -2176,7 +2204,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      var file = Database._getFile(fileName)
+      var file = this._getFile(fileName)
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`File ${fileName}.json not found!`, errorCodes.missingFile)
       throw new DatabaseError("An unknown error has occurred!", errorCodes.unknown)
@@ -2186,7 +2214,7 @@ class Database {
     else if (isNaN(veri)) throw new DatabaseError("The value of the data must be a Number", errorCodes.notNumber)
     else veri *= number
     file[key] = veri
-    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, 2))
+    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
     if (this.cache) this.cache[fileName] = file
     return number
   }
@@ -2228,7 +2256,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      var file = Database._getFile(fileName)
+      var file = this._getFile(fileName)
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`File ${fileName}.json not found!`, errorCodes.missingFile)
       throw new DatabaseError("An unknown error has occurred!", errorCodes.unknown)
@@ -2238,7 +2266,7 @@ class Database {
     else if (isNaN(veri)) throw new DatabaseError("The value of the data must be a Number", errorCodes.notNumber)
     else goToInteger ? (veri /= number) : (veri /= number).toFixed(0)
     file[key] = veri
-    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, 2))
+    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
     if (this.cache) this.cache[fileName] = file
     return number
   }
@@ -2277,7 +2305,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      let file = Database._getFile(fileName)
+      let file = this._getFile(fileName)
       return file
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`File ${fileName}.json not found!`, errorCodes.missingFile)
@@ -2315,7 +2343,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      let file = Database._getFile(fileName)
+      let file = this._getFile(fileName)
       return Object.entries(file)
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`File ${fileName}.json not found!`, errorCodes.missingFile)
@@ -2435,7 +2463,7 @@ class Database {
     if (fs.existsSync(`${fileName}.json`)) throw new DatabaseError(`A file named ${fileName}.json already exists`, errorCodes.exists)
     if (Object.prototype.toString.call(file) != "[object Object]") throw new DatabaseError("file value must be an Object type", errorCodes.invalidInput)
     try {
-      fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, 2))
+      fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
       if (isDefaultFile) this.DEFAULT_FILE_NAME = fileName
       if (this.cache) this.cache[fileName] = file
       return file
@@ -2478,8 +2506,8 @@ class Database {
     fileName = fileName.replace(/\.json *$/m, "")
     cloneFileName = cloneFileName.replace(/\.json *$/m, "")
     try {
-      let file = JSON.parse(fs.readFileSync(`${fileName}.json`))
-      fs.writeFileSync(`${cloneFileName}.json`, JSON.stringify(file, null, 2))
+      let file = this._getFile(fileName)
+      fs.writeFileSync(`${cloneFileName}.json`, JSON.stringify(file, null, this.spaces))
       if (this.cache) this.cache[cloneFileName] = file
       return file
     } catch (e) {
@@ -2512,7 +2540,7 @@ class Database {
    *  }
    * )
    * 
-   * // Sonra komutu kullanarak verinin hangi tip olduğunu görelim
+   * // Then let's see what type the data is using the command
    * Database.typeof("ali") // "string"
    * 
    * Database.typeof("ilost") // "array"
@@ -2524,7 +2552,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      let file = Database._getFile(fileName)
+      let file = this._getFile(fileName)
       let veri = file[key]
       return Array.isArray(veri) ? "array" : typeof veri
     } catch (e) {
