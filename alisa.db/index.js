@@ -3,6 +3,7 @@
  * @typedef {Object} constructorObject
  * @property {String} [fileName="database"] Default file name
  * @property {Number} [spaces=2] How many spaces to use for indentation in the output json files
+ * @property {Boolean} [autoWrite=true] Sets whether to automatically write to the JSON file when a data is added or changed.
  * @property {Boolean} [cache=false] You set whether to cache the database file (If you cache it, the performance of the module will increase, but the probability of error will also increase)
  */
 
@@ -101,10 +102,12 @@ class Database {
 
         // Removing .json text
         this.DEFAULT_FILE_NAME = constructorObject.replace(/\.json *$/m, "")
+        
       } else {
 
         // If it does not end in .json, it takes the entered value as the file name
         this.DEFAULT_FILE_NAME = constructorObject
+        
       }
     }
 
@@ -113,21 +116,23 @@ class Database {
 
 
     // If entered as an object, continue as normal
-    const { fileName, cache, spaces } = constructorObject
+    const { fileName, cache, spaces, autoWrite } = constructorObject
 
 
     // If the name of the file is entered, make it the default file name
-    if (typeof fileName == "string") {
+    if ("fileName" in constructorObject && typeof fileName == "string") {
 
       // If the file name ends in .json, remove .json
       if (fileName.trim().endsWith(".json")) {
 
         // Removing .json text
         this.DEFAULT_FILE_NAME = fileName.replace(/\.json *$/m, "")
+        
       } else {
 
         // If it does not end in .json, it takes the entered value as the file name
         this.DEFAULT_FILE_NAME = fileName
+        
       }
 
     } else {
@@ -143,14 +148,38 @@ class Database {
 
 
 
+    // If the user has set the autoWrite setting, use his settings
+    if ("autoWrite" in constructorObject && autoWrite !== undefined) {
+
+      // And if the setting is true do this
+      if (autoWrite === true) {
+
+        // Automatically write to JSON file
+        this.autoWrite = true
+
+      } else {
+
+        // Automatically write if value is not true
+        this.autoWrite = false
+
+      }
+
+    } else {
+
+      // Set true by default if no value is entered
+      this.autoWrite = true
+
+    }
+
+
     // If the user has set the cache setting, use his settings
-    if (typeof cache == "boolean") {
+    if ("cache" in constructorObject && typeof cache == "boolean") {
 
       // And if the setting is true do this
       if (cache === true) {
 
         // Save in cache (This caching can also be used for multiple files)
-        this.cache = { [this.DEFAULT_FILE_NAME]: fs.readFileSync(`${this.DEFAULT_FILE_NAME}.json`, "utf-8") }
+        this.cache = { [this.DEFAULT_FILE_NAME]: JSON.parse(fs.readFileSync(`${this.DEFAULT_FILE_NAME}.json`, "utf-8")) }
 
       }
 
@@ -158,7 +187,7 @@ class Database {
 
 
     // If the user has specified the number of spaces in the JSON file, use that setting
-    if (spaces !== undefined) {
+    if ("spaces" in constructorObject && spaces !== undefined) {
 
       // Convert entered value to number object
       let numberOfSpaces = Number(spaces)
@@ -214,8 +243,13 @@ class Database {
    */
 
   _getFile(fileName) {
-    if (this.cache) return this.cache[fileName] ?? JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
-    return JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
+    try {
+      if (this.cache) return this.cache[fileName] ?? JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
+      return JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
+    } catch (e) {
+      fs.writeFileSync(`${fileName}.json`, "{}")
+      return {}
+    }
   }
 
 
@@ -266,6 +300,32 @@ class Database {
 
 
   /**
+   * If you have the database's cache setting open, use this command to save all the information in the cache to JSON files.
+   * @param {String|Array<String>} fileName If you only want one file to be saved, enter the name of the file. If you want specific multiple files to be saved, enter the file names in Array
+   * @return {void}
+   */
+
+  writeAll(fileName) {
+    if (!this.cache || Object.prototype.toString.call(this.cache) !== "[object Object]") return;
+    if (typeof fileName == "string") {
+      fs.writeFileSync(`${fileName}.json`, JSON.stringify(this.cache[fileName] || {}, null, this.spaces))
+      return;
+    } else if (Array.isArray(fileName)){
+      fileName.forEach(file => {
+        file = file.replace(/\.json *$/m, "")
+        fs.writeFileSync(`${file}.json`, JSON.stringify(this.cache[file] || {}, null, this.spaces))
+      })
+      return;
+    }
+    Object.entries(this.cache).forEach(([file, data]) => {
+      fs.writeFileSync(`${file}.json`, JSON.stringify(data, null, this.spaces))
+    })
+    return;
+  }
+
+
+
+  /**
    * Commands to print data to the database
    */
 
@@ -297,7 +357,7 @@ class Database {
     try {
       let file = this._getFile(fileName)
       file[key] = value
-      fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
+      if (this.autoWrite) fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
       if (this.cache) this.cache[fileName] = file
       return file
     } catch (e) {
@@ -341,7 +401,7 @@ class Database {
       let file = this._getFile(fileName)
       if (Array.isArray(keysAndValue)) keysAndValue = Object.fromEntries(keysAndValue)
       file = { ...file, ...keysAndValue }
-      fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
+      if (this.autoWrite) fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
       if (this.cache) this.cache[fileName] = file
       return file
     } catch (e) {
@@ -383,7 +443,7 @@ class Database {
     fileName = fileName.replace(/\.json *$/m, "")
     try {
       if (Array.isArray(input)) input = Object.fromEntries(input)
-      fs.writeFileSync(`${fileName}.json`, JSON.stringify(input, null, this.spaces))
+      if (this.autoWrite) fs.writeFileSync(`${fileName}.json`, JSON.stringify(input, null, this.spaces))
       if (this.cache) this.cache[fileName] = file
       return input
     } catch (e) {
@@ -1554,7 +1614,7 @@ class Database {
       let arrayfile = Object.entries(file).map(a => ({ key: a[0], value: a[1] })).find(callback)
       if (arrayfile) {
         delete file[arrayfile.key]
-        fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
+        if (this.autoWrite) fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
         if (this.cache) this.cache[fileName] = file
       }
       return arrayfile
@@ -1604,7 +1664,7 @@ class Database {
       let arrayfile = Object.entries(file).map(a => ({ key: a[0], value: a[1] })).filter(callback)
       if (arrayfile.length) {
         arrayfile.forEach(object => delete file[object.key])
-        fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
+        if (this.autoWrite) fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
         if (this.cache) this.cache[fileName] = file
       }
       return arrayfile
@@ -1652,7 +1712,7 @@ class Database {
       let veri = file[key]
       if (!veri) return undefined
       delete file[key]
-      fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
+      if (this.autoWrite) fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
       if (this.cache) this.cache[fileName] = file
       return veri
     } catch (e) {
@@ -1733,7 +1793,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      fs.writeFileSync(`${fileName}.json`, "{}")
+      if (this.autoWrite) fs.writeFileSync(`${fileName}.json`, "{}")
       if (this.cache) this.cache[fileName] = {}
       return {}
     } catch (e) {
@@ -1790,7 +1850,7 @@ class Database {
     else if (!Array.isArray(veri)) throw new DatabaseError("The value of the data must be an Array value", errorCodes.notArray)
     else veri.push(item)
     file[key] = veri
-    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
+    if (this.autoWrite) fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
     if (this.cache) this.cache[fileName] = file
     return veri
   }
@@ -1840,7 +1900,7 @@ class Database {
     else if (!Array.isArray(veri)) throw new DatabaseError("The value of the data must be an Array value", errorCodes.notArray)
     else veri.push(...array)
     file[key] = veri
-    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
+    if (this.autoWrite) fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
     if (this.cache) this.cache[fileName] = file
     return veri
   }
@@ -1898,7 +1958,7 @@ class Database {
       else newVeri.push(veri[i])
     }
     file[key] = newVeri
-    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
+    if (this.autoWrite) fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
     if (this.cache) this.cache[fileName] = file
     return deletedValues
   }
@@ -1946,7 +2006,7 @@ class Database {
     else if (!Array.isArray(veri)) throw new DatabaseError("The value of the data must be an Array value", errorCodes.notArray)
     else veri.unshift(item)
     file[key] = veri
-    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
+    if (this.autoWrite) fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
     if (this.cache) this.cache[fileName] = file
     return veri
   }
@@ -1996,7 +2056,7 @@ class Database {
     else if (!Array.isArray(veri)) throw new DatabaseError("The value of the data must be an Array value", errorCodes.notArray)
     else veri.unshift(...array)
     file[key] = veri
-    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
+    if (this.autoWrite) fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
     if (this.cache) this.cache[fileName] = file
     return veri
   }
@@ -2054,7 +2114,7 @@ class Database {
       else newVeri.push(veri[i])
     }
     file[key] = newVeri
-    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
+    if (this.autoWrite) fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
     if (this.cache) this.cache[fileName] = file
     return deletedValues
   }
@@ -2110,7 +2170,7 @@ class Database {
     else if (isNaN(veri)) throw new DatabaseError("The value of the data must be a Number", errorCodes.notNumber)
     else veri += number
     file[key] = veri
-    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
+    if (this.autoWrite) fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
     if (this.cache) this.cache[fileName] = file
     return number
   }
@@ -2163,7 +2223,7 @@ class Database {
     else veri -= number
     if (veri < 0 && !goToNegative) throw new DatabaseError("The value of the data must be a Number", errorCodes.negativeNumber)
     file[key] = veri
-    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
+    if (this.autoWrite) fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
     if (this.cache) this.cache[fileName] = file
     return number
   }
@@ -2214,7 +2274,7 @@ class Database {
     else if (isNaN(veri)) throw new DatabaseError("The value of the data must be a Number", errorCodes.notNumber)
     else veri *= number
     file[key] = veri
-    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
+    if (this.autoWrite) fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
     if (this.cache) this.cache[fileName] = file
     return number
   }
@@ -2266,7 +2326,7 @@ class Database {
     else if (isNaN(veri)) throw new DatabaseError("The value of the data must be a Number", errorCodes.notNumber)
     else goToInteger ? (veri /= number) : (veri /= number).toFixed(0)
     file[key] = veri
-    fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
+    if (this.autoWrite) fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
     if (this.cache) this.cache[fileName] = file
     return number
   }
@@ -2421,7 +2481,7 @@ class Database {
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
-      fs.writeFileSync(`${fileName}.json`, "{}")
+      if (this.autoWrite) fs.writeFileSync(`${fileName}.json`, "{}")
       if (this.cache) this.cache[fileName] = {}
       return {}
     } catch (e) {
@@ -2463,7 +2523,7 @@ class Database {
     if (fs.existsSync(`${fileName}.json`)) throw new DatabaseError(`A file named ${fileName}.json already exists`, errorCodes.exists)
     if (Object.prototype.toString.call(file) != "[object Object]") throw new DatabaseError("file value must be an Object type", errorCodes.invalidInput)
     try {
-      fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
+      if (this.autoWrite) fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this.spaces))
       if (isDefaultFile) this.DEFAULT_FILE_NAME = fileName
       if (this.cache) this.cache[fileName] = file
       return file
@@ -2507,7 +2567,7 @@ class Database {
     cloneFileName = cloneFileName.replace(/\.json *$/m, "")
     try {
       let file = this._getFile(fileName)
-      fs.writeFileSync(`${cloneFileName}.json`, JSON.stringify(file, null, this.spaces))
+      if (this.autoWrite) fs.writeFileSync(`${cloneFileName}.json`, JSON.stringify(file, null, this.spaces))
       if (this.cache) this.cache[cloneFileName] = file
       return file
     } catch (e) {

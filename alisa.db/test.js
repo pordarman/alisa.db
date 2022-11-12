@@ -43,7 +43,13 @@
 const alisadb = require("./index") // You replace "./index" with "alisa.db"
 
 // Then we create a new database
-const Database = new alisadb({ fileName: "database.json", cache: false, spaces: 2 }) // Enter your default filename where it says fileName, set whether to cache the file or not where it says cache and set the number of spaces between the data in the JSON file
+const Database = new alisadb({ fileName: "database.json", cache: false, autoWrite: true, spaces: 2 })
+
+// fileName = Enter your default filename where it says fileName
+// cache = Set whether to cache the file or not where it says cache
+// autoWrite = Set whether to automatically print the data when you print or change a data in the file.
+// spaces = Set the number of spaces between the data in the JSON file
+
 
 
 /**
@@ -57,6 +63,9 @@ Database.keys()
 
 // This calls all the values in database.json file
 Database.values()
+
+// If you set the database cache to true, it will print the cached data to the file.
+Database.writeAll()
 
 
 /**

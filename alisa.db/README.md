@@ -135,6 +135,12 @@ As you can see, we can save time and memory by printing multiple data instead of
 
 
 # Updates
+## v0.3.3 - **IMPORTANT UPDATE**
+
+- "An unknown error has occurred!" bug fixed
+
+- Some changes have been made to the database
+
 ## v0.3.2
 
 - Added feature to set JSON spaces
