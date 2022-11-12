@@ -43,7 +43,7 @@
 const alisadb = require("./index") // You replace "./index" with "alisa.db"
 
 // Then we create a new database
-const Database = new alisadb("database.json") // Here we enter the name of our file by default
+const Database = new alisadb({ fileName: "database.json", cache: false }) // Enter your default filename where it says fileName and set whether to cache the file or not where it says cache
 
 
 /**

@@ -64,8 +64,8 @@ It's very simple, first you have to open any node.js file and write the followin
 const alisa_db = require("alisa.db")
 
 const Database = new alisa_db("database.json")
-const Database_1 = new alisa_db("alisa.db.json")
-const Database_2 = new alisa_db("example.json")
+const Database_1 = new alisa_db({ fileName: "alisa.db.json" })
+const Database_2 = new alisa_db({ cache: true })
 ```
 Each database we wrote above holds a different file database data. You can increase this as much as you want.
 
@@ -81,11 +81,11 @@ Please make your definitions as above. If you have made a definition as below, t
 
 const alisa_db = require("alisa.db")
 
-const { get, set } = new alisa_db("database.json")
+const { get, set } = new alisa_db({ fileName: "database.json", cache: true })
 // This command will throw an error!
 
 
-const Database = new alisa_db("alisa.json")
+const Database = new alisa_db({ fileName: "alisa.json", cache: true })
 // This command will work as it should
 ```
 
@@ -135,6 +135,10 @@ As you can see, we can save time and memory by printing multiple data instead of
 
 
 # Updates
+## v0.3.1
+
+- Added caching option (Currently this option is in the testing phase, there may be bugs)
+
 ## v0.3.0
 
 - The module is now available not only for node.js but also for javascript
@@ -146,12 +150,6 @@ As you can see, we can save time and memory by printing multiple data instead of
 ## v0.2.1
 
 - Fixed several bug fixes
-
-## v0.2.0
-
-- The whole module has been translated into English (It was quite difficult for me..)
-
-- Annnddd fixed some typos
 
 <br>
 
