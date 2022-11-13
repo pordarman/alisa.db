@@ -89,6 +89,16 @@ class Database {
   /**
    * You only need to define it once
    * @param {constructorObject} constructorObject Database's options
+   * @example
+   * // First we define our module
+   * const alisadb = require("alisa.db")
+   * 
+   * // Then, if we want, we add the data we want and customize our database further.
+   * const Database = new alisadb()
+   * 
+   * const Database_1 = new alisadb("alisa.db.json")
+   * 
+   * const Database_2 = new alisadb({ fileName: "alisa.db.json", cache: true, autoWrite: false, spaces: 4 })
    */
 
   constructor(constructorObject = {}) {
@@ -127,12 +137,12 @@ class Database {
 
         // Removing .json text
         this.DEFAULT_FILE_NAME = fileName.replace(/\.json *$/m, "")
-        
+
       } else {
 
         // If it does not end in .json, it takes the entered value as the file name
         this.DEFAULT_FILE_NAME = fileName
-        
+
       }
 
     } else {
@@ -560,9 +570,9 @@ class Database {
    */
 
   getManyValue(values, defaultValue = [], fileName = this.DEFAULT_FILE_NAME) {
-    if (!values) throw new DatabaseError("values value is missing", errorCodes.missingInput)
+    if (!values) throw new DatabaseError("values is missing", errorCodes.missingInput)
     if (typeof values == "string") return this.getValue(values, (Array.isArray(defaultValue) && defaultValue.length == 0) ? undefined : defaultValue, fileName)
-    if (!Array.isArray(values)) throw new DatabaseError("values value must be an Array", errorCodes.invalidInput)
+    if (!Array.isArray(values)) throw new DatabaseError("values must be an Array", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
@@ -951,9 +961,9 @@ class Database {
    */
 
   hasSomeValue(values, fileName = this.DEFAULT_FILE_NAME) {
-    if (!values) throw new DatabaseError("values value is missing", errorCodes.missingInput)
+    if (!values) throw new DatabaseError("values is missing", errorCodes.missingInput)
     if (typeof values == "string") return this.hasValue(values, fileName)
-    if (!Array.isArray(values)) throw new DatabaseError("values value must be an Array", errorCodes.invalidInput)
+    if (!Array.isArray(values)) throw new DatabaseError("values must be an Array", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {
@@ -996,9 +1006,9 @@ class Database {
    */
 
   hasEveryValue(values, fileName = this.DEFAULT_FILE_NAME) {
-    if (!values) throw new DatabaseError("values value is missing", errorCodes.missingInput)
+    if (!values) throw new DatabaseError("values is missing", errorCodes.missingInput)
     if (typeof values == "string") return this.hasValue(values, fileName)
-    if (!Array.isArray(values)) throw new DatabaseError("values value must be an Array", errorCodes.invalidInput)
+    if (!Array.isArray(values)) throw new DatabaseError("values must be an Array", errorCodes.invalidInput)
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
     fileName = fileName.replace(/\.json *$/m, "")
     try {

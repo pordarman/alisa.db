@@ -1,4 +1,4 @@
-## ![alisa.db Logo](https://i.hizliresim.com/aug2sp9.png)
+## ![alisa.db Logo](https://www.npmjs.com/package/alisa.db/)
 
 
 [![Package Name](https://img.shields.io/badge/Package%20name-alisa.db-red)](https://www.npmjs.com/package/alisa.db/)
@@ -17,12 +17,15 @@
 # Creator(s)
 
 - [Ali (Fearless Crazy)](https://github.com/pordarman)
+- [Emir (Storme)](https://github.com/PhantomStorm0)
 
 <br>
 
 # Social media accounts
 
 - Ali: [Instagram](https://www.instagram.com/ali.celk/) - [Discord](https://discord.com/users/488839097537003521) - [Spotify](https://open.spotify.com/user/215jixxk4morzgq5mpzsmwwqa?si=41e0583b36f9449b)
+
+- Emir: [Biography](https://phantomstorm.xyz/) - [Instagram](https://www.instagram.com/eavsar_emir.js/) - [Discord](https://discord.com/users/817417815396974683)
 
 <br>
 
@@ -66,6 +69,7 @@ const alisa_db = require("alisa.db")
 const Database = new alisa_db("database.json")
 const Database_1 = new alisa_db({ fileName: "alisa.db.json" })
 const Database_2 = new alisa_db({ cache: true })
+const Database_3 = new alisa_db({ autoWrite: true, fileName: "alisa.db.json" })
 ```
 Each database we wrote above holds a different file database data. You can increase this as much as you want.
 
@@ -135,6 +139,14 @@ As you can see, we can save time and memory by printing multiple data instead of
 
 
 # Updates
+## v0.3.4
+
+- A new person has been added to the creators of the module, thumbs up 🎉🎉
+
+- Update README.md file *again..*
+
+- The command descriptions part of the module has been made a bit more understandable.
+
 ## v0.3.3 - **IMPORTANT UPDATE**
 
 - "An unknown error has occurred!" bug fixed
