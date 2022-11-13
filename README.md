@@ -1,4 +1,4 @@
-## ![alisa.db Logo](https://www.npmjs.com/package/alisa.db/)
+## [![alisa.db Logo](https://i.hizliresim.com/aug2sp9.png)](https://www.npmjs.com/package/alisa.db/)
 
 
 [![Package Name](https://img.shields.io/badge/Package%20name-alisa.db-red)](https://www.npmjs.com/package/alisa.db/)
@@ -139,6 +139,12 @@ As you can see, we can save time and memory by printing multiple data instead of
 
 
 # Updates
+## v0.3.5 - **Quick update**
+
+- Fixed a minor bug in the README.md file
+
+- Errors in the database have been made more understandable
+
 ## v0.3.4
 
 - A new person has been added to the creators of the module, thumbs up 🎉🎉
