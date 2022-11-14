@@ -139,6 +139,12 @@ As you can see, we can save time and memory by printing multiple data instead of
 
 
 # Updates
+## v0.3.7
+
+- Added `.forEach()` command
+
+- Fixed some performance issues
+
 ## v0.3.6
 
 - Fixed some typos in test.js and test.mjs files and transferred test files to a separate folder
@@ -170,14 +176,6 @@ As you can see, we can save time and memory by printing multiple data instead of
 - Fixed some typos
 
 - Update README.md file
-
-## v0.3.1
-
-- Added caching option (Currently this option is in the testing phase, there may be bugs)
-
-## v0.3.0
-
-- The module is now available not only for node.js but also for javascript
 
 <br>
 

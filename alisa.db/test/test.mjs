@@ -17,7 +17,7 @@
  * Let's explain with an example
  */
 
- ({
+({
     key: "value",
     anotherKey: [],
     anotherKey2: {},

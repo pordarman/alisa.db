@@ -1539,6 +1539,59 @@ class Database {
 
 
   /**
+   * Performs the specified action for each item in the database
+   * @param {(element: { key: String, value: Array|Object|String|null|Number }, index: Number, thisArgs: Array) => {}} callback for forEach function
+   * @param {String} fileName File name (Optional)
+   * @return {Boolean}
+   * @example
+   * 
+   * // First, let's print some data to the database
+   * Database.setMany(
+   *  { 
+   *   ali: "King", 
+   *   hello: "World", 
+   *   umm: "Are you there?", 
+   *   ilost: "i lost.."
+   *  }
+   * )
+   * 
+   * // Let's perform the specified operation for each item
+   * Database.forEach(callback => {
+   * 
+   *   // Let's print all the key data in the database to the console
+   *   console.log(callback.key)
+   * 
+   * })
+   * 
+   * // This is another way of calling
+   * Database.forEach(callback => {
+   * 
+   *   // Let's print the key whose value is Array to the console
+   *   if (Array.isArray(callback.value)) {
+   * 
+   *     console.log(`${callback.key} has an array value`)
+   *   
+   *   }
+   * 
+   * })
+   */
+
+  forEach(callback, fileName = this.DEFAULT_FILE_NAME) {
+    if (typeof callback != "function") throw new DatabaseError("callback value must be a function value", errorCodes.invalidInput)
+    if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput)
+    fileName = fileName.replace(/\.json *$/m, "")
+    try {
+      let file = this._getFile(fileName)
+      return Object.entries(file).map(a => ({ key: a[0], value: a[1] })).forEach(callback)
+    } catch (e) {
+      if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`File ${fileName}.json not found!`, errorCodes.missingFile)
+      throw new DatabaseError("An unknown error has occurred!", errorCodes.unknown)
+    }
+  }
+
+
+
+  /**
    * Checks if all of the data you defined from the JSON file exists
    * @param {(element: { key: String, value: Array|Object|String|null|Number}, index: Number, array: Array) => {}} callback for every function
    * @param {String} fileName File name (Optional)
