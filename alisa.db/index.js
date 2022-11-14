@@ -112,12 +112,12 @@ class Database {
 
         // Removing .json text
         this.DEFAULT_FILE_NAME = constructorObject.replace(/\.json *$/m, "")
-        
+
       } else {
 
         // If it does not end in .json, it takes the entered value as the file name
         this.DEFAULT_FILE_NAME = constructorObject
-        
+
       }
     }
 
@@ -137,12 +137,12 @@ class Database {
 
         // Removing .json text
         this.DEFAULT_FILE_NAME = fileName.replace(/\.json *$/m, "")
-        
+
       } else {
 
         // If it does not end in .json, it takes the entered value as the file name
         this.DEFAULT_FILE_NAME = fileName
-        
+
       }
 
     } else {
@@ -320,7 +320,7 @@ class Database {
     if (typeof fileName == "string") {
       fs.writeFileSync(`${fileName}.json`, JSON.stringify(this.cache[fileName] || {}, null, this.spaces))
       return;
-    } else if (Array.isArray(fileName)){
+    } else if (Array.isArray(fileName)) {
       fileName.forEach(file => {
         file = file.replace(/\.json *$/m, "")
         fs.writeFileSync(`${file}.json`, JSON.stringify(this.cache[file] || {}, null, this.spaces))
