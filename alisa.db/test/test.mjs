@@ -17,7 +17,7 @@
  * Let's explain with an example
  */
 
-({
+ ({
     key: "value",
     anotherKey: [],
     anotherKey2: {},
@@ -40,10 +40,10 @@
 
 
 // First we define the alisa.db module
-const alisadb = require("./index") // You replace "./index" with "alisa.db"
+import alisadb from "../index.mjs" // You replace "../index.mjs" with "alisa.db"
 
 // Then we create a new database
-const Database = new alisadb({ fileName: "database.json", cache: false, autoWrite: true, spaces: 2 })
+const Database = new alisadb({ fileName: "alisa.db.json", cache: true, autoWrite: false, spaces: 4 })
 
 // fileName = Enter your default filename where it says fileName
 // cache = Set whether to cache the file or not where it says cache
@@ -101,7 +101,7 @@ Database.getValue({ anyKey: "anyValue", anyArray: ["alisa", "db", "is", "awesome
 
 
 // If there is a value that is the same as the values you entered in this database.json file, it calls it
-Database.getValue(["bro!?", { anyKey: "anyValue", anyArray: ["alisa", "db", "is", "awesome"], anyObjectAgain: {} }])
+Database.getManyValue(["bro!?", { anyKey: "anyValue", anyArray: ["alisa", "db", "is", "awesome"], anyObjectAgain: {} }])
 
 
 // This will call all the data you entered in the database.json file

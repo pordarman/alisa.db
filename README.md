@@ -139,6 +139,10 @@ As you can see, we can save time and memory by printing multiple data instead of
 
 
 # Updates
+## v0.3.6
+
+- Fixed some typos in test.js and test.mjs files and transferred test files to a separate folder
+
 ## v0.3.5 - **Quick update**
 
 - Fixed a minor bug in the README.md file
