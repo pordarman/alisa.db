@@ -139,6 +139,10 @@ As you can see, we can save time and memory by printing multiple data instead of
 
 
 # Updates
+## v0.3.8
+
+- Added `.sort()` command
+
 ## v0.3.7
 
 - Added `.forEach()` command

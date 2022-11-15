@@ -1,8 +1,4 @@
 {
-  "hello": "World",
-  "test": "Test",
-  "alisa": "alisa.db",
-  "version": "0.0.3",
   "a": [
     1,
     2,
@@ -16,7 +12,6 @@
       {
         "b": "c",
         "a": {},
-        "d": true,
         "e": [
           "a",
           "b",
@@ -33,9 +28,16 @@
               }
             ]
           }
-        ]
+        ],
+        "d": true
       }
     ]
   ],
-  "ali": "veli"
+  "alisa": "alisa.db",
+  "hello": "World",
+  "test": "Test",
+  "version": "0.0.3",
+  "out": "of",
+  "sight": "out",
+  "of": "mind"
 }

@@ -12,5 +12,7 @@ module.exports = {
 
     unknown: 8,
 
-    exists: 9
+    exists: 9,
+
+    systemError: 10
 }
