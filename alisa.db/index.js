@@ -111,6 +111,10 @@ class Database {
       if (constructorObject.trim().endsWith(".json")) {
 
         // Removing .json text
+
+        /**
+         * @private
+         */
         this._DEFAULT_FILE_NAME = constructorObject.replace(/\.json *$/m, "")
 
       } else {
@@ -165,6 +169,10 @@ class Database {
       if (autoWrite === true) {
 
         // Automatically write to JSON file
+
+        /**
+         * @private
+         */
         this._autoWrite = true
 
       } else {
@@ -189,6 +197,10 @@ class Database {
       if (cache === true) {
 
         // Save in cache (This caching can also be used for multiple files)
+
+        /**
+         * @private
+         */
         this._cache = { [this._DEFAULT_FILE_NAME]: JSON.parse(fs.readFileSync(`${this._DEFAULT_FILE_NAME}.json`, "utf-8")) }
 
       }
@@ -205,6 +217,9 @@ class Database {
       // If the value entered is a number, use the number as the default space setting
       if (!isNaN(numberOfSpaces)) {
 
+        /**
+         * @private
+         */
         this._spaces = numberOfSpaces
 
       } else {
@@ -223,8 +238,30 @@ class Database {
 
 
     // If both autoWrite and cache features are turned off, it will give an error because no matter how much data is written, there will be no change in the database
-    if (this._autoWrite === false && this._cache === false) throw new DatabaseError("AutoWrite and cache cannot be turned off at the same time!")
+    if (this._autoWrite === false && this._cache === undefined) throw new DatabaseError("AutoWrite and cache cannot be turned off at the same time!")
 
+  }
+
+
+
+  /**
+   * Private commands
+   */
+
+
+  /**
+   * @param {String} fileName File name
+   * @private
+   */
+
+  _getFile(fileName) {
+    try {
+      if (this._cache) return this._cache[fileName] ?? JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
+      return JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
+    } catch (e) {
+      fs.writeFileSync(`${fileName}.json`, "{}")
+      return {}
+    }
   }
 
 
@@ -247,23 +284,6 @@ class Database {
 
   get [Symbol.toStringTag]() {
     return "Database"
-  }
-
-
-
-  /**
-   * @param {String} fileName File name
-   * @private
-   */
-
-  _getFile(fileName) {
-    try {
-      if (this._cache) return this._cache[fileName] ?? JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
-      return JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
-    } catch (e) {
-      fs.writeFileSync(`${fileName}.json`, "{}")
-      return {}
-    }
   }
 
 
@@ -1596,7 +1616,7 @@ class Database {
 
 
   /**
-   * Checks if at least one of the data you defined from the JSON file exists
+   * Bir diziyi yerinde sıralar. Bu yöntem diziyi değiştirir ve aynı diziye bir başvuru döndürür.
    * @param {(element1: { key: String, value: Array|Object|String|null|Number }, element2: { key: String, value: Array|Object|String|null|Number } ) => {}} callback for sort function
    * @param {String} fileName File name (Optional)
    * @return {Boolean}
@@ -1612,16 +1632,19 @@ class Database {
    *  }
    * )
    * 
-   * // Then let's check the data we want using the command
+   * // Then, let's sort the data written in the database using the command
    * Database.sort() // { "ali": "King", "hello": "World", ilost: "i lost..", "umm": "Are you there?" }
    * 
-   * // This is another way of calling
-   * Database.sort(callback => {
+   * // If you want to sort the numbers use the following command
+   * Database.sort((object1, object2) => {
    * 
-   *   // It checks whether the object's value data is Array or not
-   *   return Array.isArray(callback.value)
+   *   // Sort from largest to smallest
+   *   return +object2.key - +object1.key
    * 
-   * }) // false
+   *   // Sort from smallest to largest
+   *   return +object1.key - +object2.key
+   * 
+   * })
    */
 
   sort(callback = undefined, fileName = this._DEFAULT_FILE_NAME) {

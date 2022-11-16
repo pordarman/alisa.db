@@ -181,6 +181,14 @@ Database.some(object => object.key.includes("a"))
 Database.every(object => object.key.includes("a"))
 
 
+// Performs the specified action for each item in the database
+Database.forEach(object => console.log(object.key))
+
+
+// Sorts and rewrites all data in the database alphabetically
+Database.sort()
+
+
 // This will delete the data you specified in the database.json file
 Database.findAndDelete(object => object.key.includes("alisao7"))
 

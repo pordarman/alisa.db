@@ -139,6 +139,12 @@ As you can see, we can save time and memory by printing multiple data instead of
 
 
 # Updates
+## v0.3.9 - **Quick update**
+
+- Changed description in `.sort()` command
+
+- Fixed some typos
+
 ## v0.3.8
 
 - Added `.sort()` command
@@ -172,14 +178,6 @@ As you can see, we can save time and memory by printing multiple data instead of
 - "An unknown error has occurred!" bug fixed
 
 - Some changes have been made to the database
-
-## v0.3.2
-
-- Added feature to set JSON spaces
-
-- Fixed some typos
-
-- Update README.md file
 
 <br>
 
