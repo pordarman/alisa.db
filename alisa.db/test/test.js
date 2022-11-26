@@ -132,8 +132,8 @@ Database.exists("key")
 
 
 // This checks if at least 1 of the data you entered exists
-Database.hasSome(["ali", "alisa", "key"])
-Database.existsSome(["ali", "alisa", "key"])
+Database.hasAny(["ali", "alisa", "key"])
+Database.existsAny(["ali", "alisa", "key"])
 
 
 // This checks whether there is a value that is the same as the value you entered in the database.json file
@@ -142,8 +142,8 @@ Database.existsValue({ anyKey: "anyValue", anyArray: ["alisa", "db", "is", "awes
 
 
 // Returns true if this is equal to at least one value with the values you entered in the database.json file
-Database.hasSomeValue(["bro!?", { anyKey: "anyValue", anyArray: ["alisa", "db", "is", "awesome"], anyObjectAgain: {} }]) // true
-Database.existsSomeValue(["no no", "empty"]) // false
+Database.hasAnyValue(["bro!?", { anyKey: "anyValue", anyArray: ["alisa", "db", "is", "awesome"], anyObjectAgain: {} }]) // true
+Database.existsAnyValue(["no no", "empty"]) // false
 
 
 // Returns true if the values you entered in this database.json file are all equal to a value

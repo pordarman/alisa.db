@@ -10,7 +10,6 @@
 import DatabaseError from "./src/.mjs/DatabaseError.mjs"
 import errorCodes from "./src/.mjs/errorCodes.mjs"
 import fs from "fs"
-import { version } from "./package.json"
 
 
 
@@ -83,7 +82,7 @@ function sameArray(array1, array2) {
 }
 
 
-class Database {
+export default class Database {
 
 
   /**
@@ -272,7 +271,7 @@ class Database {
    */
 
   get version() {
-    return `v${version}`
+    return `vv0.3.12`
   }
 
 
@@ -975,16 +974,16 @@ class Database {
    * Database.hasValue("World") // true
    * 
    * // Enter values in array to pull multiple data
-   * Database.hasSomeValue(["World", "o7", "String"]) // true
+   * Database.hasAnyValue(["World", "o7", "String"]) // true
    * 
    * // Returns true if at least 1 of the values you entered were found
-   * Database.hasSomeValue([[1, 2, 3], "King", "fear"]) // true
+   * Database.hasAnyValue([[1, 2, 3], "King", "fear"]) // true
    * 
    * // Returns false if none of the values you entered were found
-   * Database.hasSomeValue(["ali", "test"]) // false
+   * Database.hasAnyValue(["ali", "test"]) // false
    */
 
-  hasSomeValue(values, fileName = this._DEFAULT_FILE_NAME) {
+  hasAnyValue(values, fileName = this._DEFAULT_FILE_NAME) {
     if (!values) throw new DatabaseError("values is missing", errorCodes.missingInput)
     if (typeof values == "string") return this.hasValue(values, fileName)
     if (!Array.isArray(values)) throw new DatabaseError("values must be an Array", errorCodes.invalidInput)
@@ -1068,13 +1067,13 @@ class Database {
    * Database.has("hello") // true
    * 
    * // Enter the names of the keys in the array to check multiple data
-   * Database.hasSome(["hello", "Alisa", "Fearless"]) // true
+   * Database.hasAny(["hello", "Alisa", "Fearless"]) // true
    * 
    * // Returns false if none of the values you entered were found
-   * Database.hasSome(["alisa", "test"]) // false
+   * Database.hasAny(["alisa", "test"]) // false
    */
 
-  hasSome(keys, fileName = this._DEFAULT_FILE_NAME) {
+  hasAny(keys, fileName = this._DEFAULT_FILE_NAME) {
     if (!keys) throw new DatabaseError("keys value is missing", errorCodes.missingInput)
     if (typeof keys == "string") return this.has(keys, fileName)
     if (!Array.isArray(keys)) throw new DatabaseError("keys value must be an Array", errorCodes.invalidInput)
@@ -1202,17 +1201,17 @@ class Database {
    * Database.hasValue("World") // true
    * 
    * // Enter values in array to pull multiple data
-   * Database.existsSomeValue(["World", "o7", "String"]) // true
+   * Database.existsAnyValue(["World", "o7", "String"]) // true
    * 
    * // Returns true if at least 1 of the values you entered were found
-   * Database.existsSomeValue([[1, 2, 3], "alisa", "King"]) // true
+   * Database.existsAnyValue([[1, 2, 3], "alisa", "King"]) // true
    * 
    * // Returns false if none of the values you entered were found
-   * Database.existsSomeValue(["ali", "test"]) // false
+   * Database.existsAnyValue(["ali", "test"]) // false
    */
 
-  existsSomeValue(values, fileName = this._DEFAULT_FILE_NAME) {
-    return this.hasSomeValue(values, fileName)
+  existsAnyValue(values, fileName = this._DEFAULT_FILE_NAME) {
+    return this.hasAnyValue(values, fileName)
   }
 
 
@@ -1271,14 +1270,14 @@ class Database {
    * Database.has("hello") // true
    * 
    * // Enter the names of the keys in the array to check multiple data
-   * Database.existsSome(["hello", "Alisa", "Fearless"]) // true
+   * Database.existsAny(["hello", "Alisa", "Fearless"]) // true
    * 
    * // Returns false if none of the values you entered were found
-   * Database.existsSome(["alisa", "test"]) // false
+   * Database.existsAny(["alisa", "test"]) // false
    */
 
-  existsSome(keys, fileName = this._DEFAULT_FILE_NAME) {
-    return this.hasSome(keys, fileName)
+  existsAny(keys, fileName = this._DEFAULT_FILE_NAME) {
+    return this.hasAny(keys, fileName)
   }
 
 
@@ -1311,7 +1310,7 @@ class Database {
    */
 
   hasMany(keys, fileName = this._DEFAULT_FILE_NAME) {
-    return this.hasSome(keys, fileName)
+    return this.hasAny(keys, fileName)
   }
 
 
@@ -2766,5 +2765,3 @@ class Database {
   }
 
 }
-
-export default Database;
