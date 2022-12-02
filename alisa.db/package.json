@@ -1,12 +1,11 @@
 {
   "name": "alisa.db",
-  "version": "0.3.12",
+  "version": "0.3.13",
   "readme": "README.md",
   "description": "The most powerful module of the JSON database, which is powerful, customizable and offers many uses.",
   "main": "index.js",
   "scripts": {
-    "test": "node test/test.js",
-    "install": "npm i alisa.db"
+    "test": "node test/test.js"
   },
   "exports": {
     "require": "./index.js",

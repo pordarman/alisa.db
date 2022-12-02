@@ -271,7 +271,7 @@ module.exports = class Database {
    */
 
   get version() {
-    return `v0.3.12`
+    return `v0.3.13`
   }
 
 
