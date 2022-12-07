@@ -258,8 +258,7 @@ export default class Database {
       if (this._cache) return this._cache[fileName] ?? JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
       return JSON.parse(fs.readFileSync(`${fileName}.json`, "utf-8"))
     } catch (e) {
-      fs.writeFileSync(`${fileName}.json`, "{}")
-      return {}
+      throw e
     }
   }
 
@@ -271,7 +270,7 @@ export default class Database {
    */
 
   get version() {
-    return `vv0.3.13`
+    return `vv0.3.14`
   }
 
 
@@ -335,25 +334,25 @@ export default class Database {
   /**
    * If you have the database's cache setting open, use this command to save all the information in the cache to JSON files.
    * @param {String|Array<String>} fileName If you only want one file to be saved, enter the name of the file. If you want specific multiple files to be saved, enter the file names in Array
-   * @return {void}
+   * @return {Boolean}
    */
 
   writeAll(fileName) {
     if (!this._cache || Object.prototype.toString.call(this._cache) !== "[object Object]") return;
     if (typeof fileName == "string") {
       fs.writeFileSync(`${fileName}.json`, JSON.stringify(this._cache[fileName] || {}, null, this._spaces))
-      return;
+      return true;
     } else if (Array.isArray(fileName)) {
       fileName.forEach(file => {
         file = file.replace(/\.json *$/m, "")
         fs.writeFileSync(`${file}.json`, JSON.stringify(this._cache[file] || {}, null, this._spaces))
       })
-      return;
+      return true;
     }
     Object.entries(this._cache).forEach(([file, data]) => {
       fs.writeFileSync(`${file}.json`, JSON.stringify(data, null, this._spaces))
     })
-    return;
+    return true;
   }
 
 
@@ -2428,7 +2427,7 @@ export default class Database {
    * Divides the value of the data in the JSON file by the value you enter
    * @param {String} key Name of key
    * @param {Number} number Number to divide by data 
-   * @param {Boolean} goToInteger Can the resulting number be an integer?
+   * @param {Boolean} goToDecimal Can the resulting number be an decimal?
    * @param {String} fileName File name (Optional)
    * @return {Number}
    * @example
@@ -2450,7 +2449,7 @@ export default class Database {
    * // Now in the following data is written in the "heart" data 5
    */
 
-  division(key, number, goToInteger = false, fileName = this._DEFAULT_FILE_NAME) {
+  division(key, number, goToDecimal = false, fileName = this._DEFAULT_FILE_NAME) {
     if (!key) throw new DatabaseError("key value is missing", errorCodes.missingInput)
     if (typeof key != "string") throw new DatabaseError("key value must be a string", errorCodes.invalidInput)
     if (!number) throw new DatabaseError("number value is missing or equal to 0", errorCodes.missingInput)
@@ -2467,7 +2466,7 @@ export default class Database {
     let veri = file[key]
     if (!veri) veri = 1
     else if (isNaN(veri)) throw new DatabaseError("The value of the data must be a Number", errorCodes.notNumber)
-    else goToInteger ? (veri /= number) : (veri /= number).toFixed(0)
+    else goToDecimal ? (veri /= number) : (veri /= number).toFixed(0)
     file[key] = veri
     if (this._autoWrite) fs.writeFileSync(`${fileName}.json`, JSON.stringify(file, null, this._spaces))
     if (this._cache) this._cache[fileName] = file
@@ -2564,7 +2563,7 @@ export default class Database {
   /**
    * Deletes the entire JSON file
    * @param {String} fileName File name (Optional)
-   * @return {void}
+   * @return {Boolean}
    * @example
    * 
    * // First, let's print some data to the database
@@ -2589,7 +2588,7 @@ export default class Database {
     try {
       fs.unlinkSync(`${fileName}.json`)
       if (this._cache) delete this._cache[fileName]
-      return;
+      return true;
     } catch (e) {
       if (e?.errno == -4058 || e?.code == "ENOENT") throw new DatabaseError(`File ${fileName}.json not found!`, errorCodes.missingFile)
       throw new DatabaseError("An unknown error has occurred!", errorCodes.unknown)

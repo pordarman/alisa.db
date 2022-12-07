@@ -139,6 +139,14 @@ As you can see, we can save time and memory by printing multiple data instead of
 
 
 # Updates
+## v0.3.14
+
+- Fixed some typos
+
+- Made some bug fixes
+
+- After using the `.writeAll()` and `.destroy()` commands, it no longer returns a void but a Boolean value
+
 ## v0.3.9 - **Quick update**
 
 - Changed description in `.sort()` command
