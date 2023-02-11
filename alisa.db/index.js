@@ -71,14 +71,12 @@ function sameValue(value1, value2) {
  */
 
 function sameArray(array1, array2) {
-  let obj = {}
-  if (array1.length != array2.length) return false
-  return array1.every(value_1 => array2.some((a2, i) => {
-    let isSame = sameValue(value_1, a2)
-    if (!isSame || obj[i]) return false
-    obj[i] = true
-    return true
-  }))
+  let length = array1.length;
+  if (length != array2.length) return false
+  for (let index = 0; index < length; ++index) {
+    if (!sameValue(array1[index], array2[index])) return false;
+  }
+  return true;
 }
 
 
