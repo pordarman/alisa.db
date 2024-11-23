@@ -1,6 +1,5 @@
 export default {
     missingInput: 1,
-    missingFile: 2,
 
     negativeNumber: 3,
 
@@ -9,8 +8,6 @@ export default {
 
     notArray: 6,
     notNumber: 7,
-
-    unknown: 8,
 
     exists: 9,
 

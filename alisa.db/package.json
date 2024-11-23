@@ -1,6 +1,6 @@
 {
   "name": "alisa.db",
-  "version": "0.3.14",
+  "version": "1.0.0",
   "readme": "README.md",
   "description": "The most powerful module of the JSON database, which is powerful, customizable and offers many uses.",
   "main": "index.js",
@@ -9,17 +9,31 @@
   },
   "exports": {
     "require": "./index.js",
-    "node": "./index.js",
-    "default": "./index.mjs",
-    "import": "./index.mjs"
+    "node": "./index.js"
   },
+  "types": "./index.d.ts",
   "keywords": [
     "json",
     "db",
     "jsondb",
     "database",
     "json-database",
-    "databasejson"
+    "databasejson",
+    "json-storage",
+    "file-database",
+    "simple-database",
+    "lightweight-db",
+    "offline-database",
+    "embedded-db",
+    "key-value-store",
+    "data-management",
+    "nodejs-database",
+    "javascript-db",
+    "fast-db",
+    "nosql",
+    "document-store",
+    "alisa",
+    "alisa-db"
   ],
   "author": "Fearless Crazy",
   "license": "MIT",
