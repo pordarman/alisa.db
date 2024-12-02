@@ -141,55 +141,57 @@ module.exports = class Database {
         this.#DEFAULT_FILE_NAME = constructorObject || "database";
       }
     }
+    else {
 
-    // If the entered value is not an Object value, convert it to an Object value (required so that the module does not give an error)
-    if (Object.prototype.toString.call(constructorObject) !== "[object Object]") constructorObject = {};
+      // If the entered value is not an Object value, convert it to an Object value (required so that the module does not give an error)
+      if (Object.prototype.toString.call(constructorObject) !== "[object Object]") constructorObject = {};
 
-    const {
-      fileName,
-      cache = false,
-      spaces = 4,
-      autoWrite = true
-    } = constructorObject;
+      const {
+        fileName,
+        cache = false,
+        spaces = 4,
+        autoWrite = true
+      } = constructorObject;
 
 
-    // If the name of the file is entered, make it the default file name
-    if ("fileName" in constructorObject && typeof fileName == "string") {
-      this.#DEFAULT_FILE_NAME = fileName.trim().endsWith(".json") ?
-        removeJsonAtEnd(fileName) :
-        fileName;
-    } else {
+      // If the name of the file is entered, make it the default file name
+      if ("fileName" in constructorObject && typeof fileName == "string") {
+        this.#DEFAULT_FILE_NAME = fileName.trim().endsWith(".json") ?
+          removeJsonAtEnd(fileName) :
+          fileName;
+      } else {
 
-      // If no value is entered or the value is not a font, the file name is defaulted to "database"
-      this.#DEFAULT_FILE_NAME = "database";
+        // If no value is entered or the value is not a font, the file name is defaulted to "database"
+        this.#DEFAULT_FILE_NAME = "database";
+      }
+
+
+      if (!fs.existsSync(`${this.#DEFAULT_FILE_NAME}.json`)) fs.writeFileSync(`${this.#DEFAULT_FILE_NAME}.json`, "{}");
+
+      if ("autoWrite" in constructorObject && typeof autoWrite == "boolean") {
+        this.#autoWrite = autoWrite;
+      } else {
+        this.#autoWrite = true;
+      }
+
+      if ("cache" in constructorObject && typeof cache == "boolean" && cache) {
+        // Save in cache (This caching can also be used for multiple files)
+        this.#cache = {
+          [this.#DEFAULT_FILE_NAME]: JSON.parse(fs.readFileSync(`${this.#DEFAULT_FILE_NAME}.json`, "utf-8"))
+        };
+      }
+
+      if ("spaces" in constructorObject && spaces !== undefined) {
+        const numberOfSpaces = Number(spaces);
+        this.#spaces = isNaN(numberOfSpaces) ? 4 : numberOfSpaces;
+      } else {
+        this.#spaces = 4
+      }
+
+
+      // If both autoWrite and cache features are turned off, it will give an error because no matter how much data is written, there will be no change in the database
+      if (this.#autoWrite === false && this.#cache === undefined) throw new DatabaseError("AutoWrite and cache cannot be turned off at the same time!");
     }
-
-
-    if (!fs.existsSync(`${this.#DEFAULT_FILE_NAME}.json`)) fs.writeFileSync(`${this.#DEFAULT_FILE_NAME}.json`, "{}");
-
-    if ("autoWrite" in constructorObject && typeof autoWrite == "boolean") {
-      this.#autoWrite = autoWrite;
-    } else {
-      this.#autoWrite = true;
-    }
-
-    if ("cache" in constructorObject && typeof cache == "boolean" && cache) {
-      // Save in cache (This caching can also be used for multiple files)
-      this.#cache = {
-        [this.#DEFAULT_FILE_NAME]: JSON.parse(fs.readFileSync(`${this.#DEFAULT_FILE_NAME}.json`, "utf-8"))
-      };
-    }
-
-    if ("spaces" in constructorObject && spaces !== undefined) {
-      const numberOfSpaces = Number(spaces);
-      this.#spaces = isNaN(numberOfSpaces) ? 4 : numberOfSpaces;
-    } else {
-      this.#spaces = 4
-    }
-
-
-    // If both autoWrite and cache features are turned off, it will give an error because no matter how much data is written, there will be no change in the database
-    if (this.#autoWrite === false && this.#cache === undefined) throw new DatabaseError("AutoWrite and cache cannot be turned off at the same time!")
   }
 
 
@@ -228,7 +230,7 @@ module.exports = class Database {
    */
 
   get version() {
-    return `v1.0.0`
+    return `v1.0.1`
   }
 
 
