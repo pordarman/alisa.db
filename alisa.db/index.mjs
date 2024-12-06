@@ -82,7 +82,7 @@ function sameArray(array1, array2) {
  * @returns {String} - Returns the file name without the .json extension
  */
 function removeJsonAtEnd(fileName) {
-  return fileName.replace(/\.json *$/m, "");
+  return fileName.replace(/\.json *$/i, "");
 }
 
 
@@ -122,14 +122,14 @@ export default class Database {
    * @param {constructorObject} constructorObject - Database's options
    * @example
    * // First we define our module
-   * const alisadb = require("alisa.db")
+   * const alisadb = require("alisa.db");
    * 
    * // Then, if we want, we add the data we want and customize our database further.
-   * const Database = new alisadb()
+   * const Database = new alisadb();
    * 
-   * const Database_1 = new alisadb("alisa.db.json")
+   * const Database_1 = new alisadb("alisa.db.json");
    * 
-   * const Database_2 = new alisadb({ fileName: "alisa.db.json", cache: true, autoWrite: false, spaces: 4 })
+   * const Database_2 = new alisadb({ fileName: "alisa.db.json", cache: true, autoWrite: false, spaces: 4 });
    */
 
   constructor(constructorObject = {}) {
@@ -233,7 +233,7 @@ export default class Database {
    */
 
   get version() {
-    return `v1.0.1`
+    return `v1.0.2`
   }
 
 
@@ -310,7 +310,7 @@ export default class Database {
     }
 
     Object.entries(this.#cache).forEach(([file, data]) => {
-      fs.writeFileSync(`${file}.json`, JSON.stringify(data, null, this.#spaces))
+      fs.writeFileSync(`${file}.json`, JSON.stringify(data, null, this.#spaces));
     });
 
     return true;
@@ -345,7 +345,7 @@ export default class Database {
     if (!key) throw new DatabaseError("key value is missing", errorCodes.missingInput);
     if (typeof key != "string") throw new DatabaseError("key value must be a string", errorCodes.invalidInput);
 
-    if (value === undefined) throw new DatabaseError("value value is missing", errorCodes.missingInput);
+    if (!(1 in arguments)) throw new DatabaseError("value value is missing", errorCodes.missingInput);
 
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput);
 
@@ -423,7 +423,7 @@ export default class Database {
    * ["hello", "World"], 
    * ["key", "value"], 
    * ["array", ["1", "2", "3"]]
-   * ], "database/fearless.json")
+   * ], "database/fearless.json");
    */
 
   setFile(input, fileName = this.#DEFAULT_FILE_NAME) {
@@ -524,7 +524,7 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // If you only want to retrieve a single data, use the .getValue() command
    * Database.getValue("World") // "hello"
@@ -574,7 +574,7 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // If you only want to get a single piece of data, use the .get() command
    * Database.get("hello") // "World"
@@ -625,13 +625,13 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Use this command to pull all data
    * Database.getAll() // { "ali": "King", "hello": "World", "umm": "Are you there?", "ilost": ["i lost.."] }
    * 
    * // If you want to pull data from another file, enter the path of that file
-   * Database.getAll("so a filename.json")
+   * Database.getAll("so a filename.json");
    */
 
   getAll(fileName = this.#DEFAULT_FILE_NAME) {
@@ -711,7 +711,7 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // If you only want to retrieve a single data, use the .getValue() command
    * Database.getValue("World") // "hello"
@@ -748,7 +748,7 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // If you only want to get a single piece of data, use the .get() command
    * Database.get("hello") // "World"
@@ -783,13 +783,13 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Use this command to pull all data
    * Database.getAll() // { "ali": "King", "hello": "World", "umm": "Are you there?", "ilost": ["i lost.."] }
    * 
    * // If you want to pull data from another file, enter the path of that file
-   * Database.getAll("so a filename.json")
+   * Database.getAll("so a filename.json");
    */
 
   fetchAll(fileName = this.#DEFAULT_FILE_NAME) {
@@ -812,13 +812,13 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Use this command to pull all data
    * Database.getAll() // { "ali": "King", "hello": "World", "umm": "Are you there?", "ilost": ["i lost.."] }
    * 
    * // If you want to pull data from another file, enter the path of that file
-   * Database.getAll("so a filename.json")
+   * Database.getAll("so a filename.json");
    */
 
   all(fileName = this.#DEFAULT_FILE_NAME) {
@@ -902,7 +902,7 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // If you only want to retrieve a single data, use the .hasValue() command
    * Database.hasValue("World") // true
@@ -945,7 +945,7 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // If you only want to retrieve a single data, use the .hasValue() command
    * Database.hasValue("World") // true
@@ -985,7 +985,7 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // If you only want to check one piece of data, use the .has() command
    * Database.has("hello") // true
@@ -1024,7 +1024,7 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // If you only want to check one piece of data, use the .has() command
    * Database.has("hello") // true
@@ -1109,7 +1109,7 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // If you only want to retrieve a single data, use the .hasValue() command
    * Database.hasValue("World") // true
@@ -1145,7 +1145,7 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // If you only want to retrieve a single data, use the .hasValue() command
    * Database.hasValue("World") // true
@@ -1178,7 +1178,7 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // If you only want to check one piece of data, use the .has() command
    * Database.has("hello") // true
@@ -1211,7 +1211,7 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // If you only want to check one piece of data, use the .has() command
    * Database.has("hello") // true
@@ -1244,7 +1244,7 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // If you only want to check one piece of data, use the .has() command
    * Database.has("hello") // true
@@ -1282,21 +1282,21 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: "i lost.."
    *  }
-   * )
+   * );
    * 
    * // Then let's return the data we want using the command
-   * Database.find(callback => {
+   * Database.find((key, value) => {
    * 
    *   // Returns the first data containing the word "ali" in the key data of the object
-   *   return callback.key.includes("ali")
+   *   return key.includes("ali");
    * 
    * }) // "King"
    * 
    * // This is another way of calling
-   * Database.find(callback => {
+   * Database.find((key, value) => {
    * 
    *   // Returns the first data of the object whose value is Array
-   *   return Array.isArray(callback.value)
+   *   return Array.isArray(value);
    * 
    * }) // undefined
    */
@@ -1334,21 +1334,21 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: "i lost.."
    *  }
-   * )
+   * );
    * 
    * // Then let's filter the data we want using the command
-   * Database.filter(callback => {
+   * Database.filter((key, value) => {
    * 
    *   // Filter data containing the word "ali" in the key data of the object
-   *   return callback.key.includes("ali")
+   *   return key.includes("ali");
    * 
    * }) // { ali: "King", hello: "World" }
    * 
    * // This is another way of calling
-   * Database.filter(callback => {
+   * Database.filter((key, value) => {
    * 
    *   // Returns data whose object's value is Array
-   *   return Array.isArray(callback.value)
+   *   return Array.isArray(value);
    * 
    * }) // {}
    */
@@ -1388,7 +1388,7 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: "i lost.."
    *  }
-   * )
+   * );
    * 
    * // Then let's filter the data we want using the command
    * Database.includes("ali") // [{ ali: "King" }, { aliv2: ["heyy"] }]
@@ -1419,7 +1419,7 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: "i lost.."
    *  }
-   * )
+   * );
    * 
    * // Then let's filter the data we want using the command
    * Database.startsWith("ali") // [{ ali: "King" }, { aliv2: ["heyy"] }]
@@ -1449,21 +1449,21 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: "i lost.."
    *  }
-   * )
+   * );
    * 
    * // Then let's check the data we want using the command
-   * Database.some(callback => {
+   * Database.some((key, value) => {
    * 
    *   // Checks whether there is a word containing the word "ali" in the key data of the object
-   *   return callback.key.includes("ali")
+   *   return key.includes("ali");
    * 
    * }) // true
    * 
    * // This is another way of calling
-   * Database.some(callback => {
+   * Database.some((key, value) => {
    * 
    *   // It checks whether the object's value data is Array or not
-   *   return Array.isArray(callback.value)
+   *   return Array.isArray(value);
    * 
    * }) // false
    */
@@ -1496,27 +1496,27 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: "i lost.."
    *  }
-   * )
+   * );
    * 
    * // Let's perform the specified operation for each item
-   * Database.forEach(callback => {
+   * Database.forEach((key, value) => {
    * 
    *   // Let's print all the key data in the database to the console
-   *   console.log(callback.key)
+   *   console.log(key);
    * 
-   * })
+   * });
    * 
    * // This is another way of calling
-   * Database.forEach(callback => {
+   * Database.forEach((key, value) => {
    * 
    *   // Let's print the key whose value is Array to the console
-   *   if (Array.isArray(callback.value)) {
+   *   if (Array.isArray(value)) {
    * 
-   *     console.log(`${callback.key} has an array value`)
+   *     console.log(`${key} has an array value`);
    *   
    *   }
    * 
-   * })
+   * });
    */
 
   forEach(callback, fileName = this.#DEFAULT_FILE_NAME) {
@@ -1547,7 +1547,7 @@ export default class Database {
    *   hello: "World",
    *   umm: "Are you there?" 
    *  }
-   * )
+   * );
    * 
    * // Then, let's sort the data written in the database using the command
    * Database.sort() // { "ali": "King", "hello": "World", ilost: "i lost..", "umm": "Are you there?" }
@@ -1556,20 +1556,19 @@ export default class Database {
    * Database.sort((object1, object2) => {
    * 
    *   // Sort from largest to smallest
-   *   return object1.key.localeCompare(object2.key)
+   *   return object1.key.localeCompare(object2.key);
    * 
    *   // Sort from smallest to largest
-   *   return object2.key.localeCompare(object1.key)
+   *   return object2.key.localeCompare(object1.key);
    * 
-   * })
+   * });
    */
 
-  sort(callback = undefined, fileName = this.#DEFAULT_FILE_NAME) {
-    if (callback && typeof callback != "function") throw new DatabaseError("callback value must be a function value", errorCodes.invalidInput);
+  sort(callback = (a, b) => a.key.localeCompare(b.key), fileName = this.#DEFAULT_FILE_NAME) {
+    if (typeof callback != "function") throw new DatabaseError("callback value must be a function value", errorCodes.invalidInput);
 
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput);
 
-    callback ??= (a, b) => a.key.localeCompare(b.key);
     const newFile = Object.fromEntries(
       Object.entries(this._getFile(removeJsonAtEnd(fileName)))
         .sort((a, b) => callback({ key: a[0], value: a[1] }, { key: b[0], value: b[1] }))
@@ -1596,21 +1595,21 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: "i lost.."
    *  }
-   * )
+   * );
    * 
    * // Then let's check the data we want using the command
-   * Database.every(callback => {
+   * Database.every((key, value) => {
    * 
    *   // Checks whether there is a word containing the word "ali" in each key data of the object
-   *   return callback.key.includes("ali")
+   *   return key.includes("ali");
    * 
    * }) // false
    * 
    * // This is another way of calling
-   * Database.every(callback => {
+   * Database.every((key, value) => {
    * 
    *   // Checks if the object's key data is a font
-   *   return typeof callback.key == "string"
+   *   return typeof key == "string"
    * 
    * }) // true
    */
@@ -1641,13 +1640,13 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: "i lost.."
    *  }
-   * )
+   * );
    * 
    * // Then let's show the data we want to delete using the command
-   * Database.find(callback => {
+   * Database.find((key, value) => {
    * 
    *   // Find and delete the first data containing the word "ali" in the key data of the object
-   *   return callback.key.includes("ali")
+   *   return key.includes("ali");
    * 
    * }) // { ali: "King" }
    * 
@@ -1679,6 +1678,7 @@ export default class Database {
   /**
    * Deletes all the data you defined from the JSON file
    * @param {(key: String, value: any, index: Number, thisArgs: Array ) => {}} callback - for the filter function
+   * @param {Number} limit - Limit value (Optional)
    * @param {String} fileName - File name (Optional)
    * @return {Array}
    * @example
@@ -1692,23 +1692,29 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: "i lost.."
    *  }
-   * )
+   * );
    * 
    * // Then let's show the data we want using the command
-   * Database.filterAndDelete(callback => {
+   * Database.filterAndDelete((key, value) => {
    * 
    *   // Find and delete all data containing the word "ali" in the key data of the object
-   *   return callback.key.includes("ali")
+   *   return key.includes("ali");
    * 
    * }) // [{ ali: "King" }, { aliv2: ["heyy"] }]
    * 
    * // File no longer contains "ali" and "aliv2" data
    */
 
-  filterAndDelete(callback, fileName = this.#DEFAULT_FILE_NAME) {
+  filterAndDelete(callback, limit = Infinity, fileName = this.#DEFAULT_FILE_NAME) {
     if (typeof callback != "function") throw new DatabaseError("callback value must be a function value", errorCodes.invalidInput);
 
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput);
+
+    limit = Number(limit);
+    if (isNaN(limit)) throw new DatabaseError("limit value must be a number", errorCodes.invalidInput);
+    if (limit < 0) throw new DatabaseError("limit value must be greater than or equal to 0", errorCodes.negativeNumber);
+    
+    if (limit === 0) return [];
 
     const file = this._getFile(removeJsonAtEnd(fileName));
     const entries = Object.entries(file);
@@ -1719,6 +1725,7 @@ export default class Database {
       if (callback(key, value, i, entries)) {
         result.push(value);
         delete file[key];
+        if (result.length === limit) break;
       }
     }
 
@@ -1748,7 +1755,7 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: "i lost.."
    *  }
-   * )
+   * );
    * 
    * // Then, let's enter the data we want to be deleted using the command
    * Database.delete("hello") { hello: "World" }
@@ -1787,7 +1794,7 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: "i lost.."
    *  }
-   * )
+   * );
    * 
    * // Then let's enter the keys we want to be deleted using the command
    * Database.deleteMany(["ali", "hello", "umm"]) // "ali", "hello" and "umm" data deleted
@@ -1830,7 +1837,7 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: "i lost.."
    *  }
-   * )
+   * );
    * 
    * // Then let's delete all the data using the command
    * Database.deleteAll() // {}
@@ -1869,7 +1876,7 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Then let's add a new data to the end of the Array data using the command
    * Database.push("ilost", "control") // ["i lost..", "control"]
@@ -1881,7 +1888,7 @@ export default class Database {
     if (!key) throw new DatabaseError("key value is missing", errorCodes.missingInput);
     if (typeof key != "string") throw new DatabaseError("key value must be a string", errorCodes.invalidInput);
 
-    if (item === undefined) throw new DatabaseError("item value is missing", errorCodes.missingInput);
+    if (!(1 in arguments)) throw new DatabaseError("item value is missing", errorCodes.missingInput);
 
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput);
 
@@ -1914,7 +1921,7 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Then let's add a new data to the end of the Array data using the command
    * Database.pushAll("ilost", ["control", "brooo", "..."]) // ["i lost..", "control", "brooo", "..."]
@@ -1960,7 +1967,7 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost..", "this life", "i cry", "broo"]
    *  }
-   * )
+   * );
    * 
    * // Then let's delete the data at the end of the Array data using the command
    * Database.pop("ilost") // ["broo"]
@@ -1975,10 +1982,9 @@ export default class Database {
     if (!key) throw new DatabaseError("key value is missing", errorCodes.missingInput);
     if (typeof key != "string") throw new DatabaseError("key value must be a string", errorCodes.invalidInput);
 
-    if (number === undefined) throw new DatabaseError("number value is missing", errorCodes.missingInput);
-
-    number = Number(number)
+    number = Number(number);
     if (isNaN(number)) throw new DatabaseError("number value must be a number value", errorCodes.notNumber);
+    if (number < 0) throw new DatabaseError("number value must be greater than or equal to 0", errorCodes.negativeNumber);
 
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput);
 
@@ -2011,7 +2017,7 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Then let's add a new data to the beginning of the Array data using the command
    * Database.unshift("ilost", "i hate") // ["i hate", "i lost.."]
@@ -2023,7 +2029,7 @@ export default class Database {
     if (!key) throw new DatabaseError("key value is missing", errorCodes.missingInput);
     if (typeof key != "string") throw new DatabaseError("key value must be a string", errorCodes.invalidInput);
 
-    if (item === undefined) throw new DatabaseError("item value is missing", errorCodes.missingInput);
+    if (!(1 in arguments)) throw new DatabaseError("item value is missing", errorCodes.missingInput);
 
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput);
 
@@ -2056,7 +2062,7 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Then let's add a new data to the beginning of the Array data using the command
    * Database.unshiftAll("ilost", ["i hate", "this life", "man"]) // ["i hate", "this life", "man", "i lost.."]
@@ -2102,7 +2108,7 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost..", "this life", "i cry", "broo"]
    *  }
-   * )
+   * );
    * 
    * // Then let's delete the first data of the Array data using the command
    * Database.shift("ilost") // ["i lost.."]
@@ -2117,10 +2123,9 @@ export default class Database {
     if (!key) throw new DatabaseError("key value is missing", errorCodes.missingInput);
     if (typeof key != "string") throw new DatabaseError("key value must be a string", errorCodes.invalidInput);
 
-    if (number === undefined) throw new DatabaseError("number value is missing", errorCodes.missingInput);
-
-    number = Number(number)
+    number = Number(number);
     if (isNaN(number)) throw new DatabaseError("number value must be a number value", errorCodes.notNumber);
+    if (number < 0) throw new DatabaseError("number value must be greater than or equal to 0", errorCodes.negativeNumber);
 
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput);
 
@@ -2129,7 +2134,7 @@ export default class Database {
 
     if (!Array.isArray(data)) throw new DatabaseError("The values of the data must be an Array value", errorCodes.notArray);
 
-    const deletedValues = data.splice(number);
+    const deletedValues = data.splice(0, number);
 
     this._writeAndCache(fileName, file);
     return deletedValues;
@@ -2159,7 +2164,7 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Then let's increase its value using the command
    * Database.add("heart", 15) // 30
@@ -2171,9 +2176,7 @@ export default class Database {
     if (!key) throw new DatabaseError("key value is missing", errorCodes.missingInput);
     if (typeof key != "string") throw new DatabaseError("key value must be a string", errorCodes.invalidInput);
 
-    if (number === undefined) throw new DatabaseError("number value is missing", errorCodes.missingInput);
-
-    number = Number(number)
+    number = parseFloat(number);
     if (isNaN(number)) throw new DatabaseError("number value must be a number value", errorCodes.notNumber);
 
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput);
@@ -2210,7 +2213,7 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Then let's decrease its value using the command
    * Database.substr("heart", 5) // 10
@@ -2222,9 +2225,7 @@ export default class Database {
     if (!key) throw new DatabaseError("key value is missing", errorCodes.missingInput);
     if (typeof key != "string") throw new DatabaseError("key value must be a string", errorCodes.invalidInput);
 
-    if (number === undefined) throw new DatabaseError("number value is missing", errorCodes.missingInput);
-
-    number = Number(number)
+    number = parseFloat(number);
     if (isNaN(number)) throw new DatabaseError("number value must be a number value", errorCodes.notNumber);
 
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput);
@@ -2261,7 +2262,7 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Then multiply its value by the number using the command
    * Database.multi("heart", 3) // 45
@@ -2273,9 +2274,7 @@ export default class Database {
     if (!key) throw new DatabaseError("key value is missing", errorCodes.missingInput);
     if (typeof key != "string") throw new DatabaseError("key value must be a string", errorCodes.invalidInput);
 
-    if (number === undefined) throw new DatabaseError("number value is missing", errorCodes.missingInput);
-
-    number = Number(number)
+    number = parseFloat(number);
     if (isNaN(number)) throw new DatabaseError("number value must be a number value", errorCodes.notNumber);
 
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput);
@@ -2312,7 +2311,7 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Then let's divide its value by number using the command
    * Database.division("heart", 3) // 5
@@ -2324,10 +2323,9 @@ export default class Database {
     if (!key) throw new DatabaseError("key value is missing", errorCodes.missingInput);
     if (typeof key != "string") throw new DatabaseError("key value must be a string", errorCodes.invalidInput);
 
-    if (number === undefined) throw new DatabaseError("number value is missing", errorCodes.missingInput);
-
-    number = Number(number)
+    number = parseFloat(number);
     if (isNaN(number)) throw new DatabaseError("number value must be a number value", errorCodes.notNumber);
+    if (number === 0) throw new DatabaseError("number value must be greater than 0", errorCodes.zeroNumber);
 
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput);
 
@@ -2365,13 +2363,13 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Use this command to pull all data
    * Database.toJSON() // { "ali": "King", "hello": World", "umm": "Are you there?", "ilost": ["i lost.."] }
    * 
    * // If you want to pull data from another file, enter the path of that file
-   * Database.toJSON("so a filename.json")
+   * Database.toJSON("so a filename.json");
    */
 
   toJSON(fileName = this.#DEFAULT_FILE_NAME) {
@@ -2396,14 +2394,14 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Use this command to pull all data
    * Database.toArray() 
    * // [["ali", "King"], ["hello", World"], ["umm", "Are you there?"], ["ilost", ["i lost.."]]]
    * 
    * // If you want to pull data from another file, enter the path of that file
-   * Database.toArray("so a filename.json")
+   * Database.toArray("so a filename.json");
    */
 
   toArray(fileName = this.#DEFAULT_FILE_NAME) {
@@ -2433,10 +2431,10 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Then let's delete the file completely using the command
-   * Database.destroy()
+   * Database.destroy();
    * 
    * // The JSON file has now traveled to the infinities of the universe
    */
@@ -2466,10 +2464,10 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Then let's delete the data in the file using the command
-   * Database.reset()
+   * Database.reset();
    * 
    * // JSON file now only prints "{}" data
    */
@@ -2498,16 +2496,16 @@ export default class Database {
    * @example
    * 
    * // Let's delete the database first
-   * Database.destroy()
+   * Database.destroy();
    * 
    * // Then let's create a new file using the command
-   * Database.create("alisa.json")
+   * Database.create("alisa.json");
    * 
    * // If we want to print data in the file while creating it, let's write the data as the second parameter
-   * Database.create("alisadb.json", { ali: "Adam" })
+   * Database.create("alisadb.json", { ali: "Adam" });
    * 
    * // If you want to set the file you created as the default file, type true last
-   * Database.create("default.json", {}, true)
+   * Database.create("default.json", {}, true);
    */
 
   create(fileName, file = {}, isDefaultFile = false) {
@@ -2542,13 +2540,13 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Then let's command copy this JSON file to another JSON file
-   * Database.clone("alisa.json")
+   * Database.clone("alisa.json");
    * 
    * // If you want, you can also enter the file name to be cloned
-   * Database.clone("alisadb.json", "such a filename.json")
+   * Database.clone("alisadb.json", "such a filename.json");
    */
 
   clone(cloneFileName, fileName = this.#DEFAULT_FILE_NAME) {
@@ -2588,7 +2586,7 @@ export default class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Then let's see what type the data is using the command
    * Database.typeof("ali") // "string"

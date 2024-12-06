@@ -119,14 +119,14 @@ module.exports = class Database {
    * @param {constructorObject} constructorObject - Database's options
    * @example
    * // First we define our module
-   * const alisadb = require("alisa.db")
+   * const alisadb = require("alisa.db");
    * 
    * // Then, if we want, we add the data we want and customize our database further.
-   * const Database = new alisadb()
+   * const Database = new alisadb();
    * 
-   * const Database_1 = new alisadb("alisa.db.json")
+   * const Database_1 = new alisadb("alisa.db.json");
    * 
-   * const Database_2 = new alisadb({ fileName: "alisa.db.json", cache: true, autoWrite: false, spaces: 4 })
+   * const Database_2 = new alisadb({ fileName: "alisa.db.json", cache: true, autoWrite: false, spaces: 4 });
    */
 
   constructor(constructorObject = {}) {
@@ -226,18 +226,18 @@ module.exports = class Database {
 
   /**
    * Version of database
-   * @returns {String}
+   * @return {String}
    */
 
   get version() {
-    return `v1.0.1`
+    return `v1.0.2`
   }
 
 
 
   /**
    * Data written when using Object.prototype.toString.call(Database) command
-   * @returns {String}
+   * @return {String}
    */
 
   get [Symbol.toStringTag]() {
@@ -254,7 +254,7 @@ module.exports = class Database {
   /**
    * Returns the key values of all data in the JSON file
    * @param {String} fileName - File name (Optional)
-   * @returns {Array<String>}
+   * @return {Array<String>}
    */
 
   keys(fileName = this.#DEFAULT_FILE_NAME) {
@@ -269,7 +269,7 @@ module.exports = class Database {
   /**
    * Returns the values of all data in the JSON file
    * @param {String} fileName - File name (Optional)
-   * @returns {Array<any>}
+   * @return {Array<any>}
    */
 
   values(fileName = this.#DEFAULT_FILE_NAME) {
@@ -284,7 +284,7 @@ module.exports = class Database {
   /**
    * If you have the database's cache setting open, use this command to save all the information in the cache to JSON files.
    * @param {String|Array<String>} fileName - If you only want one file to be saved, enter the name of the file. If you want specific multiple files to be saved, enter the file names in Array
-   * @returns {Boolean}
+   * @return {Boolean}
    */
 
   writeAll(fileName) {
@@ -307,7 +307,7 @@ module.exports = class Database {
     }
 
     Object.entries(this.#cache).forEach(([file, data]) => {
-      fs.writeFileSync(`${file}.json`, JSON.stringify(data, null, this.#spaces))
+      fs.writeFileSync(`${file}.json`, JSON.stringify(data, null, this.#spaces));
     });
 
     return true;
@@ -325,7 +325,7 @@ module.exports = class Database {
    * @param {String} key - Name of key
    * @param {Object|Date|String|Array|null} value - The value corresponding to the typed key
    * @param {String} fileName - File name (Optional)
-   * @returns {Object}
+   * @return {Object}
    * @example
    * 
    * // Writes the word "World" against the "hello" key value
@@ -342,7 +342,7 @@ module.exports = class Database {
     if (!key) throw new DatabaseError("key value is missing", errorCodes.missingInput);
     if (typeof key != "string") throw new DatabaseError("key value must be a string", errorCodes.invalidInput);
 
-    if (value === undefined) throw new DatabaseError("value value is missing", errorCodes.missingInput);
+    if (!(1 in arguments)) throw new DatabaseError("value value is missing", errorCodes.missingInput);
 
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput);
 
@@ -360,7 +360,7 @@ module.exports = class Database {
    * Writes new multiple data to JSON file or replaces existing data
    * @param {Array<Array<String,any>>|Object<String,any>} items - Data to be written or changed
    * @param {String} fileName - File name (Optional)
-   * @returns {Object}
+   * @return {Object}
    * @example
    * 
    * // Use this command to print multiple data to file
@@ -403,7 +403,7 @@ module.exports = class Database {
    * Deletes all data in the JSON file and writes the data you entered
    * @param {Object} input - Data to be written to JSON file
    * @param {String} fileName - File name (Optional)
-   * @returns {Object}
+   * @return {Object}
    * @example
    * 
    * // Deletes all data in the JSON file and writes the data you entered
@@ -420,7 +420,7 @@ module.exports = class Database {
    * ["hello", "World"], 
    * ["key", "value"], 
    * ["array", ["1", "2", "3"]]
-   * ], "database/fearless.json")
+   * ], "database/fearless.json");
    */
 
   setFile(input, fileName = this.#DEFAULT_FILE_NAME) {
@@ -448,7 +448,7 @@ module.exports = class Database {
    * @param {String} key - Name of key
    * @param {any} defaultValue - If there is no such data, the default data to return
    * @param {String} fileName - File name (Optional)
-   * @returns {any|undefined}
+   * @return {any|undefined}
    * @example
    * 
    * // First, let's print some data to the database
@@ -480,7 +480,7 @@ module.exports = class Database {
    * Pulls the key corresponding to the specified value from the JSON file
    * @param {Array|Object|String|null|Number} value - Name of value
    * @param {String} fileName - File name (Optional)
-   * @returns {Object}
+   * @return {Object}
    * @example
    * 
    * // First, let's print some data to the database
@@ -510,7 +510,7 @@ module.exports = class Database {
    * @param {Array} values - Values
    * @param {any} defaultValue - Default data to be returned if no data is available
    * @param {String} fileName - File name (Optional)
-   * @returns {any|Object}
+   * @return {any|Object}
    * @example
    * 
    * // First, let's print some data to the database
@@ -521,7 +521,7 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // If you only want to retrieve a single data, use the .getValue() command
    * Database.getValue("World") // "hello"
@@ -560,7 +560,7 @@ module.exports = class Database {
    * @param {Array<String>} keys - Keys
    * @param {any} defaultValue - Default data to be returned if no data is available
    * @param {String} fileName - File name (Optional)
-   * @returns {any|Object}
+   * @return {any|Object}
    * @example
    * 
    * // First, let's print some data to the database
@@ -571,7 +571,7 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // If you only want to get a single piece of data, use the .get() command
    * Database.get("hello") // "World"
@@ -611,7 +611,7 @@ module.exports = class Database {
   /**
    * Pulls all data from JSON file
    * @param {String} fileName - File name (Optional)
-   * @returns {Object}
+   * @return {Object}
    * @example
    * 
    * // First, let's print some data to the database
@@ -622,13 +622,13 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Use this command to pull all data
    * Database.getAll() // { "ali": "King", "hello": "World", "umm": "Are you there?", "ilost": ["i lost.."] }
    * 
    * // If you want to pull data from another file, enter the path of that file
-   * Database.getAll("so a filename.json")
+   * Database.getAll("so a filename.json");
    */
 
   getAll(fileName = this.#DEFAULT_FILE_NAME) {
@@ -644,7 +644,7 @@ module.exports = class Database {
    * @param {String} key - Name of key
    * @param {any} defaultValue - If there is no such data, the default data to return
    * @param {String} fileName - File name (Optional)
-   * @returns {any|undefined}
+   * @return {any|undefined}
    * @example
    * 
    * // First, let's print some data to the database
@@ -670,7 +670,7 @@ module.exports = class Database {
    * Pulls data corresponding to specified data from JSON file
    * @param {Array|Object|String|null|Number} value - Name of value
    * @param {String} fileName - File name (Optional)
-   * @returns {Object}
+   * @return {Object}
    * @example
    * 
    * // First, let's print some data to the database
@@ -697,7 +697,7 @@ module.exports = class Database {
    * @param {Array} values - Values
    * @param {any} defaultValue - Default data to be returned if no data is available
    * @param {String} fileName - File name (Optional)
-   * @returns {any|Object}
+   * @return {any|Object}
    * @example
    * 
    * // First, let's print some data to the database
@@ -708,7 +708,7 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // If you only want to retrieve a single data, use the .getValue() command
    * Database.getValue("World") // "hello"
@@ -734,7 +734,7 @@ module.exports = class Database {
    * @param {Array<String>} keys - Keys
    * @param {any} defaultValue - Default data to be returned if no data is available
    * @param {String} fileName - File name (Optional)
-   * @returns {any|Object}
+   * @return {any|Object}
    * @example
    * 
    * // First, let's print some data to the database
@@ -745,7 +745,7 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // If you only want to get a single piece of data, use the .get() command
    * Database.get("hello") // "World"
@@ -769,7 +769,7 @@ module.exports = class Database {
   /**
    * Pulls all data from JSON file
    * @param {String} fileName - File name (Optional)
-   * @returns {Object}
+   * @return {Object}
    * @example
    * 
    * // First, let's print some data to the database
@@ -780,13 +780,13 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Use this command to pull all data
    * Database.getAll() // { "ali": "King", "hello": "World", "umm": "Are you there?", "ilost": ["i lost.."] }
    * 
    * // If you want to pull data from another file, enter the path of that file
-   * Database.getAll("so a filename.json")
+   * Database.getAll("so a filename.json");
    */
 
   fetchAll(fileName = this.#DEFAULT_FILE_NAME) {
@@ -798,7 +798,7 @@ module.exports = class Database {
   /**
    * Pulls all data from JSON file
    * @param {String} fileName - File name (Optional)
-   * @returns {Object}
+   * @return {Object}
    * @example
    * 
    * // First, let's print some data to the database
@@ -809,13 +809,13 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Use this command to pull all data
    * Database.getAll() // { "ali": "King", "hello": "World", "umm": "Are you there?", "ilost": ["i lost.."] }
    * 
    * // If you want to pull data from another file, enter the path of that file
-   * Database.getAll("so a filename.json")
+   * Database.getAll("so a filename.json");
    */
 
   all(fileName = this.#DEFAULT_FILE_NAME) {
@@ -833,7 +833,7 @@ module.exports = class Database {
    * Checks if the specified key from the JSON file exists
    * @param {String} key - Name of key
    * @param {String} fileName - File name (Optional)
-   * @returns {Boolean}
+   * @return {Boolean}
    * @example
    * 
    * // First, let's print some data to the database
@@ -861,7 +861,7 @@ module.exports = class Database {
    * Checks whether value corresponds to the specified value from the JSON file
    * @param {Array|Object|String|null|Number} value - Name of value
    * @param {String} fileName - File name (Optional)
-   * @returns {Boolean}
+   * @return {Boolean}
    * @example
    * 
    * // First, let's print some data to the database
@@ -888,7 +888,7 @@ module.exports = class Database {
    * Checks if there is at least one value corresponding to the specified value from the JSON file
    * @param {Array} values - Values
    * @param {String} fileName - File name (Optional)
-   * @returns {any|Object}
+   * @return {any|Object}
    * @example
    * 
    * // First, let's print some data to the database
@@ -899,7 +899,7 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // If you only want to retrieve a single data, use the .hasValue() command
    * Database.hasValue("World") // true
@@ -931,7 +931,7 @@ module.exports = class Database {
    * Checks if all value corresponding to specified value from JSON file exists
    * @param {Array} values - Values
    * @param {String} fileName - File name (Optional)
-   * @returns {any|Object}
+   * @return {any|Object}
    * @example
    * 
    * // First, let's print some data to the database
@@ -942,7 +942,7 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // If you only want to retrieve a single data, use the .hasValue() command
    * Database.hasValue("World") // true
@@ -971,7 +971,7 @@ module.exports = class Database {
    * Checks if at least one of the specified key values from the JSON file exists
    * @param {Array} keys - Keys
    * @param {String} fileName - File name (Optional)
-   * @returns {Boolean}
+   * @return {Boolean}
    * @example
    * 
    * // First, let's print some data to the database
@@ -982,7 +982,7 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // If you only want to check one piece of data, use the .has() command
    * Database.has("hello") // true
@@ -1010,7 +1010,7 @@ module.exports = class Database {
    * Checks if all of the key values specified from the JSON file are present
    * @param {Array} keys - Keys
    * @param {String} fileName - File name (Optional)
-   * @returns {Boolean}
+   * @return {Boolean}
    * @example
    * 
    * // First, let's print some data to the database
@@ -1021,7 +1021,7 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // If you only want to check one piece of data, use the .has() command
    * Database.has("hello") // true
@@ -1049,7 +1049,7 @@ module.exports = class Database {
    * Checks if the specified data from the JSON file exists
    * @param {String} key - Name of key
    * @param {String} fileName - File name (Optional)
-   * @returns {Boolean}
+   * @return {Boolean}
    * @example
    * 
    * // First, let's print some data to the database
@@ -1072,7 +1072,7 @@ module.exports = class Database {
    * Checks whether value corresponds to the specified data from the JSON file
    * @param {Array|Object|String|null|Number} value - Name of value
    * @param {String} fileName - File name (Optional)
-   * @returns {Boolean}
+   * @return {Boolean}
    * @example
    * 
    * // First, let's print some data to the database
@@ -1095,7 +1095,7 @@ module.exports = class Database {
    * Checks if there is at least one value corresponding to the specified value from the JSON file
    * @param {Array} values - Values
    * @param {String} fileName - File name (Optional)
-   * @returns {any|Object}
+   * @return {any|Object}
    * @example
    * 
    * // First, let's print some data to the database
@@ -1106,7 +1106,7 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // If you only want to retrieve a single data, use the .hasValue() command
    * Database.hasValue("World") // true
@@ -1131,7 +1131,7 @@ module.exports = class Database {
    * Checks if all value corresponding to specified value from JSON file exists
    * @param {Array} values - Values
    * @param {String} fileName - File name (Optional)
-   * @returns {any|Object}
+   * @return {any|Object}
    * @example
    * 
    * // First, let's print some data to the database
@@ -1142,7 +1142,7 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // If you only want to retrieve a single data, use the .hasValue() command
    * Database.hasValue("World") // true
@@ -1164,7 +1164,7 @@ module.exports = class Database {
    * Checks if at least one of the specified data from the JSON file exists
    * @param {Array} keys - Keys
    * @param {String} fileName - File name (Optional)
-   * @returns {Boolean}
+   * @return {Boolean}
    * @example
    * 
    * // First, let's print some data to the database
@@ -1175,7 +1175,7 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // If you only want to check one piece of data, use the .has() command
    * Database.has("hello") // true
@@ -1197,7 +1197,7 @@ module.exports = class Database {
    * Checks if at least one of the specified data from the JSON file exists
    * @param {Array} keys - Keys
    * @param {String} fileName - File name (Optional)
-   * @returns {Boolean}
+   * @return {Boolean}
    * @example
    * 
    * // First, let's print some data to the database
@@ -1208,7 +1208,7 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // If you only want to check one piece of data, use the .has() command
    * Database.has("hello") // true
@@ -1230,7 +1230,7 @@ module.exports = class Database {
    * Checks if all of the key values specified from the JSON file are present
    * @param {Array} keys - Keys
    * @param {String} fileName - File name (Optional)
-   * @returns {Boolean}
+   * @return {Boolean}
    * @example
    * 
    * // First, let's print some data to the database
@@ -1241,7 +1241,7 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // If you only want to check one piece of data, use the .has() command
    * Database.has("hello") // true
@@ -1268,7 +1268,7 @@ module.exports = class Database {
    * Returns the first data you define from the JSON file 
    * @param {(key: String, value: any, index: Number, thisArgs: Array ) => {}} callback - for the find function
    * @param {String} fileName - File name (Optional)
-   * @returns {any}
+   * @return {any}
    * @example
    * 
    * // First, let's print some data to the database
@@ -1279,21 +1279,21 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: "i lost.."
    *  }
-   * )
+   * );
    * 
    * // Then let's return the data we want using the command
-   * Database.find(callback => {
+   * Database.find((key, value) => {
    * 
    *   // Returns the first data containing the word "ali" in the key data of the object
-   *   return callback.key.includes("ali")
+   *   return key.includes("ali");
    * 
    * }) // "King"
    * 
    * // This is another way of calling
-   * Database.find(callback => {
+   * Database.find((key, value) => {
    * 
    *   // Returns the first data of the object whose value is Array
-   *   return Array.isArray(callback.value)
+   *   return Array.isArray(value);
    * 
    * }) // undefined
    */
@@ -1320,7 +1320,7 @@ module.exports = class Database {
    * Returns the data you define from the JSON file, filtering it 
    * @param {(key: String, value: any, index: Number, thisArgs: Array ) => {}} callback - for the filter function
    * @param {String} fileName - File name (Optional)
-   * @returns {Object}
+   * @return {Object}
    * @example
    * 
    * // First, let's print some data to the database
@@ -1331,21 +1331,21 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: "i lost.."
    *  }
-   * )
+   * );
    * 
    * // Then let's filter the data we want using the command
-   * Database.filter(callback => {
+   * Database.filter((key, value) => {
    * 
    *   // Filter data containing the word "ali" in the key data of the object
-   *   return callback.key.includes("ali")
+   *   return key.includes("ali");
    * 
    * }) // { ali: "King", hello: "World" }
    * 
    * // This is another way of calling
-   * Database.filter(callback => {
+   * Database.filter((key, value) => {
    * 
    *   // Returns data whose object's value is Array
-   *   return Array.isArray(callback.value)
+   *   return Array.isArray(value);
    * 
    * }) // {}
    */
@@ -1373,7 +1373,7 @@ module.exports = class Database {
    * Returns data containing the word you entered from the JSON file 
    * @param {String} key - for the filter function
    * @param {String} fileName - File name (Optional)
-   * @returns {Array}
+   * @return {Array}
    * @example
    * 
    * // First, let's print some data to the database
@@ -1385,7 +1385,7 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: "i lost.."
    *  }
-   * )
+   * );
    * 
    * // Then let's filter the data we want using the command
    * Database.includes("ali") // [{ ali: "King" }, { aliv2: ["heyy"] }]
@@ -1404,7 +1404,7 @@ module.exports = class Database {
    * Returns data starting with the word you entered from the JSON file 
    * @param {String} key - for the filter function
    * @param {String} fileName - File name (Optional)
-   * @returns {Array}
+   * @return {Array}
    * @example
    * 
    * // First, let's print some data to the database
@@ -1416,7 +1416,7 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: "i lost.."
    *  }
-   * )
+   * );
    * 
    * // Then let's filter the data we want using the command
    * Database.startsWith("ali") // [{ ali: "King" }, { aliv2: ["heyy"] }]
@@ -1435,7 +1435,7 @@ module.exports = class Database {
    * Checks if at least one of the data you defined from the JSON file exists
    * @param {(key: String, value: any, index: Number, thisArgs: Array ) => {}} callback - for some function
    * @param {String} fileName - File name (Optional)
-   * @returns {Boolean}
+   * @return {Boolean}
    * @example
    * 
    * // First, let's print some data to the database
@@ -1446,21 +1446,21 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: "i lost.."
    *  }
-   * )
+   * );
    * 
    * // Then let's check the data we want using the command
-   * Database.some(callback => {
+   * Database.some((key, value) => {
    * 
    *   // Checks whether there is a word containing the word "ali" in the key data of the object
-   *   return callback.key.includes("ali")
+   *   return key.includes("ali");
    * 
    * }) // true
    * 
    * // This is another way of calling
-   * Database.some(callback => {
+   * Database.some((key, value) => {
    * 
    *   // It checks whether the object's value data is Array or not
-   *   return Array.isArray(callback.value)
+   *   return Array.isArray(value);
    * 
    * }) // false
    */
@@ -1482,7 +1482,7 @@ module.exports = class Database {
    * Performs the specified action for each item in the database
    * @param {(key: String, value: any, index: Number, thisArgs: Array ) => {}} callback - for forEach function
    * @param {String} fileName - File name (Optional)
-   * @returns {undefined}
+   * @return {undefined}
    * @example
    * 
    * // First, let's print some data to the database
@@ -1493,27 +1493,27 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: "i lost.."
    *  }
-   * )
+   * );
    * 
    * // Let's perform the specified operation for each item
-   * Database.forEach(callback => {
+   * Database.forEach((key, value) => {
    * 
    *   // Let's print all the key data in the database to the console
-   *   console.log(callback.key)
+   *   console.log(key);
    * 
-   * })
+   * });
    * 
    * // This is another way of calling
-   * Database.forEach(callback => {
+   * Database.forEach((key, value) => {
    * 
    *   // Let's print the key whose value is Array to the console
-   *   if (Array.isArray(callback.value)) {
+   *   if (Array.isArray(value)) {
    * 
-   *     console.log(`${callback.key} has an array value`)
+   *     console.log(`${key} has an array value`);
    *   
    *   }
    * 
-   * })
+   * });
    */
 
   forEach(callback, fileName = this.#DEFAULT_FILE_NAME) {
@@ -1533,7 +1533,7 @@ module.exports = class Database {
    * Sorts the data you defined from the JSON file (only works with object not array)
    * @param {({ key: String, value: any }, { key: String, value: any } ) => {}} callback - for sort function
    * @param {String} fileName - File name (Optional)
-   * @returns {Boolean}
+   * @return {Boolean}
    * @example
    * 
    * // First, let's print some data to the database
@@ -1544,7 +1544,7 @@ module.exports = class Database {
    *   hello: "World",
    *   umm: "Are you there?" 
    *  }
-   * )
+   * );
    * 
    * // Then, let's sort the data written in the database using the command
    * Database.sort() // { "ali": "King", "hello": "World", ilost: "i lost..", "umm": "Are you there?" }
@@ -1553,20 +1553,19 @@ module.exports = class Database {
    * Database.sort((object1, object2) => {
    * 
    *   // Sort from largest to smallest
-   *   return object1.key.localeCompare(object2.key)
+   *   return object1.key.localeCompare(object2.key);
    * 
    *   // Sort from smallest to largest
-   *   return object2.key.localeCompare(object1.key)
+   *   return object2.key.localeCompare(object1.key);
    * 
-   * })
+   * });
    */
 
-  sort(callback = undefined, fileName = this.#DEFAULT_FILE_NAME) {
-    if (callback && typeof callback != "function") throw new DatabaseError("callback value must be a function value", errorCodes.invalidInput);
+  sort(callback = (a, b) => a.key.localeCompare(b.key), fileName = this.#DEFAULT_FILE_NAME) {
+    if (typeof callback != "function") throw new DatabaseError("callback value must be a function value", errorCodes.invalidInput);
 
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput);
 
-    callback ??= (a, b) => a.key.localeCompare(b.key);
     const newFile = Object.fromEntries(
       Object.entries(this._getFile(removeJsonAtEnd(fileName)))
         .sort((a, b) => callback({ key: a[0], value: a[1] }, { key: b[0], value: b[1] }))
@@ -1582,7 +1581,7 @@ module.exports = class Database {
    * Checks if all of the data you defined from the JSON file exists
    * @param {(key: String, value: any, index: Number, thisArgs: Array ) => {}} callback - for every function
    * @param {String} fileName - File name (Optional)
-   * @returns {Boolean}
+   * @return {Boolean}
    * @example
    * 
    * // First, let's print some data to the database
@@ -1593,21 +1592,21 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: "i lost.."
    *  }
-   * )
+   * );
    * 
    * // Then let's check the data we want using the command
-   * Database.every(callback => {
+   * Database.every((key, value) => {
    * 
    *   // Checks whether there is a word containing the word "ali" in each key data of the object
-   *   return callback.key.includes("ali")
+   *   return key.includes("ali");
    * 
    * }) // false
    * 
    * // This is another way of calling
-   * Database.every(callback => {
+   * Database.every((key, value) => {
    * 
    *   // Checks if the object's key data is a font
-   *   return typeof callback.key == "string"
+   *   return typeof key == "string"
    * 
    * }) // true
    */
@@ -1627,7 +1626,7 @@ module.exports = class Database {
    * Deletes the first data you defined from the JSON file 
    * @param {(key: String, value: any, index: Number, thisArgs: Array ) => {}} callback - for the find function
    * @param {String} fileName - File name (Optional)
-   * @returns {Object|undefined}
+   * @return {Object|undefined}
    * @example
    * 
    * // First, let's print some data to the database
@@ -1638,13 +1637,13 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: "i lost.."
    *  }
-   * )
+   * );
    * 
    * // Then let's show the data we want to delete using the command
-   * Database.find(callback => {
+   * Database.find((key, value) => {
    * 
    *   // Find and delete the first data containing the word "ali" in the key data of the object
-   *   return callback.key.includes("ali")
+   *   return key.includes("ali");
    * 
    * }) // { ali: "King" }
    * 
@@ -1676,8 +1675,9 @@ module.exports = class Database {
   /**
    * Deletes all the data you defined from the JSON file
    * @param {(key: String, value: any, index: Number, thisArgs: Array ) => {}} callback - for the filter function
+   * @param {Number} limit - Limit value (Optional)
    * @param {String} fileName - File name (Optional)
-   * @returns {Array}
+   * @return {Array}
    * @example
    * 
    * // First, let's print some data to the database
@@ -1689,23 +1689,29 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: "i lost.."
    *  }
-   * )
+   * );
    * 
    * // Then let's show the data we want using the command
-   * Database.filterAndDelete(callback => {
+   * Database.filterAndDelete((key, value) => {
    * 
    *   // Find and delete all data containing the word "ali" in the key data of the object
-   *   return callback.key.includes("ali")
+   *   return key.includes("ali");
    * 
    * }) // [{ ali: "King" }, { aliv2: ["heyy"] }]
    * 
    * // File no longer contains "ali" and "aliv2" data
    */
 
-  filterAndDelete(callback, fileName = this.#DEFAULT_FILE_NAME) {
+  filterAndDelete(callback, limit = Infinity, fileName = this.#DEFAULT_FILE_NAME) {
     if (typeof callback != "function") throw new DatabaseError("callback value must be a function value", errorCodes.invalidInput);
 
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput);
+
+    limit = Number(limit);
+    if (isNaN(limit)) throw new DatabaseError("limit value must be a number", errorCodes.invalidInput);
+    if (limit < 0) throw new DatabaseError("limit value must be greater than or equal to 0", errorCodes.negativeNumber);
+    
+    if (limit === 0) return [];
 
     const file = this._getFile(removeJsonAtEnd(fileName));
     const entries = Object.entries(file);
@@ -1716,6 +1722,7 @@ module.exports = class Database {
       if (callback(key, value, i, entries)) {
         result.push(value);
         delete file[key];
+        if (result.length === limit) break;
       }
     }
 
@@ -1734,7 +1741,7 @@ module.exports = class Database {
    * Delete data from JSON file 
    * @param {String} key - The name of the key to be deleted
    * @param {String} fileName - File name (Optional)
-   * @returns {Object|undefined}
+   * @return {Object|undefined}
    * @example
    * 
    * // First, let's print some data to the database
@@ -1745,7 +1752,7 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: "i lost.."
    *  }
-   * )
+   * );
    * 
    * // Then, let's enter the data we want to be deleted using the command
    * Database.delete("hello") { hello: "World" }
@@ -1773,7 +1780,7 @@ module.exports = class Database {
    * You delete multiple data from JSON file 
    * @param {Array} keys - Keys
    * @param {String} fileName - File name (Optional)
-   * @returns {Array}
+   * @return {Array}
    * @example
    * 
    * // First, let's print some data to the database
@@ -1784,7 +1791,7 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: "i lost.."
    *  }
-   * )
+   * );
    * 
    * // Then let's enter the keys we want to be deleted using the command
    * Database.deleteMany(["ali", "hello", "umm"]) // "ali", "hello" and "umm" data deleted
@@ -1816,7 +1823,7 @@ module.exports = class Database {
   /**
    * You delete all the data in the JSON file 
    * @param {String} fileName - File name (Optional)
-   * @returns {Object}
+   * @return {Object}
    * @example
    * 
    * // First, let's print some data to the database
@@ -1827,7 +1834,7 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: "i lost.."
    *  }
-   * )
+   * );
    * 
    * // Then let's delete all the data using the command
    * Database.deleteAll() // {}
@@ -1855,7 +1862,7 @@ module.exports = class Database {
    * @param {String} key - Name of key
    * @param {Array|Object|String|null|Number} item - Data to add 
    * @param {String} fileName - File name (Optional)
-   * @returns {Array}
+   * @return {Array}
    * @example
    * 
    * // First, let's print some data to the database
@@ -1866,7 +1873,7 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Then let's add a new data to the end of the Array data using the command
    * Database.push("ilost", "control") // ["i lost..", "control"]
@@ -1878,7 +1885,7 @@ module.exports = class Database {
     if (!key) throw new DatabaseError("key value is missing", errorCodes.missingInput);
     if (typeof key != "string") throw new DatabaseError("key value must be a string", errorCodes.invalidInput);
 
-    if (item === undefined) throw new DatabaseError("item value is missing", errorCodes.missingInput);
+    if (!(1 in arguments)) throw new DatabaseError("item value is missing", errorCodes.missingInput);
 
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput);
 
@@ -1900,7 +1907,7 @@ module.exports = class Database {
    * @param {String} key - Name of key
    * @param {Array} values - Data to add 
    * @param {String} fileName - File name (Optional)
-   * @returns {Array}
+   * @return {Array}
    * @example
    * 
    * // First, let's print some data to the database
@@ -1911,7 +1918,7 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Then let's add a new data to the end of the Array data using the command
    * Database.pushAll("ilost", ["control", "brooo", "..."]) // ["i lost..", "control", "brooo", "..."]
@@ -1946,7 +1953,7 @@ module.exports = class Database {
    * @param {String} key - Name of key
    * @param {Number} number - Number of data to be deleted 
    * @param {String} fileName - File name (Optional)
-   * @returns {Array}
+   * @return {Array}
    * @example
    * 
    * // First, let's print some data to the database
@@ -1957,7 +1964,7 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost..", "this life", "i cry", "broo"]
    *  }
-   * )
+   * );
    * 
    * // Then let's delete the data at the end of the Array data using the command
    * Database.pop("ilost") // ["broo"]
@@ -1972,10 +1979,9 @@ module.exports = class Database {
     if (!key) throw new DatabaseError("key value is missing", errorCodes.missingInput);
     if (typeof key != "string") throw new DatabaseError("key value must be a string", errorCodes.invalidInput);
 
-    if (number === undefined) throw new DatabaseError("number value is missing", errorCodes.missingInput);
-
-    number = Number(number)
+    number = Number(number);
     if (isNaN(number)) throw new DatabaseError("number value must be a number value", errorCodes.notNumber);
+    if (number < 0) throw new DatabaseError("number value must be greater than or equal to 0", errorCodes.negativeNumber);
 
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput);
 
@@ -1997,7 +2003,7 @@ module.exports = class Database {
    * @param {String} key - Name of key
    * @param {Array|Object|String|null|Number} item - Data to add 
    * @param {String} fileName - File name (Optional)
-   * @returns {Array}
+   * @return {Array}
    * @example
    * 
    * // First, let's print some data to the database
@@ -2008,7 +2014,7 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Then let's add a new data to the beginning of the Array data using the command
    * Database.unshift("ilost", "i hate") // ["i hate", "i lost.."]
@@ -2020,7 +2026,7 @@ module.exports = class Database {
     if (!key) throw new DatabaseError("key value is missing", errorCodes.missingInput);
     if (typeof key != "string") throw new DatabaseError("key value must be a string", errorCodes.invalidInput);
 
-    if (item === undefined) throw new DatabaseError("item value is missing", errorCodes.missingInput);
+    if (!(1 in arguments)) throw new DatabaseError("item value is missing", errorCodes.missingInput);
 
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput);
 
@@ -2042,7 +2048,7 @@ module.exports = class Database {
    * @param {String} key - Name of key
    * @param {Array} array - Data to add 
    * @param {String} fileName - File name (Optional)
-   * @returns {Array}
+   * @return {Array}
    * @example
    * 
    * // First, let's print some data to the database
@@ -2053,7 +2059,7 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Then let's add a new data to the beginning of the Array data using the command
    * Database.unshiftAll("ilost", ["i hate", "this life", "man"]) // ["i hate", "this life", "man", "i lost.."]
@@ -2088,7 +2094,7 @@ module.exports = class Database {
    * @param {String} key - Name of key
    * @param {Number} number - Number of data to be deleted 
    * @param {String} fileName - File name (Optional)
-   * @returns {Array}
+   * @return {Array}
    * @example
    * 
    * // First, let's print some data to the database
@@ -2099,7 +2105,7 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost..", "this life", "i cry", "broo"]
    *  }
-   * )
+   * );
    * 
    * // Then let's delete the first data of the Array data using the command
    * Database.shift("ilost") // ["i lost.."]
@@ -2114,10 +2120,9 @@ module.exports = class Database {
     if (!key) throw new DatabaseError("key value is missing", errorCodes.missingInput);
     if (typeof key != "string") throw new DatabaseError("key value must be a string", errorCodes.invalidInput);
 
-    if (number === undefined) throw new DatabaseError("number value is missing", errorCodes.missingInput);
-
-    number = Number(number)
+    number = Number(number);
     if (isNaN(number)) throw new DatabaseError("number value must be a number value", errorCodes.notNumber);
+    if (number < 0) throw new DatabaseError("number value must be greater than or equal to 0", errorCodes.negativeNumber);
 
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput);
 
@@ -2126,7 +2131,7 @@ module.exports = class Database {
 
     if (!Array.isArray(data)) throw new DatabaseError("The values of the data must be an Array value", errorCodes.notArray);
 
-    const deletedValues = data.splice(number);
+    const deletedValues = data.splice(0, number);
 
     this._writeAndCache(fileName, file);
     return deletedValues;
@@ -2144,7 +2149,7 @@ module.exports = class Database {
    * @param {String} key - Name of key
    * @param {Number} number - Number to add to data 
    * @param {String} fileName - File name (Optional)
-   * @returns {Number}
+   * @return {Number}
    * @example
    * 
    * // First, let's print some data to the database
@@ -2156,7 +2161,7 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Then let's increase its value using the command
    * Database.add("heart", 15) // 30
@@ -2168,9 +2173,7 @@ module.exports = class Database {
     if (!key) throw new DatabaseError("key value is missing", errorCodes.missingInput);
     if (typeof key != "string") throw new DatabaseError("key value must be a string", errorCodes.invalidInput);
 
-    if (number === undefined) throw new DatabaseError("number value is missing", errorCodes.missingInput);
-
-    number = Number(number)
+    number = parseFloat(number);
     if (isNaN(number)) throw new DatabaseError("number value must be a number value", errorCodes.notNumber);
 
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput);
@@ -2195,7 +2198,7 @@ module.exports = class Database {
    * @param {Number} number - Number to subtract from data 
    * @param {Boolean} goToNegative - Can the resulting number be less than 0?
    * @param {String} fileName - File name (Optional)
-   * @returns {Number}
+   * @return {Number}
    * @example
    * 
    * // First, let's print some data to the database
@@ -2207,7 +2210,7 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Then let's decrease its value using the command
    * Database.substr("heart", 5) // 10
@@ -2219,9 +2222,7 @@ module.exports = class Database {
     if (!key) throw new DatabaseError("key value is missing", errorCodes.missingInput);
     if (typeof key != "string") throw new DatabaseError("key value must be a string", errorCodes.invalidInput);
 
-    if (number === undefined) throw new DatabaseError("number value is missing", errorCodes.missingInput);
-
-    number = Number(number)
+    number = parseFloat(number);
     if (isNaN(number)) throw new DatabaseError("number value must be a number value", errorCodes.notNumber);
 
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput);
@@ -2246,7 +2247,7 @@ module.exports = class Database {
    * @param {String} key - Name of key
    * @param {Number} number - The number to be multiplied by the data
    * @param {String} fileName - File name (Optional)
-   * @returns {Number}
+   * @return {Number}
    * @example
    * 
    * // First, let's print some data to the database
@@ -2258,7 +2259,7 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Then multiply its value by the number using the command
    * Database.multi("heart", 3) // 45
@@ -2270,9 +2271,7 @@ module.exports = class Database {
     if (!key) throw new DatabaseError("key value is missing", errorCodes.missingInput);
     if (typeof key != "string") throw new DatabaseError("key value must be a string", errorCodes.invalidInput);
 
-    if (number === undefined) throw new DatabaseError("number value is missing", errorCodes.missingInput);
-
-    number = Number(number)
+    number = parseFloat(number);
     if (isNaN(number)) throw new DatabaseError("number value must be a number value", errorCodes.notNumber);
 
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput);
@@ -2297,7 +2296,7 @@ module.exports = class Database {
    * @param {Number} number - Number to divide by data 
    * @param {Boolean} goToDecimal - Can the resulting number be an decimal?
    * @param {String} fileName - File name (Optional)
-   * @returns {Number}
+   * @return {Number}
    * @example
    * 
    * // First, let's print some data to the database
@@ -2309,7 +2308,7 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Then let's divide its value by number using the command
    * Database.division("heart", 3) // 5
@@ -2321,10 +2320,9 @@ module.exports = class Database {
     if (!key) throw new DatabaseError("key value is missing", errorCodes.missingInput);
     if (typeof key != "string") throw new DatabaseError("key value must be a string", errorCodes.invalidInput);
 
-    if (number === undefined) throw new DatabaseError("number value is missing", errorCodes.missingInput);
-
-    number = Number(number)
+    number = parseFloat(number);
     if (isNaN(number)) throw new DatabaseError("number value must be a number value", errorCodes.notNumber);
+    if (number === 0) throw new DatabaseError("number value must be greater than 0", errorCodes.zeroNumber);
 
     if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput);
 
@@ -2351,7 +2349,7 @@ module.exports = class Database {
   /**
    * Pulls all data from JSON file and returns it in JSON format
    * @param {String} fileName - File name (Optional)
-   * @returns {Object}
+   * @return {Object}
    * @example
    * 
    * // First, let's print some data to the database
@@ -2362,13 +2360,13 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Use this command to pull all data
    * Database.toJSON() // { "ali": "King", "hello": World", "umm": "Are you there?", "ilost": ["i lost.."] }
    * 
    * // If you want to pull data from another file, enter the path of that file
-   * Database.toJSON("so a filename.json")
+   * Database.toJSON("so a filename.json");
    */
 
   toJSON(fileName = this.#DEFAULT_FILE_NAME) {
@@ -2382,7 +2380,7 @@ module.exports = class Database {
   /**
    * Pulls all data from JSON file and returns it in Array format
    * @param {String} fileName - File name (Optional)
-   * @returns {Array<Object<String,any>>}
+   * @return {Array<Object<String,any>>}
    * @example
    * 
    * // First, let's print some data to the database
@@ -2393,14 +2391,14 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Use this command to pull all data
    * Database.toArray() 
    * // [["ali", "King"], ["hello", World"], ["umm", "Are you there?"], ["ilost", ["i lost.."]]]
    * 
    * // If you want to pull data from another file, enter the path of that file
-   * Database.toArray("so a filename.json")
+   * Database.toArray("so a filename.json");
    */
 
   toArray(fileName = this.#DEFAULT_FILE_NAME) {
@@ -2419,7 +2417,7 @@ module.exports = class Database {
   /**
    * Deletes the entire JSON file
    * @param {String} fileName - File name (Optional)
-   * @returns {Boolean}
+   * @return {Boolean}
    * @example
    * 
    * // First, let's print some data to the database
@@ -2430,10 +2428,10 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Then let's delete the file completely using the command
-   * Database.destroy()
+   * Database.destroy();
    * 
    * // The JSON file has now traveled to the infinities of the universe
    */
@@ -2452,7 +2450,7 @@ module.exports = class Database {
   /**
    * Deletes all data in the JSON file
    * @param {String} fileName - File name (Optional)
-   * @returns {Object}
+   * @return {Object}
    * @example
    * 
    * // First, let's print some data to the database
@@ -2463,10 +2461,10 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Then let's delete the data in the file using the command
-   * Database.reset()
+   * Database.reset();
    * 
    * // JSON file now only prints "{}" data
    */
@@ -2491,20 +2489,20 @@ module.exports = class Database {
   /**
    * Creates a new JSON database file
    * @param {String} fileName - File name (Optional)
-   * @returns {Object}
+   * @return {Object}
    * @example
    * 
    * // Let's delete the database first
-   * Database.destroy()
+   * Database.destroy();
    * 
    * // Then let's create a new file using the command
-   * Database.create("alisa.json")
+   * Database.create("alisa.json");
    * 
    * // If we want to print data in the file while creating it, let's write the data as the second parameter
-   * Database.create("alisadb.json", { ali: "Adam" })
+   * Database.create("alisadb.json", { ali: "Adam" });
    * 
    * // If you want to set the file you created as the default file, type true last
-   * Database.create("default.json", {}, true)
+   * Database.create("default.json", {}, true);
    */
 
   create(fileName, file = {}, isDefaultFile = false) {
@@ -2528,7 +2526,7 @@ module.exports = class Database {
    * Clones a specific JSON database file
    * @param {String} cloneFileName - The name of the file to be cloned
    * @param {String} fileName - File name (Optional)
-   * @returns {Object}
+   * @return {Object}
    * @example
    * 
    * // First, let's print some data to the database
@@ -2539,13 +2537,13 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Then let's command copy this JSON file to another JSON file
-   * Database.clone("alisa.json")
+   * Database.clone("alisa.json");
    * 
    * // If you want, you can also enter the file name to be cloned
-   * Database.clone("alisadb.json", "such a filename.json")
+   * Database.clone("alisadb.json", "such a filename.json");
    */
 
   clone(cloneFileName, fileName = this.#DEFAULT_FILE_NAME) {
@@ -2574,7 +2572,7 @@ module.exports = class Database {
    * Returns the type of data in the JSON file
    * @param {String} key - Name of key
    * @param {String} fileName - File name (Optional)
-   * @returns {String}
+   * @return {String}
    * @example
    * 
    * // First, let's print some data to the database
@@ -2585,7 +2583,7 @@ module.exports = class Database {
    *   umm: "Are you there?", 
    *   ilost: ["i lost.."]
    *  }
-   * )
+   * );
    * 
    * // Then let's see what type the data is using the command
    * Database.typeof("ali") // "string"

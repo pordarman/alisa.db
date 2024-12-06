@@ -139,6 +139,12 @@ As you can see, we can save time and memory by printing multiple data instead of
 
 
 # Updates
+## v1.0.0
+
+- Major bugs in the database have been fixed and the appearance has been made more beautiful so that if you want to change it personally, you will understand it much more easily
+
+- Added "limit" to filterAndDelete method so you can decide how many data to delete at most
+
 ## v0.3.14
 
 - Fixed some typos
@@ -172,20 +178,6 @@ As you can see, we can save time and memory by printing multiple data instead of
 - Fixed a minor bug in the README.md file
 
 - Errors in the database have been made more understandable
-
-## v0.3.4
-
-- A new person has been added to the creators of the module, thumbs up 🎉🎉
-
-- Update README.md file *again..*
-
-- The command descriptions part of the module has been made a bit more understandable.
-
-## v0.3.3 - **IMPORTANT UPDATE**
-
-- "An unknown error has occurred!" bug fixed
-
-- Some changes have been made to the database
 
 <br>
 
