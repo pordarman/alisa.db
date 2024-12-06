@@ -143,6 +143,8 @@ export default class Database {
       } else {
         this.#DEFAULT_FILE_NAME = constructorObject || "database";
       }
+
+      if (!fs.existsSync(`${this.#DEFAULT_FILE_NAME}.json`)) fs.writeFileSync(`${this.#DEFAULT_FILE_NAME}.json`, "{}");
     }
     else {
 
@@ -233,7 +235,7 @@ export default class Database {
    */
 
   get version() {
-    return `v1.0.2`
+    return `v1.0.4`
   }
 
 

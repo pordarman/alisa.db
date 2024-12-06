@@ -140,6 +140,8 @@ module.exports = class Database {
       } else {
         this.#DEFAULT_FILE_NAME = constructorObject || "database";
       }
+
+      if (!fs.existsSync(`${this.#DEFAULT_FILE_NAME}.json`)) fs.writeFileSync(`${this.#DEFAULT_FILE_NAME}.json`, "{}");
     }
     else {
 
@@ -164,7 +166,6 @@ module.exports = class Database {
         // If no value is entered or the value is not a font, the file name is defaulted to "database"
         this.#DEFAULT_FILE_NAME = "database";
       }
-
 
       if (!fs.existsSync(`${this.#DEFAULT_FILE_NAME}.json`)) fs.writeFileSync(`${this.#DEFAULT_FILE_NAME}.json`, "{}");
 
@@ -230,7 +231,7 @@ module.exports = class Database {
    */
 
   get version() {
-    return `v1.0.2`
+    return `v1.0.4`
   }
 
 

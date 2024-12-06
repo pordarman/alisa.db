@@ -37,7 +37,7 @@ declare class AlisaDB {
     hasMany(keys: string[], fileName?: string): boolean;
     existsAll(keys: string[], fileName?: string): boolean;
     find(callback: (key: string, value: any, index: number, thisArr: any[]) => boolean, fileName?: string): any;
-    filter(callback: (key: string, value: any, index: number, thisArr: any[]) => boolean, fileName?: string): object;
+    filter(callback: (key: string, value: any, index: number, thisArr: any[]) => boolean, limit: number, fileName?: string): object;
     includes(key: string, fileName?: string): any[];
     startsWith(key: string, fileName?: string): any[];
     some(callback: (key: string, value: any, index: number, thisArr: any[]) => boolean, fileName?: string): boolean;
