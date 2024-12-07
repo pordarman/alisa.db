@@ -142,6 +142,10 @@ module.exports = class Database {
       }
 
       if (!fs.existsSync(`${this.#DEFAULT_FILE_NAME}.json`)) fs.writeFileSync(`${this.#DEFAULT_FILE_NAME}.json`, "{}");
+
+      this.#autoWrite = true;
+      this.#cache = false;
+      this.#spaces = 4;
     }
     else {
 
@@ -231,7 +235,7 @@ module.exports = class Database {
    */
 
   get version() {
-    return `v1.0.4`
+    return `v1.0.5`
   }
 
 
