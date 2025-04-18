@@ -1,17 +1,18 @@
 {
   "name": "alisa.db",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "readme": "README.md",
-  "description": "The most powerful module of the JSON database, which is powerful, customizable and offers many uses.",
+  "description": "A powerful and customizable local JSON database module for Node.js projects with event system, caching, and full TypeScript support.",
   "main": "index.js",
+  "types": "./index.d.ts",
   "scripts": {
     "test": "node test/test.js"
   },
   "exports": {
     "require": "./index.js",
-    "node": "./index.js"
+    "import": "./index.js",
+    "types": "./index.d.ts"
   },
-  "types": "./types.d.ts",
   "keywords": [
     "json",
     "db",

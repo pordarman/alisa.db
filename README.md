@@ -17,15 +17,12 @@
 # Creator(s)
 
 - [Ali (Fearless Crazy)](https://github.com/pordarman)
-- [Emir (Storme)](https://github.com/PhantomStorm0)
 
 <br>
 
 # Social media accounts
 
 - Ali: [Instagram](https://www.instagram.com/ali.celk/) - [Discord](https://discord.com/users/488839097537003521) - [Spotify](https://open.spotify.com/user/215jixxk4morzgq5mpzsmwwqa?si=41e0583b36f9449b)
-
-- Emir: [Biography](https://phantomstorm.xyz/) - [Instagram](https://www.instagram.com/eavsar_emir.js/) - [Discord](https://discord.com/users/817417815396974683)
 
 <br>
 
@@ -47,141 +44,181 @@
 
 <br>
 
-# What is this module?
+# alisa.db
+A blazing-fast, feature-rich and fully customizable local JSON database module for Node.js projects.
 
-- This module was established to facilitate people using JSON database
-
-- This module, which contains as many commands and features as you would like, is *perfect*, just like the man/woman of your dreams
-
-- There are commands and features that you can customize almost anything
-
-- This module was made with the sole purpose of helping people, without generating any income
-
-<br>
-
-# So how to use?
-
-It's very simple, first you have to open any node.js file and write the following in it:
-<br>
-```js
-const alisa_db = require("alisa.db")
-
-const Database = new alisa_db("database.json")
-const Database_1 = new alisa_db({ fileName: "alisa.db.json" })
-const Database_2 = new alisa_db({ cache: true })
-const Database_3 = new alisa_db({ autoWrite: true, fileName: "alisa.db.json" })
-```
-Each database we wrote above holds a different file database data. You can increase this as much as you want.
-
-After typing this you can access **all** commands
-
-<br>
-
-### **CAUTION!!**
-Please make your definitions as above. If you have made a definition as below, the module will not work properly and will give an error!
-
-```js
-// Incorrect command definition
-
-const alisa_db = require("alisa.db")
-
-const { get, set } = new alisa_db({ fileName: "database.json", cache: true })
-// This command will throw an error!
-
-
-const Database = new alisa_db({ fileName: "alisa.json", cache: true })
-// This command will work as it should
+## 📦 Installation
+```bash
+npm install alisa.db
 ```
 
-<br>
+## ✨ Features
+- Type-safe, event-driven architecture
+- Built-in cache support for better performance
+- Auto write functionality (or manual save via `.writeAll()`)
+- Full support for multiple files
+- Rich utility methods: CRUD, math ops, array ops, filter/search, etc.
+- Built-in event system: `.on()`, `.off()`, `.emit()`
+- TypeScript & ESM support (types included)
 
-# Example
+---
 
-Now, if you want, let me briefly explain how to write data to the database
-<br>
+## 🚀 Getting Started
 
+### Initialization
 ```js
-// Printing data to database
-Database.set("hello", "World!")
+const AlisaDB = require("alisa.db");
 
-// After typing this, the following data is created in the database.json file:
+// Using string
+const db = new AlisaDB("database.json");
+
+// Using config object
+const db = new AlisaDB("data.json", {
+  autoWrite: true,
+  cache: true,
+  spaces: 2
+});
 ```
-![Printing data to database](https://i.hizliresim.com/mnt8zwz.png)
-  
-As you can see, it is very simple and understandable to use
 
-<br>
-
-And if you want, instead of saving a single data, you can save multiple data at the same time
+### CRUD Operations
 ```js
-// Printing multiple data to database
-Database.setMany({ hello: "World", test: "Test", alisa: "alisa.db", version: "0.0.3" })
-
-// After typing this, the following data is created in the database.json file:
+db.set("username", "Fearless");
+db.get("username"); // "Fearless"
+db.has("username"); // true
+db.delete("username");
+db.get("username", "Anonymous"); // default fallback
 ```
-![Printing multiple data to database](https://i.hizliresim.com/lzfojym.png)
 
-As you can see, we can save time and memory by printing multiple data instead of printing one by one
+### Bulk Operations
+```js
+db.setMany({ x: 1, y: 2, z: 3 });
+db.getMany(["x", "z"]); // { x: 1, z: 3 }
+db.deleteMany(["x", "y"]);
+db.deleteAll();
+```
 
-<br>
+### Array Utilities
+```js
+db.push("roles", "admin");
+db.pushAll("roles", ["mod", "dev"]);
+db.pop("roles");
+db.unshift("roles", "founder");
+db.shift("roles", 2);
+```
 
-# So why alisa.db?
+### Mathematical Modifiers
+```js
+db.set("coins", 100);
+db.add("coins", 50);
+db.substr("coins", 30);
+db.multi("coins", 2);
+db.division("coins", 4);
+```
 
-- The first reason is that it is overly simple and less likely to fail
+### Advanced Queries
+```js
+db.find((key, value) => value === "admin");
+db.filter((key, value) => typeof value === "number");
+db.findAndDelete((k, v) => v === 0);
+db.filterAndDelete((k, v) => k.startsWith("temp"), 3);
+```
 
-- The second reason is that since it is an open source module, it can be edited in a special way if you want
+### Introspection & Export
+```js
+db.toJSON();     // Full object
+db.toArray();    // Object.entries()
+db.keys();       // All keys
+db.values();     // All values
+db.typeof("roles"); // "array"
+```
 
-- The third reason is that we are improving this module every day, making it more performance and adding new features to our strength
+### File Management
+```js
+db.clone("backup.json");
+db.reset();
+db.destroy();
+db.create("newfile.json", { hello: "world" }, true);
+```
 
-- The fourth reason is... Well, I guess there's no other reason :( Maybe it's just to make me happy 👉👈
+---
 
-<br>
+## 📡 Event System
 
+AlisaDB provides a fully extensible event system. Every change, read, write, or delete operation can trigger a custom listener.
 
-# Updates
-## v1.0.0
+You can track nearly everything:
+```js
+db.on("get", ({ key, value }) => console.log("Accessed", key, value));
+db.on("delete", ({ key }) => console.warn("Deleted:", key));
+```
 
-- Major bugs in the database have been fixed and the appearance has been made more beautiful so that if you want to change it personally, you will understand it much more easily
+This is very useful for:
+- Debugging database activity
+- Logging or auditing file changes
+- Reacting to specific state changes (e.g. auto-backup on set)
 
-- Added "limit" to filterAndDelete method so you can decide how many data to delete at most
+All listener callbacks receive an object with contextual information. For example:
+```js
+{
+  fileName: "db.json",
+  file: { /* The file */ }
+  key: "userId",
+  value: "Storme",
+  isFound: true,
+  rawData: "Storme"
+}
+```
+You can listen to any change happening in the database:
+```js
+db.on("set", ({ key, value }) => {
+  console.log(`Set ${key} =`, value);
+});
 
-## v0.3.14
+db.set("user", "Ali"); // triggers the above listener
+```
 
-- Fixed some typos
+Remove listeners with:
+```js
+const fn = console.log;
+db.on("delete", fn);
+db.off("delete", fn);
+```
 
-- Made some bug fixes
+Supported events: `set`, `get`, `delete`, `push`, `add`, `writeFile`, `writeCache`, `reset`, `destroy`, `clone`, `create`, etc.
 
-- After using the `.writeAll()` and `.destroy()` commands, it no longer returns a void but a Boolean value
+---
 
-## v0.3.9 - **Quick update**
+## 💾 Auto Write & Cache
+```js
+const db = new AlisaDB("database.json", { autoWrite: true, cache: true });
 
-- Changed description in `.sort()` command
+// Or manually save changes to disk:
+db.writeAll();
+```
 
-- Fixed some typos
+---
 
-## v0.3.8
+## 🧩 Multi-file support
+```js
+db.set("greeting", "hello", "english.json");
+db.set("greeting", "merhaba", "turkish.json");
+```
 
-- Added `.sort()` command
+You can manage unlimited JSON files via `fileName` parameters.
 
-## v0.3.7
+---
 
-- Added `.forEach()` command
+## 🔧 Utility Methods
+```js
+db.has("key");
+db.hasAny(["k1", "k2"]);
+db.hasAll(["k1", "k2"]);
+db.getMany(["k1", "k2"]);
+db.getFromValue("Ali");
+db.filter((k, v) => typeof v === "number");
+```
 
-- Fixed some performance issues
-
-## v0.3.6
-
-- Fixed some typos in test.js and test.mjs files and transferred test files to a separate folder
-
-## v0.3.5 - **Quick update**
-
-- Fixed a minor bug in the README.md file
-
-- Errors in the database have been made more understandable
-
-<br>
-
-Please do not forget to use it in the latest version for more **stable** and **performance** of the module!
+---
 
 <br>
 
