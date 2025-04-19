@@ -161,7 +161,7 @@ All listener callbacks receive an object with contextual information. For exampl
 ```js
 {
   fileName: "db.json",
-  file: { /* The file */ }
+  file: { /* The file */ },
   key: "userId",
   value: "Storme",
   isFound: true,
