@@ -2,7 +2,7 @@
 
 
 [![Package Name](https://img.shields.io/badge/Package%20name-alisa.db-red)](https://www.npmjs.com/package/alisa.db/)
-[![Package size](https://img.shields.io/bundlephobia/min/alisa.db?label=Package%20size)](https://www.npmjs.com/package/alisa.db/)
+[![Package size](https://img.shields.io/bundlejs/size/alisa.db?label=Package%20size)](https://www.npmjs.com/package/alisa.db/)
 [![Version](https://img.shields.io/npm/v/alisa.db.svg?label=Package%20version)](https://www.npmjs.com/package/alisa.db/)
 [![License](https://img.shields.io/npm/l/alisa.db.svg?label=License)](https://www.npmjs.com/package/alisa.db/)
 
@@ -16,7 +16,7 @@
 
 # Creator(s)
 
-- [Ali (Fearless Crazy)](https://github.com/pordarman)
+- [Ali Çelik](https://github.com/pordarman)
 
 <br>
 
