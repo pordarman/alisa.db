@@ -13,8 +13,8 @@ const fs = require("fs");
 
 /**
  * Checks if the entered objects are the same
- * @param {Object} object1 - First object
- * @param {Object} object2 - Second object
+ * @param {Object<String, any>} object1 - First object
+ * @param {Object<String, any>} object2 - Second object
  * @returns {Boolean} - Returns true if the objects are the same, otherwise it returns false
  */
 function sameObject(object1, object2) {
@@ -60,9 +60,9 @@ function sameValue(value1, value2) {
 
 /**
  * Checks if the entered Arrays are the same
- * @param {Array} array1 - 
- * @param {Array} array2 - 
- * @returns {Boolean}
+ * @param {Array<any>} array1 - First array
+ * @param {Array<any>} array2 - Second array
+ * @returns {Boolean} - Returns true if the arrays are the same, otherwise it returns false
  */
 
 function sameArray(array1, array2) {
@@ -272,6 +272,7 @@ module.exports = class Database {
         // If the cache feature is turned off, it will give an error because there is no data to write
         if (!this.#cache || Object.prototype.toString.call(this.#cache) !== "[object Object]") return false;
 
+        /** @param {String} fileName */
         const writeFile = (fileName) => {
             if (this.#cache == null) return;
             fs.writeFileSync(`${fileName}.json`, JSON.stringify(this.#cache[fileName] || {}, null, this.#spaces));
@@ -298,7 +299,7 @@ module.exports = class Database {
     /**
      * Writes new data to JSON file or replaces existing data
      * @param {String} key - Name of key
-     * @param {Object|Date|String|Array|null} value - The value corresponding to the typed key
+     * @param {Object|Date|String|Array<any>|null} value - The value corresponding to the typed key
      * @param {String} fileName - File name (Optional)
      * @return {Object}
      * @example
@@ -333,9 +334,9 @@ module.exports = class Database {
 
     /**
      * Writes new multiple data to JSON file or replaces existing data
-     * @param {Array<Array<String,any>>|Object<String,any>} items - Data to be written or changed
+     * @param {Array<[string, any]>|Object<String,any>} items - Data to be written or changed
      * @param {String} fileName - File name (Optional)
-     * @return {Object}
+     * @return {void}
      * @example
      * 
      * // Use this command to print multiple data to file
@@ -494,8 +495,10 @@ module.exports = class Database {
         if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput);
 
         const file = this._getFile(fileName);
-        const result = {};
         let isFound = false;
+
+        /** @type {Object<string, any>} */
+        const result = {};
 
         keys.forEach(key => {
             if (key in file) {
@@ -545,9 +548,9 @@ module.exports = class Database {
 
     /**
      * Pulls the key corresponding to the specified value from the JSON file
-     * @param {Array|Object|String|null|Number} value - Name of value
+     * @param {Array<any>|Object|String|null|Number} value - Name of value
      * @param {String} fileName - File name (Optional)
-     * @return {Object}
+     * @return {String|any|undefined}
      * @example
      * 
      * // First, let's print some data to the database
@@ -578,7 +581,7 @@ module.exports = class Database {
 
     /**
      * Pulls keys corresponding to specified value values from JSON file
-     * @param {Array} values - Values
+     * @param {Array<any>} values - Values
      * @param {any} defaultValue - Default data to be returned if no data is available
      * @param {String} fileName - File name (Optional)
      * @return {any|Object}
@@ -615,6 +618,8 @@ module.exports = class Database {
         if (typeof fileName != "string") throw new DatabaseError("fileName value must be a string", errorCodes.invalidInput);
 
         const file = this._getFile(fileName);
+        
+        /** @type {Object<string, any>} */
         const result = [];
 
         values.forEach(value => {
@@ -667,7 +672,7 @@ module.exports = class Database {
 
     /**
      * Checks if at least one of the specified key values from the JSON file exists
-     * @param {Array} keys - Keys
+     * @param {Array<String>} keys - Keys
      * @param {String} fileName - File name (Optional)
      * @return {Boolean}
      * @example
@@ -713,7 +718,7 @@ module.exports = class Database {
 
     /**
      * Checks if all of the key values specified from the JSON file are present
-     * @param {Array} keys - Keys
+     * @param {Array<String>} keys - Keys
      * @param {String} fileName - File name (Optional)
      * @return {Boolean}
      * @example
@@ -755,7 +760,7 @@ module.exports = class Database {
 
     /**
      * Checks whether value corresponds to the specified value from the JSON file
-     * @param {Array|Object|String|null|Number} value - Name of value
+     * @param {Array<String>|Object|String|null|Number} value - Name of value
      * @param {String} fileName - File name (Optional)
      * @return {Boolean}
      * @example
@@ -786,7 +791,7 @@ module.exports = class Database {
 
     /**
      * Checks if there is at least one value corresponding to the specified value from the JSON file
-     * @param {Array} values - Values
+     * @param {Array<any>} values - Values
      * @param {String} fileName - File name (Optional)
      * @return {any|Object}
      * @example
@@ -832,7 +837,7 @@ module.exports = class Database {
 
     /**
      * Checks if all value corresponding to specified value from JSON file exists
-     * @param {Array} values - Values
+     * @param {Array<any>} values - Values
      * @param {String} fileName - File name (Optional)
      * @return {any|Object}
      * @example
@@ -933,7 +938,7 @@ module.exports = class Database {
 
     /**
      * Returns the first data you define from the JSON file 
-     * @param {(key: String, value: any, index: Number, thisArgs: Array ) => {}} callback - for the find function
+     * @param {(key: String, value: any, index: Number, thisArgs: Array<any>) => {}} callback - for the find function
      * @param {String} fileName - File name (Optional)
      * @return {any}
      * @example
@@ -989,7 +994,7 @@ module.exports = class Database {
 
     /**
      * Returns the data you define from the JSON file, filtering it 
-     * @param {(key: String, value: any, index: Number, thisArgs: Array ) => {}} callback - for the filter function
+     * @param {(key: String, value: any, index: Number, thisArgs: Array<any> ) => {}} callback - for the filter function
      * @param {String} fileName - File name (Optional)
      * @return {Object}
      * @example
@@ -1028,6 +1033,8 @@ module.exports = class Database {
 
         const file = this._getFile(fileName);
         const entries = Object.entries(file);
+
+        /** @type {Object<string, any>} */
         const result = {};
 
         for (let i = 0; i < entries.length; i++) {
@@ -1045,7 +1052,7 @@ module.exports = class Database {
      * Returns data containing the word you entered from the JSON file 
      * @param {String} key - for the filter function
      * @param {String} fileName - File name (Optional)
-     * @return {Array}
+     * @return {Object}
      * @example
      * 
      * // First, let's print some data to the database
@@ -1060,13 +1067,12 @@ module.exports = class Database {
      * );
      * 
      * // Then let's filter the data we want using the command
-     * Database.includes("ali") // [{ ali: "King" }, { aliv2: ["heyy"] }]
+     * Database.includes("ali") // { ali: "King", aliv2: ["heyy"] }
      */
 
     includes(key, fileName = this.#DEFAULT_FILE_NAME) {
         if (!key) throw new DatabaseError("key value is missing", errorCodes.missingInput);
         if (typeof key != "string") throw new DatabaseError("key value must be a string", errorCodes.invalidInput);
-
 
         return this.filter(objectKey => objectKey.includes(key), fileName);
     }
@@ -1077,7 +1083,7 @@ module.exports = class Database {
      * Returns data starting with the word you entered from the JSON file 
      * @param {String} key - for the filter function
      * @param {String} fileName - File name (Optional)
-     * @return {Array}
+     * @return {Object}
      * @example
      * 
      * // First, let's print some data to the database
@@ -1092,7 +1098,7 @@ module.exports = class Database {
      * );
      * 
      * // Then let's filter the data we want using the command
-     * Database.startsWith("ali") // [{ ali: "King" }, { aliv2: ["heyy"] }]
+     * Database.startsWith("ali") // { ali: "King", aliv2: ["heyy"] }
      */
 
     startsWith(key, fileName = this.#DEFAULT_FILE_NAME) {
@@ -1106,7 +1112,7 @@ module.exports = class Database {
 
     /**
      * Checks if at least one of the data you defined from the JSON file exists
-     * @param {(key: String, value: any, index: Number, thisArgs: Array ) => {}} callback - for some function
+     * @param {(key: String, value: any, index: Number, thisArgs: Array<any>) => {}} callback - for some function
      * @param {String} fileName - File name (Optional)
      * @return {Boolean}
      * @example
@@ -1155,7 +1161,7 @@ module.exports = class Database {
 
     /**
      * Performs the specified action for each item in the database
-     * @param {(key: String, value: any, index: Number, thisArgs: Array ) => {}} callback - for forEach function
+     * @param {(key: String, value: any, index: Number, thisArgs: Array<any> ) => {}} callback - for forEach function
      * @param {String} fileName - File name (Optional)
      * @return {undefined}
      * @example
@@ -1207,7 +1213,7 @@ module.exports = class Database {
 
     /**
      * Checks if all of the data you defined from the JSON file exists
-     * @param {(key: String, value: any, index: Number, thisArgs: Array ) => {}} callback - for every function
+     * @param {(key: String, value: any, index: Number, thisArgs: Array<any>) => {}} callback - for every function
      * @param {String} fileName - File name (Optional)
      * @return {Boolean}
      * @example
@@ -1256,7 +1262,7 @@ module.exports = class Database {
 
     /**
      * Deletes the first data you defined from the JSON file 
-     * @param {(key: String, value: any, index: Number, thisArgs: Array ) => {}} callback - for the find function
+     * @param {(key: String, value: any, index: Number, thisArgs: Array<any> ) => {}} callback - for the find function
      * @param {String} fileName - File name (Optional)
      * @return {Object|undefined}
      * @example
@@ -1309,10 +1315,10 @@ module.exports = class Database {
 
     /**
      * Deletes all the data you defined from the JSON file
-     * @param {(key: String, value: any, index: Number, thisArgs: Array ) => {}} callback - for the filter function
+     * @param {(key: String, value: any, index: Number, thisArgs: Array<any> ) => {}} callback - for the filter function
      * @param {Number} limit - Limit value (Optional)
      * @param {String} fileName - File name (Optional)
-     * @return {Array}
+     * @return {Array<any>}
      * @example
      * 
      * // First, let's print some data to the database
@@ -1422,9 +1428,9 @@ module.exports = class Database {
 
     /**
      * You delete multiple data from JSON file 
-     * @param {Array} keys - Keys
+     * @param {Array<String>} keys - Keys
      * @param {String} fileName - File name (Optional)
-     * @return {Array}
+     * @return {Array<any>}
      * @example
      * 
      * // First, let's print some data to the database
@@ -1507,9 +1513,9 @@ module.exports = class Database {
     /**
      * Adds a new data to the end of the Array of data in the JSON file
      * @param {String} key - Name of key
-     * @param {Array|Object|String|null|Number} item - Data to add 
+     * @param {Array<any>|Object|String|null|Number} item - Data to add
      * @param {String} fileName - File name (Optional)
-     * @return {Array}
+     * @return {Array<any>}
      * @example
      * 
      * // First, let's print some data to the database
@@ -1553,9 +1559,9 @@ module.exports = class Database {
     /**
      * Adds multiple data to the end of Array of data in JSON file
      * @param {String} key - Name of key
-     * @param {Array} values - Data to add 
+     * @param {Array<any>} values - Data to add
      * @param {String} fileName - File name (Optional)
-     * @return {Array}
+     * @return {Array<any>}
      * @example
      * 
      * // First, let's print some data to the database
@@ -1602,7 +1608,7 @@ module.exports = class Database {
      * @param {String} key - Name of key
      * @param {Number} number - Number of data to be deleted 
      * @param {String} fileName - File name (Optional)
-     * @return {Array}
+     * @return {Array<any>}
      * @example
      * 
      * // First, let's print some data to the database
@@ -1651,9 +1657,9 @@ module.exports = class Database {
     /**
      * Adds a new data to the beginning of the Array of data in the JSON file
      * @param {String} key - Name of key
-     * @param {Array|Object|String|null|Number} item - Data to add 
+     * @param {Array<any>|Object|String|null|Number} item - Data to add
      * @param {String} fileName - File name (Optional)
-     * @return {Array}
+     * @return {Array<any>}
      * @example
      * 
      * // First, let's print some data to the database
@@ -1697,9 +1703,9 @@ module.exports = class Database {
     /**
      * Adds multiple data to the top of Array of data in JSON file
      * @param {String} key - Name of key
-     * @param {Array} values - Data to add 
+     * @param {Array<any>} values - Data to add
      * @param {String} fileName - File name (Optional)
-     * @return {Array}
+     * @return {Array<any>}
      * @example
      * 
      * // First, let's print some data to the database
@@ -1746,7 +1752,7 @@ module.exports = class Database {
      * @param {String} key - Name of key
      * @param {Number} number - Number of data to be deleted 
      * @param {String} fileName - File name (Optional)
-     * @return {Array}
+     * @return {Array<any>}
      * @example
      * 
      * // First, let's print some data to the database
